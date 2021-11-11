@@ -1,0 +1,9 @@
+# Debug
+DEBUG = True
+
+# Screen
+SCREEN_W = 1280
+SCREEN_H = 720
+SCREEN_SIZE = (SCREEN_W, SCREEN_H)
+WINDOW_TITLE = "For Evert"
+MAX_FPS = 144
