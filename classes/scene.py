@@ -11,4 +11,4 @@ class Scene:
     def draw(self, screen: Surface) -> None:
         if self.visible:
             for object in self.objects:
-                screen.blit(object.get_image(), object.get_position())
+                screen.blit(object.get_surface(), object.get_position())
