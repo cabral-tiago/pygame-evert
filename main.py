@@ -1,9 +1,13 @@
 import pygame
 import configs
+from game import Game
 
 pygame.init()
 screen = pygame.display.set_mode(configs.SCREEN_SIZE)
 pygame.display.set_caption(configs.WINDOW_TITLE)
+
+# Game
+game = Game()
 
 # Clock
 clock = pygame.time.Clock()
@@ -20,6 +24,8 @@ while run:
                 run = False
     
     screen.fill("black")
+
+    game.draw(screen)
 
     pygame.display.update()
 
