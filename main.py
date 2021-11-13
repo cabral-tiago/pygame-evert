@@ -22,6 +22,9 @@ while run:
         match event.type:
             case pygame.QUIT:
                 run = False
+            case pygame.MOUSEBUTTONDOWN:
+                if pygame.mouse.get_pressed()[0]:
+                    game.handle_mouse_click(pygame.mouse.get_pos())
     
     screen.fill("black")
 
