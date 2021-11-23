@@ -8,6 +8,9 @@ class Scene:
         self.objects: list[GameObject] = []
         self.buttons: list[Button] = []
 
+    def update(self, dt) -> None:
+        pass
+
     def draw(self, screen: Surface) -> None:
         for object in self.objects:
             screen.blit(object.get_surface(), object.get_position())

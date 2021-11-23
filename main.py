@@ -24,10 +24,11 @@ while run:
                 run = False
             case pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
-                    game.handle_mouse_click(pygame.mouse.get_pos())
+                    game.handle_mouse_click()
     
     screen.fill("black")
 
+    game.update(dt)
     game.draw(screen)
 
     pygame.display.update()
