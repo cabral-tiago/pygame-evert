@@ -41,8 +41,10 @@ class Level:
         with open(path+"/tileset_info.csv", "r", encoding="utf-8") as file:
             tileset_path = file.readline().strip()
             tile_w, tile_h = [int(x.strip()) for x in file.readline().strip().split(",")]
+            tileset_scale = int(file.readline().strip())
 
-        self.__tileset = Tileset(tileset_path, (tile_w, tile_h))
+        self.__tileset = Tileset(tileset_path, (tile_w, tile_h), tileset_scale)
+        self.__tileset_scale = tileset_scale
 
         layers_path = path + "/layers"
         layer_files = [f.name for f in os.scandir(layers_path) if f.name.endswith(".csv")]
