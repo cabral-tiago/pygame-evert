@@ -2,6 +2,7 @@ from classes.level import Level
 from classes.player import Player
 from classes.scene import Scene
 from pygame.surface import Surface
+from classes.states import PlayerDirection
 import pygame
 
 
@@ -14,28 +15,28 @@ class World(Scene):
 
     def update(self, dt: float) -> None:
         # TODO: Implement player_direction as a state in states.py
-        player_direction = "stopped"
+        player_direction = PlayerDirection.STAY
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            player_direction = "right"
+            player_direction = PlayerDirection.RIGHT
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            player_direction = "left"
+            player_direction = PlayerDirection.LEFT
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            player_direction = "up"
+            player_direction = PlayerDirection.UP
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            player_direction = "down"
+            player_direction = PlayerDirection.DOWN
         
         player_position = self.player.position
         movement_x = 0
         movement_y = 0
         match player_direction:
-            case "right":
+            case PlayerDirection.RIGHT:
                 movement_x = 1
-            case "left":
+            case PlayerDirection.LEFT:
                 movement_x = -1
-            case "down":
+            case PlayerDirection.DOWN:
                 movement_y = 1
-            case "up":
+            case PlayerDirection.UP:
                 movement_y = -1
         
         next_x = player_position[0] + (dt * movement_x * Player.SPEED)
