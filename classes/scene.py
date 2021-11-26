@@ -8,7 +8,7 @@ class Scene:
         self.objects: list[GameObject] = []
         self.buttons: list[Button] = []
 
-    def update(self, dt) -> None:
+    def update(self, dt: float) -> None:
         pass
 
     def draw(self, screen: Surface) -> None:
