@@ -10,8 +10,10 @@ class World(Scene):
     def __init__(self) -> None:
         super().__init__()
 
-        self.level_1: Level = Level("assets/levels/1")
-        self.player: Player = Player()
+        self.__player: Player = Player()
+        
+        level_1: Level = Level("assets/levels/1")
+        super().load_level(1, level_1)
 
     def update(self, dt: float) -> None:
         # TODO: Implement player_direction as a state in states.py
@@ -26,7 +28,7 @@ class World(Scene):
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             player_direction = PlayerDirection.DOWN
         
-        player_position = self.player.position
+        player_position = self.__player.position
         movement_x = 0
         movement_y = 0
         match player_direction:
@@ -45,13 +47,15 @@ class World(Scene):
         #TODO: Check collissions
 
         # Applying position
-        self.player.position = (next_x, next_y)
+        self.__player.position = (next_x, next_y)
 
-        self.player.update_animation(dt, player_direction)
+        self.__player.update_animation(dt, player_direction)
 
-
+    def change_level(self, level_nr: int) -> None:
+        super().change_level(level_nr)
+        # TODO
 
     def draw(self, screen: Surface) -> None:
-        self.level_1.draw(screen)
-        screen.blit(self.player.get_surface(), self.player.position)
+        self.get_current_level().draw(screen)
+        screen.blit(self.__player.get_surface(), self.__player.position)
         super().draw(screen)

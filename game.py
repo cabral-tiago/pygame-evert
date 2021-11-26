@@ -1,4 +1,3 @@
-from typing import Tuple
 from classes.states import GameState
 from classes.scene import Scene
 from scenes.menu import Menu
@@ -14,7 +13,6 @@ class Game:
         
         self.__scenes["menu"] = Menu()
         self.__scenes["world"] = World()
-
         self.__current_scene = "menu"
 
         self.__mouse_down_event = False
@@ -34,8 +32,10 @@ class Game:
                 self.__current_scene = "menu"
             case GameState.GAME_FRESH:
                 self.__current_scene = "world"
+                self.__scenes["world"].change_level(1)
             case GameState.GAME_PLAYING:
                 self.__current_scene = "world"
+                self.__scenes["world"].change_level(1)
     
     def update_mouse(self) -> None:
         mouse_pos = pygame.mouse.get_pos()
