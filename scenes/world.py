@@ -15,8 +15,11 @@ class World(Scene):
         level_1: Level = Level("assets/levels/1")
         super().load_level(1, level_1)
 
+        self.__player.teleport((500, 30))
+
     def update(self, dt: float) -> None:
-        # TODO: Implement player_direction as a state in states.py
+        super().update(dt)
+
         player_direction = PlayerDirection.STAY
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
@@ -30,15 +33,16 @@ class World(Scene):
         
         self.__player.move(dt, player_direction)
 
-        # TODO: Check collissions
-        # self.__player.collide() when colliding
+        # Checking collisions
+        for obstacle in self.get_current_level().get_obstacles():
+            if obstacle.colliderect(self.__player.get_rect()):
+                self.__player.collide()
 
         # Updating player
         self.__player.update(dt)
 
     def change_level(self, level_nr: int) -> None:
         super().change_level(level_nr)
-        # TODO
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)

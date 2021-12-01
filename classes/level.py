@@ -1,5 +1,6 @@
 import os
 import json
+from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
@@ -11,6 +12,7 @@ class Level:
     def __init__(self, path) -> None:
         self.__layers: list[LevelLayer] = []
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
+        self.__obstacles: list[Rect] = []
 
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
@@ -26,6 +28,8 @@ class Level:
                     for _, file in ordered_layers:
                         layer_collide = True if file[:-4].split("_")[1] == "ob" else False
                         layer = LevelLayer(layers_path + "/" + file, layer_collide, tileset)
+                        if layer_collide:
+                            self.__obstacles.extend(layer.get_obstacle_rects())
                         self.__layers.append(layer)
                 
                 case "background":
@@ -36,6 +40,9 @@ class Level:
 
     def get_layer(self, index: int) -> LevelLayer:
         return self.__layers[index]
+    
+    def get_obstacles(self) -> list[Rect]:
+        return self.__obstacles
 
     def draw(self, screen: Surface) -> None:
         screen.blit(self.__background, (0, 0))

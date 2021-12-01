@@ -60,6 +60,10 @@ class Player():
             
             self.__prev_position = self.__position
             self.__position = (new_x, new_y)
+    
+    def teleport(self, pos: Tuple[int, int]) -> None:
+        self.__position = pos
+        self.__prev_position = pos
 
     def collide(self) -> None:
         self.__colliding = True
