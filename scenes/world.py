@@ -28,28 +28,13 @@ class World(Scene):
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
             player_direction = PlayerDirection.DOWN
         
-        player_position = self.__player.position
-        movement_x = 0
-        movement_y = 0
-        match player_direction:
-            case PlayerDirection.RIGHT:
-                movement_x = 1
-            case PlayerDirection.LEFT:
-                movement_x = -1
-            case PlayerDirection.DOWN:
-                movement_y = 1
-            case PlayerDirection.UP:
-                movement_y = -1
-        
-        next_x = player_position[0] + (dt * movement_x * Player.SPEED)
-        next_y = player_position[1] + (dt * movement_y * Player.SPEED)
+        self.__player.move(dt, player_direction)
 
-        #TODO: Check collissions
+        # TODO: Check collissions
+        # self.__player.collide() when colliding
 
-        # Applying position
-        self.__player.position = (next_x, next_y)
-
-        self.__player.update_animation(dt, player_direction)
+        # Updating player
+        self.__player.update(dt)
 
     def change_level(self, level_nr: int) -> None:
         super().change_level(level_nr)
@@ -57,5 +42,5 @@ class World(Scene):
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
-        screen.blit(self.__player.get_surface(), self.__player.position)
+        screen.blit(self.__player.get_surface(), self.__player.get_rect())
         super().draw(screen)
