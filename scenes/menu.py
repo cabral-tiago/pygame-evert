@@ -12,9 +12,9 @@ class Menu(Scene):
         button_continue = Button("Continuar", Menu.MENU_BUTTON_SIZE, GameState.GAME_PLAYING)
         button_continue.x = 100
         button_continue.y = 100
-        self.buttons.append(button_continue)
+        super().add_button(button_continue)
 
         button_start = Button("Começar", Menu.MENU_BUTTON_SIZE, GameState.GAME_FRESH)
         button_start.x = 100
         button_start.y = 200
-        self.buttons.append(button_start)
+        super().add_button(button_start)

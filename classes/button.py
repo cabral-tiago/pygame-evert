@@ -10,7 +10,7 @@ class Button(GameObject):
 
     def __init__(self, text: str, size: Tuple[int, int], target_state: GameState) -> None:
         self.__target_state: GameState = target_state
-        self.hovered: bool = False
+        self.__hovered: bool = False
 
         font = Font(None, 40)
 
@@ -23,8 +23,14 @@ class Button(GameObject):
 
         super().__init__(surface)
 
+    def hover(self) -> None:
+        self.__hovered = True
+
+    def normal(self) -> None:
+        self.__hovered = False
+
     def get_surface(self) -> Surface:
-        if self.hovered:
+        if self.__hovered:
             return super().get_surface()
         else:
             faded = super().get_surface().copy()
