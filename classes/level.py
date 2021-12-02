@@ -54,6 +54,12 @@ class Level:
 
     def get_layer(self, index: int) -> LevelLayer:
         return self.__layers[index]
+
+    def get_width(self) -> int:
+        return self.get_layer(0).get_surface().get_width()
+
+    def get_height(self) -> int:
+        return self.get_layer(0).get_surface().get_height()
     
     def get_obstacles(self) -> list[Rect]:
         return self.__obstacles

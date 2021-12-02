@@ -32,10 +32,18 @@ class World(Scene):
         
         self.__player.move(dt, player_direction)
 
-        # Checking collisions
+        ### Player collisions
+        # With obstacles
         for obstacle in self.get_current_level().get_obstacles():
             if obstacle.colliderect(self.__player.get_rect()):
                 self.__player.set_collided()
+
+        # With the world edges
+        if (self.__player.get_rect().x < 0
+                or self.__player.get_rect().x > self.get_current_level().get_width() - self.__player.get_rect().width
+                or self.__player.get_rect().y < 0
+                or self.__player.get_rect().y > self.get_current_level().get_height() - self.__player.get_rect().height):
+            self.__player.set_collided()
 
         # Updating player
         self.__player.update(dt)
