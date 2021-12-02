@@ -9,6 +9,12 @@ class GameState(Enum):
     GAME_PAUSED = 3
     GAME_ENDING = 4
 
+
+class SceneID(Enum):
+    MENU = 0
+    WORLD = 1
+
+
 class PlayerDirection(Enum):
     DOWN = 0
     UP = 1

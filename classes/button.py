@@ -1,5 +1,5 @@
 from typing import Tuple
-from classes.states import GameState
+from classes.enums import GameState
 from classes.gameobject import GameObject
 from pygame.surface import Surface
 from pygame.font import Font

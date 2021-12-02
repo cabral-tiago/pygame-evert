@@ -2,7 +2,7 @@ from typing import Tuple
 from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.spritesheet import Spritesheet
-from classes.states import PlayerDirection
+from classes.enums import PlayerDirection
 
 
 class Player():

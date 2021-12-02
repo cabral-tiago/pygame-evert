@@ -2,7 +2,7 @@ from classes.level import Level
 from classes.player import Player
 from classes.scene import Scene
 from pygame.surface import Surface
-from classes.states import PlayerDirection
+from classes.enums import PlayerDirection
 import pygame
 
 

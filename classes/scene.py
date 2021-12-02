@@ -3,7 +3,7 @@ from pygame.surface import Surface
 from classes.button import Button
 from classes.gameobject import GameObject
 from classes.level import Level
-from classes.states import GameState
+from classes.enums import GameState
 
 
 class Scene:

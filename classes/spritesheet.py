@@ -1,7 +1,7 @@
 from typing import Tuple
 import pygame
 from pygame.surface import Surface
-from classes.states import PlayerDirection
+from classes.enums import PlayerDirection
 
 
 class Spritesheet:

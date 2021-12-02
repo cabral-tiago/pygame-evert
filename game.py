@@ -1,4 +1,4 @@
-from classes.states import GameState
+from classes.enums import GameState, SceneID
 from classes.scene import Scene
 from scenes.menu import Menu
 from scenes.world import World
@@ -8,11 +8,11 @@ class Game:
     def __init__(self) -> None:
         self.__state = GameState.MAIN_MENU
 
-        self.__scenes: dict[str, Scene] = {}
+        self.__scenes: dict[SceneID, Scene] = {}
         
-        self.__scenes["menu"] = Menu()
-        self.__scenes["world"] = World()
-        self.__current_scene = "menu"
+        self.__scenes[SceneID.MENU] = Menu()
+        self.__scenes[SceneID.WORLD] = World()
+        self.__current_scene = SceneID.MENU
 
     def update(self, dt) -> None:
         # Update current scene
@@ -26,13 +26,13 @@ class Game:
 
         match self.__state:
             case GameState.MAIN_MENU:
-                self.__current_scene = "menu"
+                self.__current_scene = SceneID.MENU
             case GameState.GAME_FRESH:
-                self.__current_scene = "world"
-                self.__scenes["world"].change_level(1)
+                self.__current_scene = SceneID.WORLD
+                self.__scenes[SceneID.WORLD].change_level(1)
             case GameState.GAME_PLAYING:
-                self.__current_scene = "world"
-                self.__scenes["world"].change_level(1)
+                self.__current_scene = SceneID.WORLD
+                self.__scenes[SceneID.WORLD].change_level(1)
 
     def handle_mouse_click(self) -> None:
         new_state = self.__scenes[self.__current_scene].handle_mouse_click()
