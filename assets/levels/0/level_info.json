@@ -1,5 +1,3 @@
 {
-    "type": "background",
-    "bg_style": "colour",
-    "bg_colour": "black"
+    "type": 0
 }

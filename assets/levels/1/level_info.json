@@ -1,8 +1,6 @@
 {
-    "type": "map",
-    "tileset": "assets\\images\\grassy_lands.png",
-    "tile_size": [16, 16],
-    "tile_scale": 4,
-    "player_appear": true,
-    "player_spawn": [10, 15]
+    "type": 2,
+    "bg_style": "image",
+    "bg_image": "assets/images/room_bg.png",
+    "bg_smooth_scale": true
 }

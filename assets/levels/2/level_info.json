@@ -1,0 +1,8 @@
+{
+    "type": 3,
+    "tileset": "assets\\images\\grassy_lands.png",
+    "tile_size": [16, 16],
+    "tile_scale": 4,
+    "player_appear": true,
+    "player_spawn": [10, 15]
+}

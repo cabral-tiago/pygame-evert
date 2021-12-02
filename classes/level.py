@@ -5,12 +5,14 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
+from classes.enums import LevelType
 import configs
 import pygame
 
 
 class Level:
     def __init__(self, path) -> None:
+        self.__type: LevelType = LevelType.BLANK
         self.__layers: list[LevelLayer] = []
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
         self.__obstacles: list[Rect] = []
@@ -25,8 +27,12 @@ class Level:
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
 
-            match level_info["type"]:
-                case "map":
+            self.__type = LevelType(level_info["type"])
+            match self.__type:
+                case LevelType.BLANK:
+                    self.__background.fill("black")
+                
+                case LevelType.MAP:
                     self.__player_appear = level_info["player_appear"]
                     spawn_x, spawn_y = level_info["player_spawn"]
                     spawn_x *= level_info["tile_size"][0] * level_info["tile_scale"]
@@ -46,20 +52,35 @@ class Level:
                             self.__obstacles.extend(layer.get_obstacle_rects())
                         self.__layers.append(layer)
                 
-                case "background":
+                case LevelType.DIALOGUE:
                     if level_info["bg_style"] == "colour":
                         self.__background.fill(level_info["bg_colour"])
                     elif level_info["bg_style"] == "image":
-                        self.__background.blit(pygame.image.load(level_info["bg_image"]),(0, 0))
+                        image: Surface = pygame.image.load(level_info["bg_image"])
+                        if image.get_width() > configs.SCREEN_W:
+                            scale = configs.SCREEN_W / image.get_width()
+                            scaled_height = int(image.get_height() * scale)
+                            if level_info["bg_smooth_scale"]:
+                                image = pygame.transform.smoothscale(image, (configs.SCREEN_W, scaled_height))
+                            else:
+                                image = pygame.transform.scale(image, (configs.SCREEN_W, scaled_height))
+
+                        self.__background.blit(image,(0, 0))
 
     def get_layer(self, index: int) -> LevelLayer:
         return self.__layers[index]
 
     def get_width(self) -> int:
-        return self.get_layer(0).get_surface().get_width()
+        if self.__type == LevelType.MAP:
+            return self.get_layer(0).get_surface().get_width()
+        else:
+            return self.__background.get_width()
 
     def get_height(self) -> int:
-        return self.get_layer(0).get_surface().get_height()
+        if self.__type == LevelType.MAP:
+            return self.get_layer(0).get_surface().get_height()
+        else:
+            return self.__background.get_height()
     
     def get_obstacles(self) -> list[Rect]:
         return self.__obstacles
