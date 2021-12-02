@@ -4,6 +4,7 @@ from classes.scene import Scene
 from pygame.surface import Surface
 from classes.enums import PlayerDirection
 import pygame
+import configs
 
 
 class World(Scene):
@@ -39,11 +40,15 @@ class World(Scene):
         # Updating player
         self.__player.update(dt)
 
+        if self.get_current_level().is_player_visible():
+            self.get_current_level().center_on_player(self.__player.get_rect())
+
     def change_level(self, level_nr: int) -> None:
         super().change_level(level_nr)
-        self.__player.teleport(super().get_current_level().get_player_spawn())
+        self.__player.teleport(self.get_current_level().get_player_spawn())
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
-        screen.blit(self.__player.get_surface(), self.__player.get_rect())
+        if self.get_current_level().is_player_visible():
+            screen.blit(self.__player.get_surface(), (configs.SCREEN_W//2, configs.SCREEN_H//2))
         super().draw(screen)

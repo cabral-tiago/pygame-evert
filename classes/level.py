@@ -19,6 +19,9 @@ class Level:
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
 
+        # Camera
+        self.__camera_offset: Tuple[int, int] = (0, 0)
+
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
 
@@ -60,8 +63,12 @@ class Level:
     
     def get_player_spawn(self) -> Tuple[int, int]:
         return self.__player_spawn
+    
+    def center_on_player(self, player_rect: Rect) -> None:
+        x, y = player_rect.x, player_rect.y
+        self.__camera_offset = (configs.SCREEN_W//2 - x, configs.SCREEN_H//2 - y)
 
     def draw(self, screen: Surface) -> None:
         screen.blit(self.__background, (0, 0))
         for layer in self.__layers:
-            screen.blit(layer.get_surface(), (0, 0))
+            screen.blit(layer.get_surface(), self.__camera_offset)
