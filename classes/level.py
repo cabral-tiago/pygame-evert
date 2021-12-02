@@ -1,5 +1,6 @@
 import os
 import json
+from typing import Tuple
 from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.tileset import Tileset
@@ -14,11 +15,21 @@ class Level:
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
         self.__obstacles: list[Rect] = []
 
+        # Player
+        self.__player_appear: bool = False
+        self.__player_spawn: Tuple[int, int] = (0, 0)
+
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
 
             match level_info["type"]:
                 case "map":
+                    self.__player_appear = level_info["player_appear"]
+                    spawn_x, spawn_y = level_info["player_spawn"]
+                    spawn_x *= level_info["tile_size"][0] * level_info["tile_scale"]
+                    spawn_y *= level_info["tile_size"][1] * level_info["tile_scale"]
+                    self.__player_spawn = (spawn_x, spawn_y)
+
                     tileset = Tileset(level_info["tileset"], level_info["tile_size"], level_info["tile_scale"])
 
                     layers_path = path + "/layers"
@@ -43,6 +54,12 @@ class Level:
     
     def get_obstacles(self) -> list[Rect]:
         return self.__obstacles
+
+    def is_player_visible(self) -> bool:
+        return self.__player_appear
+    
+    def get_player_spawn(self) -> Tuple[int, int]:
+        return self.__player_spawn
 
     def draw(self, screen: Surface) -> None:
         screen.blit(self.__background, (0, 0))

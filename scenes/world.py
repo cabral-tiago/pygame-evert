@@ -15,8 +15,6 @@ class World(Scene):
         level_1: Level = Level("assets/levels/1")
         super().load_level(1, level_1)
 
-        self.__player.teleport((500, 30))
-
     def update(self, dt: float) -> None:
         super().update(dt)
 
@@ -43,6 +41,7 @@ class World(Scene):
 
     def change_level(self, level_nr: int) -> None:
         super().change_level(level_nr)
+        self.__player.teleport(super().get_current_level().get_player_spawn())
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)

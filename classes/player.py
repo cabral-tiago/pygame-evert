@@ -18,7 +18,6 @@ class Player():
                                     PlayerDirection.LEFT]
         self.__sprites: dict[PlayerDirection, list[Surface]] = spritesheet.get_dictionary(self.__sprite_directions)
 
-
         # Movement
         self.__prev_direction = PlayerDirection.DOWN
         self.__direction = PlayerDirection.DOWN
@@ -73,9 +72,9 @@ class Player():
             self.__colliding = False
             self.__position = self.__prev_position
         
-        self.update_animation(dt)
+        self.__update_animation(dt)
 
-    def update_animation(self, dt: float) -> None:
+    def __update_animation(self, dt: float) -> None:
         self.__animation_timer += dt
         if self.__direction == PlayerDirection.STAY:
             self.__current_frame = 0
