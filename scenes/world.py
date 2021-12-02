@@ -34,7 +34,7 @@ class World(Scene):
         # Checking collisions
         for obstacle in self.get_current_level().get_obstacles():
             if obstacle.colliderect(self.__player.get_rect()):
-                self.__player.collide()
+                self.__player.set_collided()
 
         # Updating player
         self.__player.update(dt)

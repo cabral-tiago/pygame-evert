@@ -64,7 +64,7 @@ class Player():
         self.__position = pos
         self.__prev_position = pos
 
-    def collide(self) -> None:
+    def set_collided(self) -> None:
         self.__colliding = True
 
     def update(self, dt: float) -> None:
