@@ -106,7 +106,7 @@ class Level:
                     self.__d_lines.append(DialogueLine("", line[0]))
                 elif len(line) == 2:
                     self.__d_lines.append(DialogueLine(line[0], line[1]))
-                elif len(line == 3):
+                elif len(line) == 3:
                     self.__d_lines.append(DialogueLine(line[0], line[1], line[2]))
 
     def get_type(self) -> LevelType:
@@ -171,7 +171,11 @@ class Level:
                 if character_id == "":
                     continue
                 character = self.__d_characters[character_id]
-                screen.blit(character.get_image(), character.get_position())
+                if character_id == self.__get_current_line().get_character_id():
+                    screen.blit(character.get_image(self.__get_current_line().get_emotion()), character.get_position())
+                else:
+                    screen.blit(character.get_image(), character.get_position())
+
 
             dialogue_surface = self.__d_background.copy()
             character_name = self.__get_active_character().get_name()
