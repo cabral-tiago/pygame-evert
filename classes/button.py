@@ -1,27 +1,27 @@
 from typing import Tuple
 from classes.enums import GameState
-from classes.gameobject import GameObject
 from pygame.surface import Surface
+from pygame.rect import Rect
 from pygame.font import Font
 import pygame
 
 
-class Button(GameObject):
+class Button:
 
-    def __init__(self, text: str, size: Tuple[int, int], target_state: GameState) -> None:
+    def __init__(self, text: str, size: Tuple[int, int], position: Tuple[int, int], target_state: GameState) -> None:
+        self.__position: Tuple[int, int] = position
+        self.__surface: Surface = Surface(size)
+        
         self.__target_state: GameState = target_state
         self.__hovered: bool = False
 
         font = Font(None, 40)
 
-        surface: Surface = Surface(size)
-        surface.fill("white")
+        self.__surface.fill("white")
 
         button_text = font.render(text, True, "black")
-        surface.blit(button_text, (size[0] / 2 - button_text.get_width() / 2,
-                                   size[1] / 2 - button_text.get_height() / 2))
-
-        super().__init__(surface)
+        self.__surface.blit(button_text, (size[0] / 2 - button_text.get_width() / 2,
+                                          size[1] / 2 - button_text.get_height() / 2))
 
     def hover(self) -> None:
         self.__hovered = True
@@ -31,11 +31,23 @@ class Button(GameObject):
 
     def get_surface(self) -> Surface:
         if self.__hovered:
-            return super().get_surface()
+            return self.__surface
         else:
-            faded = super().get_surface().copy()
-            faded.fill((60, 10, 110, 180), special_flags=pygame.BLEND_RGB_MIN)
+            faded = self.__surface.copy()
+            faded.fill((80, 80, 80, 180), special_flags=pygame.BLEND_RGB_MIN)
             return faded
 
     def get_target_state(self) -> GameState:
         return self.__target_state
+    
+    def get_position(self) -> Tuple[int, int]:
+        return self.__position
+
+    def get_rect(self) -> Rect:
+        return self.get_surface().get_rect(topleft=self.get_position())
+
+    def get_width(self) -> int:
+        return self.get_surface().get_width()
+
+    def get_height(self) -> int:
+        return self.get_surface().get_height()
