@@ -1,18 +1,14 @@
-from classes.dialoguecharacter import DialogueCharacter
-from pygame.surface import Surface
-
-
 class DialogueLine:
-    def __init__(self, character: DialogueCharacter, line: str, expression: str = "") -> None:
-        self.__character: DialogueCharacter = character
+    def __init__(self, character_id: str, line: str, emotion: str = "") -> None:
+        self.__character_id: str = character_id
         self.__line: str = line
-        self.__expression: str = expression
+        self.__emotion: str = emotion
 
-    def get_character(self) -> DialogueCharacter:
-        return self.__character
+    def get_character_id(self) -> str:
+        return self.__character_id
 
-    def get_character_surface(self) -> Surface:
-        return self.__character.get_image(self.__expression)
+    def get_emotion(self) -> str:
+        return self.__emotion
     
     def get_line(self) -> str:
         return self.__line

@@ -7,7 +7,7 @@ from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
-from classes.enums import LevelType, ScreenAlignment
+from classes.enums import GameState, LevelType, ScreenAlignment
 import configs
 import pygame
 
@@ -29,6 +29,7 @@ class Level:
         # Dialogue
         self.__d_lines: list[DialogueLine] = []
         self.__d_characters: dict[str, DialogueCharacter] = {}
+        self.__d_line_index: int = 0
 
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
@@ -40,6 +41,8 @@ class Level:
                 
                 case LevelType.DIALOGUE:
                     self.__load_dialogue(level_info, path)
+                    self.__d_line_index = -1
+                    self.get_next_dialogue()
     
     def __load_map(self, level_info, path) -> None:
         self.__player_appear = level_info["player_appear"]
@@ -66,7 +69,7 @@ class Level:
             self.__background.fill(level_info["bg_colour"])
         elif level_info["bg_style"] == "image":
             image: Surface = pygame.image.load(level_info["bg_image"])
-            if image.get_width() > configs.SCREEN_W:
+            if image.get_width() != configs.SCREEN_W:
                 scale = configs.SCREEN_W / image.get_width()
                 scaled_height = int(image.get_height() * scale)
                 if level_info["bg_smooth_scale"]:
@@ -83,17 +86,17 @@ class Level:
             for character in dialogue_data["characters"]:
                 character_id = character[0]
                 character_path = character[1]
-                character_start_expression = character[2]
+                character_start_emotion = character[2]
 
-                self.__d_characters[character_id] = DialogueCharacter(character_path, character_start_expression)
+                self.__d_characters[character_id] = DialogueCharacter(character_path, character_start_emotion)
 
             for line in dialogue_data["dialogue"]:
                 if len(line) == 1:
-                    self.__d_lines.append(DialogueLine(self.__d_characters[""], line[0]))
+                    self.__d_lines.append(DialogueLine("", line[0]))
                 elif len(line) == 2:
-                    self.__d_lines.append(DialogueLine(self.__d_characters[line[0]], line[1]))
+                    self.__d_lines.append(DialogueLine(line[0], line[1]))
                 elif len(line == 3):
-                    self.__d_lines.append(DialogueLine(self.__d_characters[line[0]], line[1], line[2]))
+                    self.__d_lines.append(DialogueLine(line[0], line[1], line[2]))
 
     def get_type(self) -> LevelType:
         return self.__type
@@ -110,6 +113,7 @@ class Level:
         else:
             return self.__background.get_height()
     
+    ### Map Level
     def get_obstacles(self) -> list[Rect]:
         return self.__obstacles
 
@@ -123,23 +127,46 @@ class Level:
         x, y = player_rect.x, player_rect.y
         self.__camera_offset = (configs.SCREEN_W//2 - x, configs.SCREEN_H//2 - y)
 
+    ### Dialogue Level
+    def __get_current_line(self) -> DialogueLine:
+        return self.__d_lines[self.__d_line_index]
+    
+    def get_next_dialogue(self) -> GameState:
+        self.__d_line_index += 1
+        if self.__d_line_index > len(self.__d_lines):
+            return GameState.GAME_END
+        else:
+            current_character = self.__get_current_line().get_character_id()
+            for character_id in self.__d_characters:
+                if current_character == character_id:
+                    self.__d_characters[character_id].set_active()
+                else:
+                    self.__d_characters[character_id].set_inactive()
+
+        return GameState.GAME_OK
+
+    ### Drawing
     def draw(self, screen: Surface) -> None:
         screen.blit(self.__background, (0, 0))
 
-        match self.__type:
-            case LevelType.MAP:
-                for layer in self.__layers:
-                    screen.blit(layer.get_surface(), self.__camera_offset)
-            case LevelType.DIALOGUE:
-                for character_id in self.__d_characters:
-                    if character_id == "":
-                        continue
-                    character = self.__d_characters[character_id]
-                    position = (0, 0)
-                    match character.get_screen_alignment():
-                        case ScreenAlignment.LEFT:
-                            position = (20, configs.SCREEN_H - character.get_height())
-                        case ScreenAlignment.RIGHT:
-                            position = (configs.SCREEN_W - character.get_width() - 20,
-                                        configs.SCREEN_H - character.get_height())
-                    screen.blit(character.get_image(), position)
+        if self.__type == LevelType.MAP:
+            for layer in self.__layers:
+                screen.blit(layer.get_surface(), self.__camera_offset)
+        elif self.__type == LevelType.DIALOGUE:
+            for character_id in self.__d_characters:
+                if character_id == "":
+                    continue
+                character = self.__d_characters[character_id]
+                
+                # TODO: move this to DialogueCharacter
+                position = (0, 0)
+                match character.get_screen_alignment():
+                    case ScreenAlignment.LEFT:
+                        position = (20, configs.SCREEN_H - character.get_height())
+                    case ScreenAlignment.RIGHT:
+                        position = (configs.SCREEN_W - character.get_width() - 20,
+                                    configs.SCREEN_H - character.get_height())
+                
+                screen.blit(character.get_image(), position)
+        else:
+            pass  # Blank level

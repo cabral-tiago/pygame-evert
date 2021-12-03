@@ -7,7 +7,8 @@ class GameState(Enum):
     GAME_FRESH = 1
     GAME_PLAYING = 2
     GAME_PAUSED = 3
-    GAME_ENDING = 4
+    GAME_OK = 4
+    GAME_END = 5
 
 
 class SceneID(Enum):
@@ -30,7 +31,7 @@ class PlayerDirection(Enum):
 
 
 class ScreenAlignment(Enum):
-    NULL = 0
-    LEFT = 1
+    NULL = -1
+    LEFT = 0
+    CENTER = 1
     RIGHT = 2
-    CENTER = 3

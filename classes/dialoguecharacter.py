@@ -1,15 +1,18 @@
 import json
 from pygame.surface import Surface
 from classes.enums import ScreenAlignment
+import configs
 import pygame
 
 
 class DialogueCharacter:
-    def __init__(self, path: str, start_expression: str) -> None:
+
+    def __init__(self, path: str, start_emotion: str) -> None:
         self.__screen_name: str = ""
         self.__screen_alignment: ScreenAlignment = ScreenAlignment.NULL
-        self.__expressions: dict[str, Surface] = {}
-        self.__last_expression: str = start_expression
+        self.__emotions: dict[str, Surface] = {}
+        self.__last_emotion: str = start_emotion
+        self.__active: bool = False
         
         if path != "":
             with open(path, "r", encoding="utf-8") as file:
@@ -18,11 +21,13 @@ class DialogueCharacter:
                 if character_data["screen_name"]:
                     self.__screen_name = character_data["screen_name"]
                 
-                for expression in character_data["expressions"]:
-                    expression_path = f"{path[:-5]}_{expression}.png"
-                    expression_surface = pygame.image.load(expression_path)
-                    expression_surface = pygame.transform.smoothscale(expression_surface, (500, 600))
-                    self.__expressions[expression] = expression_surface
+                for emotion in character_data["emotions"]:
+                    emotion_path = f"{path[:-5]}_{emotion}.png"
+                    emotion_surface = pygame.image.load(emotion_path)
+                    if configs.CHARACTER_SIZE[0] != emotion_surface.get_width() or \
+                        configs.CHARACTER_SIZE[1] != emotion_surface.get_height():
+                        emotion_surface = pygame.transform.smoothscale(emotion_surface, configs.CHARACTER_SIZE)
+                    self.__emotions[emotion] = emotion_surface
                 
                 if character_data["screen_alignment"]:
                     match character_data["screen_alignment"]:
@@ -33,17 +38,34 @@ class DialogueCharacter:
                         case "center":
                             self.__screen_alignment = ScreenAlignment.CENTER
     
+    def set_active(self) -> None:
+        self.__active = True
+
+    def set_inactive(self) -> None:
+        self.__active = False
+
     def get_name(self) -> str:
         return self.__screen_name
-    
-    def get_image(self, expression: str = "") -> Surface:
+
+    def __get_emotion_image(self, emotion: str) -> Surface:
+        if emotion == "":
+            return self.__emotions[self.__last_emotion]
+        else:
+            self.__last_emotion = emotion
+            return self.__emotions[emotion]
+
+    def get_image(self, emotion: str = "") -> Surface:
         if self.__screen_alignment == ScreenAlignment.NULL:
             return Surface((0,0))
-        if expression == "":
-            return self.__expressions[self.__last_expression]
+
+        surface = self.__get_emotion_image(emotion)
+        
+        if self.__active:
+            return surface
         else:
-            self.__last_expression = expression
-            return self.__expressions[expression]
+            faded = surface.copy()
+            faded.fill((90, 90, 90), special_flags=pygame.BLEND_RGB_SUB)
+            return faded        
 
     def get_width(self) -> int:
         return self.get_image().get_width()

@@ -1,5 +1,5 @@
 {
     "screen_name": "Tiago",
-    "expressions": ["neutral", "surprised", "angry"],
+    "emotions": ["neutral", "surprised", "angry"],
     "screen_alignment": "right"
 }

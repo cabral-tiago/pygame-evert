@@ -1,5 +1,5 @@
 {
     "screen_name": "Evert",
-    "expressions": ["smile", "surprised", "angry", "sad"],
+    "emotions": ["smile", "surprised", "angry", "sad"],
     "screen_alignment": "left"
 }
