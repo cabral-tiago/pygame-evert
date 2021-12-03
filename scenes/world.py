@@ -6,6 +6,7 @@ from pygame.surface import Surface
 from classes.enums import GameState, LevelType, PlayerDirection
 import pygame
 import configs
+import os
 
 
 class World(Scene):
@@ -20,11 +21,11 @@ class World(Scene):
         button = Button("", dialogue_hud_size, dialogue_hud_position, GameState.GAME_NEXT_DIALOGUE, transparent = True)
         super().add_button(button)
         
-        level_1: Level = Level("assets/levels/1")
-        super().load_level(1, level_1)
-
-        level_2: Level = Level("assets/levels/2")
-        super().load_level(2, level_2)
+        levels_folder = "assets/levels/"
+        levels = [f.name for f in os.scandir(levels_folder) if int(f.name) > 0]
+        for level_nr in levels:
+            level = Level("assets/levels/" + level_nr)
+            super().load_level(int(level_nr), level)
 
     def update(self, dt: float) -> None:
         super().update(dt)
