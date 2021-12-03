@@ -33,6 +33,12 @@ class Game:
             case GameState.GAME_PLAYING:
                 self.__current_scene = SceneID.WORLD
                 self.__scenes[SceneID.WORLD].change_level(2)
+            case GameState.GAME_NEXT_DIALOGUE:
+                self.change_state(self.__scenes[self.__current_scene].get_next_dialogue())
+            case GameState.GAME_LEVEL_END:
+                self.change_state(self.__scenes[self.__current_scene].goto_next_level())
+            case GameState.GAME_END:
+                self.__current_scene = SceneID.MENU
 
     def handle_mouse_click(self) -> None:
         new_state = self.__scenes[self.__current_scene].handle_mouse_click()

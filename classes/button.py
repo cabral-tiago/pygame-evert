@@ -8,20 +8,24 @@ import pygame
 
 class Button:
 
-    def __init__(self, text: str, size: Tuple[int, int], position: Tuple[int, int], target_state: GameState) -> None:
+    def __init__(self, text: str, size: Tuple[int, int], position: Tuple[int, int],\
+                target_state: GameState, transparent: bool = False) -> None:
         self.__position: Tuple[int, int] = position
-        self.__surface: Surface = Surface(size)
+        self.__surface: Surface = Surface(size, pygame.SRCALPHA)
+        self.__transparent: bool = transparent
         
         self.__target_state: GameState = target_state
         self.__hovered: bool = False
 
         font = Font(None, 40)
 
-        self.__surface.fill("white")
+        if not self.__transparent:
+            self.__surface.fill("white")
 
-        button_text = font.render(text, True, "black")
-        self.__surface.blit(button_text, (size[0] / 2 - button_text.get_width() / 2,
-                                          size[1] / 2 - button_text.get_height() / 2))
+        if text != "":
+            button_text = font.render(text, True, "black")
+            self.__surface.blit(button_text, (size[0] / 2 - button_text.get_width() / 2,
+                                              size[1] / 2 - button_text.get_height() / 2))
 
     def hover(self) -> None:
         self.__hovered = True
@@ -30,7 +34,7 @@ class Button:
         self.__hovered = False
 
     def get_surface(self) -> Surface:
-        if self.__hovered:
+        if self.__hovered or self.__transparent:
             return self.__surface
         else:
             faded = self.__surface.copy()

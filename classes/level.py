@@ -145,10 +145,10 @@ class Level:
         return self.__d_characters[self.__get_current_line().get_character_id()]
     
     def get_next_dialogue(self) -> GameState:
-        self.__d_line_index += 1
-        if self.__d_line_index > len(self.__d_lines):
-            return GameState.GAME_END
+        if self.__d_line_index + 1 > len(self.__d_lines) - 1:
+            return GameState.GAME_LEVEL_END
         else:
+            self.__d_line_index += 1
             current_character = self.__get_current_line().get_character_id()
             for character_id in self.__d_characters:
                 if current_character == character_id:

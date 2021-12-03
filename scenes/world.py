@@ -1,8 +1,9 @@
+from classes.button import Button
 from classes.level import Level
 from classes.player import Player
 from classes.scene import Scene
 from pygame.surface import Surface
-from classes.enums import LevelType, PlayerDirection
+from classes.enums import GameState, LevelType, PlayerDirection
 import pygame
 import configs
 
@@ -12,6 +13,12 @@ class World(Scene):
         super().__init__()
 
         self.__player: Player = Player()
+
+        # Dialogue button
+        dialogue_hud_size = (configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3)
+        dialogue_hud_position = (0, configs.SCREEN_H - dialogue_hud_size[1])
+        button = Button("", dialogue_hud_size, dialogue_hud_position, GameState.GAME_NEXT_DIALOGUE, transparent = True)
+        super().add_button(button)
         
         level_1: Level = Level("assets/levels/1")
         super().load_level(1, level_1)
@@ -74,4 +81,6 @@ class World(Scene):
         self.get_current_level().draw(screen)
         if self.get_current_level().is_player_visible():
             screen.blit(self.__player.get_surface(), (configs.SCREEN_W//2, configs.SCREEN_H//2))
-        super().draw(screen)
+        
+        if self.get_current_level().get_type() == LevelType.DIALOGUE:
+            super().draw(screen)  # To draw the "button"

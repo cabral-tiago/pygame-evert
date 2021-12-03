@@ -2,7 +2,7 @@ import pygame
 from pygame.surface import Surface
 from classes.button import Button
 from classes.level import Level
-from classes.enums import GameState
+from classes.enums import GameState, LevelType
 
 
 class Scene:
@@ -22,6 +22,19 @@ class Scene:
     def change_level(self, level_nr: int) -> None:
         if level_nr in self.__levels.keys():
             self.__current_level = level_nr
+    
+    def get_next_dialogue(self) -> GameState:
+        if self.get_current_level().get_type() == LevelType.DIALOGUE:
+            return self.get_current_level().get_next_dialogue()
+        else:
+            return GameState.NULL
+    
+    def goto_next_level(self) -> GameState:
+        if self.__levels[self.__current_level+1]:
+            self.change_level(self.__current_level+1)
+            return GameState.GAME_OK
+        else:
+            return GameState.GAME_END
 
     def get_current_level(self) -> Level:
         return self.__levels[self.__current_level]

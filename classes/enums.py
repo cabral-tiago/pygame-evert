@@ -9,7 +9,8 @@ class GameState(Enum):
     GAME_PAUSED = 3
     GAME_NEXT_DIALOGUE = 4
     GAME_OK = 5
-    GAME_END = 6
+    GAME_LEVEL_END = 6
+    GAME_END = 7
 
 
 class SceneID(Enum):
