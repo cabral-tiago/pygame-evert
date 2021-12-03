@@ -24,10 +24,11 @@
         ["t", "Evert... Acho que ela está a mentir... olha isto"],
         ["( O Tiago mostra os resultados da pesquisa no Google )"],
         ["j", "Estranho... Devia confrontá-la... Obrigado pelo aviso.", "surprised"],
-        ["t", "De nada.", "neutral"],
+        ["t", "De nada. Até depois.", "neutral"],
+        ["j", "Até depois.", "smile"],
         ["( No dia seguinte )"],
-        ["t", "Hey Evert! Então... como correu as cenas com a Emily?"],
+        ["t", "Hey Evert! Então... como correram as cenas com a Emily?"],
         ["j", "Hey! Ah, não tive coragem de falar disso ainda... Talvez hoje fale...", "sad"],
-        ["t", "Okay então, boa sorte"]
+        ["t", "Okay então, boa sorte..."]
     ]
 }
