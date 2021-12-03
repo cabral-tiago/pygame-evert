@@ -28,3 +28,10 @@ class PlayerDirection(Enum):
     RIGHT = 2
     LEFT = 3
     STAY = 4
+
+
+class ScreenAlignment(Enum):
+    NULL = 0
+    LEFT = 1
+    RIGHT = 2
+    CENTER = 3

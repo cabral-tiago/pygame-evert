@@ -2,5 +2,9 @@
     "type": 2,
     "bg_style": "image",
     "bg_image": "assets/images/room_bg.png",
-    "bg_smooth_scale": true
+    "bg_smooth_scale": true,
+    "characters": {
+        "jesse": "assets/characters/jesse/jesse.json",
+        "tiago": "assets/characters/tiago/tiago.json"
+    }
 }
