@@ -27,8 +27,6 @@
         ["( No dia seguinte )"],
         ["t", "Hey Evert! Então... como correu as cenas com a Emily?"],
         ["j", "Hey! Ah, não tive coragem de falar disso ainda... Talvez hoje fale..."],
-        ["t", "Okay então, boa sorte"],
-        ["( Mais tarde nesse dia )"],
-        ["j", "(Vou sair para comprar algo para comer)"]
+        ["t", "Okay então, boa sorte"]
     ]
 }

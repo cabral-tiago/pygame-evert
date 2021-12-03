@@ -1,0 +1,9 @@
+{
+    "characters": [
+        ["j", "assets/characters/jesse/jesse.json", "smile"]
+    ],
+    "dialogue": [
+        ["( Mais tarde nesse dia )"],
+        ["j", "(Vou sair para comprar algo para comer)"]
+    ]
+}
