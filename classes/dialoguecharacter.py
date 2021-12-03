@@ -1,6 +1,6 @@
 import json
+from typing import Tuple
 from pygame.surface import Surface
-from classes.enums import ScreenAlignment
 import configs
 import pygame
 
@@ -9,7 +9,7 @@ class DialogueCharacter:
 
     def __init__(self, path: str, start_emotion: str) -> None:
         self.__screen_name: str = ""
-        self.__screen_alignment: ScreenAlignment = ScreenAlignment.NULL
+        self.__position: Tuple[int, int] = (0, 0)
         self.__emotions: dict[str, Surface] = {}
         self.__last_emotion: str = start_emotion
         self.__active: bool = False
@@ -30,13 +30,16 @@ class DialogueCharacter:
                     self.__emotions[emotion] = emotion_surface
                 
                 if character_data["screen_alignment"]:
+                    pos_x = 0
                     match character_data["screen_alignment"]:
                         case "left":
-                            self.__screen_alignment = ScreenAlignment.LEFT
+                            pos_x = 20
                         case "right":
-                            self.__screen_alignment = ScreenAlignment.RIGHT
+                            pos_x = configs.SCREEN_W - self.get_width() - 20
                         case "center":
-                            self.__screen_alignment = ScreenAlignment.CENTER
+                            pos_x = int(configs.SCREEN_W/2 - self.get_width()/2)
+
+                    self.__position = (pos_x, configs.SCREEN_H - self.get_height())
     
     def set_active(self) -> None:
         self.__active = True
@@ -48,16 +51,15 @@ class DialogueCharacter:
         return self.__screen_name
 
     def __get_emotion_image(self, emotion: str) -> Surface:
+        if len(self.__emotions) == 0:
+            return Surface((0, 0))
         if emotion == "":
             return self.__emotions[self.__last_emotion]
-        else:
-            self.__last_emotion = emotion
-            return self.__emotions[emotion]
+        
+        self.__last_emotion = emotion
+        return self.__emotions[emotion]
 
     def get_image(self, emotion: str = "") -> Surface:
-        if self.__screen_alignment == ScreenAlignment.NULL:
-            return Surface((0,0))
-
         surface = self.__get_emotion_image(emotion)
         
         if self.__active:
@@ -68,10 +70,10 @@ class DialogueCharacter:
             return faded        
 
     def get_width(self) -> int:
-        return self.get_image().get_width()
+        return configs.CHARACTER_SIZE[0]
 
     def get_height(self) -> int:
-        return self.get_image().get_height()
+        return configs.CHARACTER_SIZE[1]
 
-    def get_screen_alignment(self) -> ScreenAlignment:
-        return self.__screen_alignment
+    def get_position(self) -> Tuple[int, int]:
+        return self.__position

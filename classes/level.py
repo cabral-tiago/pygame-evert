@@ -7,7 +7,7 @@ from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
-from classes.enums import GameState, LevelType, ScreenAlignment
+from classes.enums import GameState, LevelType
 import configs
 import pygame
 
@@ -157,16 +157,6 @@ class Level:
                 if character_id == "":
                     continue
                 character = self.__d_characters[character_id]
-                
-                # TODO: move this to DialogueCharacter
-                position = (0, 0)
-                match character.get_screen_alignment():
-                    case ScreenAlignment.LEFT:
-                        position = (20, configs.SCREEN_H - character.get_height())
-                    case ScreenAlignment.RIGHT:
-                        position = (configs.SCREEN_W - character.get_width() - 20,
-                                    configs.SCREEN_H - character.get_height())
-                
-                screen.blit(character.get_image(), position)
+                screen.blit(character.get_image(), character.get_position())
         else:
             pass  # Blank level
