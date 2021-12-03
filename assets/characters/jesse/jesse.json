@@ -1,5 +1,6 @@
 {
     "screen_name": "Evert",
+    "name_colour": "peru",
     "emotions": ["smile", "surprised", "angry", "sad"],
     "screen_alignment": "left"
 }

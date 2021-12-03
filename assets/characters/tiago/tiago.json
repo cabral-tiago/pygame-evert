@@ -1,5 +1,6 @@
 {
     "screen_name": "Tiago",
+    "name_colour": "cyan3",
     "emotions": ["neutral", "surprised", "angry"],
     "screen_alignment": "right"
 }

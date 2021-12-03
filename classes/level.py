@@ -14,22 +14,32 @@ import pygame
 
 class Level:
     def __init__(self, path) -> None:
+        # Level
         self.__type: LevelType = LevelType.BLANK
-        self.__layers: list[LevelLayer] = []
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
+        
+        ### Map
+        self.__layers: list[LevelLayer] = []
         self.__obstacles: list[Rect] = []
-
+        
         # Player
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
-
+        
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
 
-        # Dialogue
+        ### Dialogue
         self.__d_lines: list[DialogueLine] = []
         self.__d_characters: dict[str, DialogueCharacter] = {}
         self.__d_line_index: int = 0
+        
+        # Dialogue HUD
+        self.__d_background = Surface((configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3), pygame.SRCALPHA)
+        self.__d_background.fill((0,0,0,160))
+        self.__d_bg_position = (0, configs.SCREEN_H - self.__d_background.get_height())
+        self.__d_font = pygame.font.Font(None, 50)
+
 
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
@@ -131,6 +141,9 @@ class Level:
     def __get_current_line(self) -> DialogueLine:
         return self.__d_lines[self.__d_line_index]
     
+    def __get_active_character(self) -> DialogueCharacter:
+        return self.__d_characters[self.__get_current_line().get_character_id()]
+    
     def get_next_dialogue(self) -> GameState:
         self.__d_line_index += 1
         if self.__d_line_index > len(self.__d_lines):
@@ -158,5 +171,14 @@ class Level:
                     continue
                 character = self.__d_characters[character_id]
                 screen.blit(character.get_image(), character.get_position())
+
+            dialogue_surface = self.__d_background.copy()
+            character_name = self.__get_active_character().get_name()
+            character_colour = self.__get_active_character().get_colour()
+            character_name_text = self.__d_font.render(character_name, True, character_colour)
+            dialogue_surface.blit(character_name_text, (40, 20))
+            text = self.__d_font.render(self.__get_current_line().get_line(), True, "white")
+            dialogue_surface.blit(text, (40, 80))
+            screen.blit(dialogue_surface, self.__d_bg_position)
         else:
             pass  # Blank level

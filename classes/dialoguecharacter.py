@@ -9,6 +9,7 @@ class DialogueCharacter:
 
     def __init__(self, path: str, start_emotion: str) -> None:
         self.__screen_name: str = ""
+        self.__colour: str = "white"
         self.__position: Tuple[int, int] = (0, 0)
         self.__emotions: dict[str, Surface] = {}
         self.__last_emotion: str = start_emotion
@@ -20,6 +21,9 @@ class DialogueCharacter:
 
                 if character_data["screen_name"]:
                     self.__screen_name = character_data["screen_name"]
+
+                if character_data["name_colour"]:
+                    self.__colour = character_data["name_colour"]
                 
                 for emotion in character_data["emotions"]:
                     emotion_path = f"{path[:-5]}_{emotion}.png"
@@ -50,6 +54,9 @@ class DialogueCharacter:
     def get_name(self) -> str:
         return self.__screen_name
 
+    def get_colour(self) -> str:
+        return self.__colour
+
     def __get_emotion_image(self, emotion: str) -> Surface:
         if len(self.__emotions) == 0:
             return Surface((0, 0))
@@ -66,7 +73,7 @@ class DialogueCharacter:
             return surface
         else:
             faded = surface.copy()
-            faded.fill((90, 90, 90), special_flags=pygame.BLEND_RGB_SUB)
+            faded.fill((140, 140, 140), special_flags=pygame.BLEND_RGB_SUB)
             return faded        
 
     def get_width(self) -> int:
@@ -77,3 +84,6 @@ class DialogueCharacter:
 
     def get_position(self) -> Tuple[int, int]:
         return self.__position
+
+    def get_middle_position(self) -> int:
+        return int(self.__position[0] + self.get_width() / 2)
