@@ -32,7 +32,7 @@ class Game:
                 self.__scenes[SceneID.WORLD].change_level(1)
             case GameState.GAME_PLAYING:
                 self.__current_scene = SceneID.WORLD
-                self.__scenes[SceneID.WORLD].change_level(1)
+                self.__scenes[SceneID.WORLD].change_level(2)
 
     def handle_mouse_click(self) -> None:
         new_state = self.__scenes[self.__current_scene].handle_mouse_click()

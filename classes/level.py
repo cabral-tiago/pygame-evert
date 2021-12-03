@@ -7,7 +7,7 @@ from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
-from classes.enums import LevelType
+from classes.enums import LevelType, ScreenAlignment
 import configs
 import pygame
 
@@ -26,17 +26,15 @@ class Level:
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
 
-        # Dialogue characters
-        self.__dialogue_lines: list[DialogueLine] = []
+        # Dialogue
+        self.__d_lines: list[DialogueLine] = []
+        self.__d_characters: dict[str, DialogueCharacter] = {}
 
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
 
             self.__type = LevelType(level_info["type"])
             match self.__type:
-                case LevelType.BLANK:
-                    self.__background.fill("black")
-                
                 case LevelType.MAP:
                     self.__load_map(level_info, path)
                 
@@ -78,34 +76,37 @@ class Level:
 
             self.__background.blit(image,(0, 0))
 
-        dialogue_characters: dict[str, DialogueCharacter] = {}
-        dialogue_characters[""] = DialogueCharacter("")  # Narrator
-        for character in level_info["characters"]:
-            dialogue_characters[character] = DialogueCharacter(level_info["characters"][character])
-        
+        self.__d_characters[""] = DialogueCharacter("", "")  # Narrator
         with open(path+"/dialogue.json", "r", encoding="utf-8") as file:
             dialogue_data = json.load(file)
 
+            for character in dialogue_data["characters"]:
+                character_id = character[0]
+                character_path = character[1]
+                character_start_expression = character[2]
+
+                self.__d_characters[character_id] = DialogueCharacter(character_path, character_start_expression)
+
             for line in dialogue_data["dialogue"]:
-                for character in line:
-                    dialogue_character = dialogue_characters[character]
-                    self.__dialogue_lines.append(DialogueLine(dialogue_character, line[character]))
+                if len(line) == 1:
+                    self.__d_lines.append(DialogueLine(self.__d_characters[""], line[0]))
+                elif len(line) == 2:
+                    self.__d_lines.append(DialogueLine(self.__d_characters[line[0]], line[1]))
+                elif len(line == 3):
+                    self.__d_lines.append(DialogueLine(self.__d_characters[line[0]], line[1], line[2]))
 
     def get_type(self) -> LevelType:
         return self.__type
 
-    def __get_layer(self, index: int) -> LevelLayer:
-        return self.__layers[index]
-
     def get_width(self) -> int:
         if self.__type == LevelType.MAP:
-            return self.__get_layer(0).get_surface().get_width()
+            return self.__layers[0].get_surface().get_width()
         else:
             return self.__background.get_width()
 
     def get_height(self) -> int:
         if self.__type == LevelType.MAP:
-            return self.__get_layer(0).get_surface().get_height()
+            return self.__layers[0].get_surface().get_height()
         else:
             return self.__background.get_height()
     
@@ -124,5 +125,21 @@ class Level:
 
     def draw(self, screen: Surface) -> None:
         screen.blit(self.__background, (0, 0))
-        for layer in self.__layers:
-            screen.blit(layer.get_surface(), self.__camera_offset)
+
+        match self.__type:
+            case LevelType.MAP:
+                for layer in self.__layers:
+                    screen.blit(layer.get_surface(), self.__camera_offset)
+            case LevelType.DIALOGUE:
+                for character_id in self.__d_characters:
+                    if character_id == "":
+                        continue
+                    character = self.__d_characters[character_id]
+                    position = (0, 0)
+                    match character.get_screen_alignment():
+                        case ScreenAlignment.LEFT:
+                            position = (20, configs.SCREEN_H - character.get_height())
+                        case ScreenAlignment.RIGHT:
+                            position = (configs.SCREEN_W - character.get_width() - 20,
+                                        configs.SCREEN_H - character.get_height())
+                    screen.blit(character.get_image(), position)

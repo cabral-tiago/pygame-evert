@@ -1,10 +1,6 @@
 {
-    "type": 2,
+    "type": 1,
     "bg_style": "image",
     "bg_image": "assets/images/room_bg.png",
-    "bg_smooth_scale": true,
-    "characters": {
-        "jesse": "assets/characters/jesse/jesse.json",
-        "tiago": "assets/characters/tiago/tiago.json"
-    }
+    "bg_smooth_scale": true
 }

@@ -17,9 +17,8 @@ class SceneID(Enum):
 
 class LevelType(Enum):
     BLANK = 0
-    MENU = 1
-    DIALOGUE = 2
-    MAP = 3
+    DIALOGUE = 1
+    MAP = 2
 
 
 class PlayerDirection(Enum):
