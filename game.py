@@ -16,7 +16,9 @@ class Game:
 
     def update(self, dt) -> None:
         # Update current scene
-        self.__scenes[self.__current_scene].update(dt)
+        result = self.__scenes[self.__current_scene].update(dt)
+        print(result)
+        self.change_state(result)
 
     def draw(self, screen) -> None:
         self.__scenes[self.__current_scene].draw(screen)

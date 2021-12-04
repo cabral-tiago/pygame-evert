@@ -3,7 +3,7 @@ from classes.level import Level
 from classes.player import Player
 from classes.scene import Scene
 from pygame.surface import Surface
-from classes.enums import GameState, LevelType, PlayerDirection
+from classes.enums import EndCondition, GameState, LevelType, PlayerDirection
 import pygame
 import configs
 import os
@@ -27,14 +27,14 @@ class World(Scene):
             level = Level("assets/levels/" + level_nr)
             super().load_level(int(level_nr), level)
 
-    def update(self, dt: float) -> None:
-        super().update(dt)
-
+    def update(self, dt: float) -> GameState:
         match self.get_current_level().get_type():
             case LevelType.MAP:
                 self.__update_map(dt)
             case LevelType.DIALOGUE:
                 self.__update_dialogue(dt)
+        
+        return super().update(dt)
 
     def __update_map(self, dt: float) -> None:
         player_direction = PlayerDirection.STAY
@@ -56,6 +56,15 @@ class World(Scene):
             if obstacle.colliderect(self.__player.get_rect()):
                 self.__player.set_collided()
 
+        # With collectables
+        for collectable in self.get_current_level().get_collectables():
+            if collectable.get_rect().colliderect(self.__player.get_rect()):
+                collectable.collect()
+        
+        # Update player position for End Condition
+        if self.get_current_level().get_end_condition() == EndCondition.RETURN_WHEN_DONE:
+            self.get_current_level().set_player_position((self.__player.get_rect().x, self.__player.get_rect().y))
+
         # With the world edges
         if (self.__player.get_rect().x < 0
                 or self.__player.get_rect().x > self.get_current_level().get_width() - self.__player.get_rect().width
@@ -65,6 +74,9 @@ class World(Scene):
 
         # Updating player
         self.__player.update(dt)
+
+        # Updating level
+        self.get_current_level().update()
 
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())

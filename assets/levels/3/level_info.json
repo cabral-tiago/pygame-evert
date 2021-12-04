@@ -4,5 +4,20 @@
     "tile_size": [16, 16],
     "tile_scale": 4,
     "player_appear": true,
-    "player_spawn": [10, 15]
+    "player_spawn": [10, 12],
+    "quests": [
+        {
+            "type": "collect",
+            "quest_title": "Apanha a comida!",
+            "quest_description": "Apanha a pizza\nao fim da rua.",
+            "object": "assets\\images\\pizza.png",
+            "object_scale": 4,
+            "object_position": [27, 16]
+        }
+    ],
+    "end_condition": {
+        "condition": "return_when_done",
+        "quest_title": "Home sweet home",
+        "quest_description": "Volta para casa."
+    }
 }

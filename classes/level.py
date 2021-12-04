@@ -5,9 +5,11 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
+from classes.object import Object
+from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
-from classes.enums import GameState, LevelType
+from classes.enums import EndCondition, GameState, LevelType, QuestType
 import configs
 import pygame
 
@@ -21,6 +23,8 @@ class Level:
         ### Map
         self.__layers: list[LevelLayer] = []
         self.__obstacles: list[Rect] = []
+        self.__quest_tracker: QuestTracker = QuestTracker()
+        self.__level_complete = False
         
         # Player
         self.__player_appear: bool = False
@@ -75,6 +79,23 @@ class Level:
                 self.__obstacles.extend(layer.get_obstacle_rects())
             self.__layers.append(layer)
 
+        world_size_x = self.__layers[0].get_surface().get_width()
+        world_size_y = self.__layers[0].get_surface().get_height()
+        self.__quest_tracker.set_surface_size((world_size_x, world_size_y))
+        
+        for quest in level_info["quests"]:
+            if quest["object"]:
+                quest["world_scale"] = level_info["tile_scale"]
+                quest["tile_size"] = level_info["tile_size"]
+            self.__quest_tracker.add_quest(quest)
+
+        end_condition = level_info["end_condition"]
+        if end_condition["condition"] == "return_when_done":
+            end_condition["home_position"] = level_info["player_spawn"]
+            end_condition["world_scale"] = level_info["tile_scale"]
+            end_condition["tile_size"] = level_info["tile_size"]
+        self.__quest_tracker.set_level_completion(end_condition)
+
     def __load_dialogue(self, level_info, path) -> None:
         if level_info["bg_style"] == "colour":
             self.__background.fill(level_info["bg_colour"])
@@ -128,6 +149,15 @@ class Level:
     def get_obstacles(self) -> list[Rect]:
         return self.__obstacles
 
+    def get_end_condition(self) -> EndCondition:
+        return self.__quest_tracker.get_end_condition()
+
+    def get_collectables(self) -> list[Object]:
+        return self.__quest_tracker.get_active_objects()
+
+    def set_player_position(self, position) -> None:
+        self.__quest_tracker.set_player_position(position)
+
     def is_player_visible(self) -> bool:
         return self.__player_appear
     
@@ -137,6 +167,15 @@ class Level:
     def center_on_player(self, player_rect: Rect) -> None:
         x, y = player_rect.x, player_rect.y
         self.__camera_offset = (configs.SCREEN_W//2 - x, configs.SCREEN_H//2 - y)
+
+    def update(self) -> None:
+        if self.__type == LevelType.MAP:
+            self.__quest_tracker.update()
+            if self.__quest_tracker.get_status() == GameState.GAME_LEVEL_END:
+                self.__level_complete = True
+    
+    def is_level_complete(self) -> bool:
+        return self.__level_complete
 
     ### Dialogue Level
     def __get_current_line(self) -> DialogueLine:
@@ -166,6 +205,7 @@ class Level:
         if self.__type == LevelType.MAP:
             for layer in self.__layers:
                 screen.blit(layer.get_surface(), self.__camera_offset)
+            screen.blit(self.__quest_tracker.get_surface(), self.__camera_offset)
         elif self.__type == LevelType.DIALOGUE:
             for character_id in self.__d_characters:
                 if character_id == "":

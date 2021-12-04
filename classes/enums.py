@@ -30,3 +30,15 @@ class PlayerDirection(Enum):
     RIGHT = 2
     LEFT = 3
     STAY = 4
+
+
+class QuestType(Enum):
+    NULL = -1
+    COLLECT = 0
+    KILL_BOSS = 1
+
+
+class EndCondition(Enum):
+    NULL = -1
+    RETURN_WHEN_DONE = 0
+    IMMEDIATE_END = 1

@@ -28,9 +28,9 @@ class Scene:
             return self.get_current_level().get_next_dialogue()
         else:
             return GameState.NULL
-    
+
     def goto_next_level(self) -> GameState:
-        if self.__levels[self.__current_level+1]:
+        if self.__current_level + 1 in self.__levels.keys():
             self.change_level(self.__current_level+1)
             return GameState.GAME_OK
         else:
@@ -54,8 +54,12 @@ class Scene:
     def handle_key_up(self, key: int) -> None:
         pass
 
-    def update(self, dt: float) -> None:
+    def update(self, dt: float) -> GameState:
         self.update_mouse()
+
+        if self.get_current_level().is_level_complete():
+            return GameState.GAME_LEVEL_END
+        return GameState.GAME_OK
     
     def update_mouse(self) -> None:
         mouse_pos = pygame.mouse.get_pos()
