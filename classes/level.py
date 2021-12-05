@@ -59,16 +59,19 @@ class Level:
                     self.get_next_dialogue()
     
     def __load_map(self, level_info, path) -> None:
-        tile_scale = level_info["tile_scale"]
-        tile_size = level_info["tile_size"]
+        # Tileset
+        tile_scale: int = level_info["tile_scale"]
+        tile_size: Tuple[int, int] = level_info["tile_size"]
         tileset = Tileset(level_info["tileset"], tile_size, tile_scale)
 
+        # Player visibility and spawn location
         self.__player_appear = level_info["player_appear"]
         spawn_x, spawn_y = level_info["player_spawn"]
         spawn_x *= tile_size[0] * tile_scale
         spawn_y *= tile_size[1] * tile_scale
         self.__player_spawn = (spawn_x, spawn_y)
 
+        # Map Layers
         layers_path = path + "/layers"
         layer_files = [f.name for f in os.scandir(layers_path) if f.name.endswith(".csv")]
         ordered_layers = sorted([(int(i[:-7]), i) for i in layer_files])
@@ -80,10 +83,12 @@ class Level:
                 self.__obstacles.extend(layer.get_obstacle_rects())
             self.__layers.append(layer)
 
+        # Passing map size to Quest Tracker
         world_size_x = self.__layers[0].get_surface().get_width()
         world_size_y = self.__layers[0].get_surface().get_height()
         self.__quest_tracker.set_surface_size((world_size_x, world_size_y))
         
+        # Quests
         for quest in level_info["quests"]:
             if quest["collectables"]:
                 for collectable in quest["collectables"]:
@@ -92,12 +97,20 @@ class Level:
                     collectable["position"] = position
             self.__quest_tracker.add_quest(quest)
 
+        # End Condition
         end_condition = level_info["end_condition"]
-        if end_condition["condition"] == "return_when_done":
-            end_condition["home_position"] = level_info["player_spawn"]
-            end_condition["world_scale"] = level_info["tile_scale"]
-            end_condition["tile_size"] = level_info["tile_size"]
-        self.__quest_tracker.set_level_completion(end_condition)
+        if end_condition["condition"] == "immediate_end":
+            self.__quest_tracker.set_end_condition(EndCondition.IMMEDIATE_END)
+        elif end_condition["condition"] == "return_when_done":
+            end_position: Tuple[int, int] = end_condition["position"]
+            end_left = end_position[0] * tile_scale * tile_size[0]
+            end_top = end_position[1] * tile_scale * tile_size[1]
+            end_width = tile_size[0] * tile_scale
+            end_height = tile_size[1] * tile_scale
+            end_rect = Rect(end_left, end_top, end_width, end_height)
+            self.__quest_tracker.set_end_condition(EndCondition.RETURN_WHEN_DONE, end_condition["quest_title"],\
+                end_condition["quest_description"], end_rect)
+
 
     def __load_dialogue(self, level_info, path) -> None:
         if level_info["bg_style"] == "colour":
@@ -158,8 +171,11 @@ class Level:
     def get_active_collectables(self) -> list[Collectable]:
         return self.__quest_tracker.get_active_collectables()
 
-    def set_player_position(self, position) -> None:
-        self.__quest_tracker.set_player_position(position)
+    def get_end_position(self) -> Rect:
+        return self.__quest_tracker.get_end_position()
+
+    def set_player_at_end(self) -> None:
+        self.__quest_tracker.set_player_at_end()
 
     def is_player_visible(self) -> bool:
         return self.__player_appear
@@ -173,8 +189,7 @@ class Level:
 
     def update(self) -> GameState:
         if self.__type == LevelType.MAP:
-            self.__quest_tracker.update()
-            return self.__quest_tracker.get_status()
+            return self.__quest_tracker.update()
         else:
             return GameState.GAME_OK
 

@@ -22,6 +22,7 @@
     "end_condition": {
         "condition": "return_when_done",
         "quest_title": "Home sweet home",
-        "quest_description": "Volta para casa."
+        "quest_description": "Volta para casa.",
+        "position": [10, 12]
     }
 }

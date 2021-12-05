@@ -61,9 +61,10 @@ class World(Scene):
             if collectable.get_rect().colliderect(self.__player.get_rect()):
                 collectable.set_collected()
         
-        # Update player position for End Condition
-        if self.get_current_level().get_end_condition() == EndCondition.RETURN_WHEN_DONE:
-            self.get_current_level().set_player_position((self.__player.get_rect().x, self.__player.get_rect().y))
+        # Check if player is at the end of the level
+        if self.get_current_level().get_end_condition() == EndCondition.RETURN_WHEN_DONE and \
+                self.get_current_level().get_end_position().colliderect(self.__player.get_rect()):
+            self.get_current_level().set_player_at_end()
 
         # With the world edges
         if (self.__player.get_rect().x < 0
