@@ -57,7 +57,7 @@ class World(Scene):
                 self.__player.set_collided()
 
         # With collectables
-        for collectable in self.get_current_level().get_collectables():
+        for collectable in self.get_current_level().get_active_collectables():
             if collectable.get_rect().colliderect(self.__player.get_rect()):
                 collectable.set_collected()
         
@@ -74,9 +74,6 @@ class World(Scene):
 
         # Updating player
         self.__player.update(dt)
-
-        # Updating level
-        self.get_current_level().update()
 
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())

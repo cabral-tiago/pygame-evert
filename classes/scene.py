@@ -57,9 +57,7 @@ class Scene:
     def update(self, dt: float) -> GameState:
         self.update_mouse()
 
-        if self.get_current_level().is_level_complete():
-            return GameState.GAME_LEVEL_END
-        return GameState.GAME_OK
+        return self.get_current_level().update()
     
     def update_mouse(self) -> None:
         mouse_pos = pygame.mouse.get_pos()

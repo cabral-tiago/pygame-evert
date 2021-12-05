@@ -24,7 +24,6 @@ class Level:
         self.__layers: list[LevelLayer] = []
         self.__obstacles: list[Rect] = []
         self.__quest_tracker: QuestTracker = QuestTracker()
-        self.__level_complete = False
         
         # Player
         self.__player_appear: bool = False
@@ -60,13 +59,15 @@ class Level:
                     self.get_next_dialogue()
     
     def __load_map(self, level_info, path) -> None:
+        tile_scale = level_info["tile_scale"]
+        tile_size = level_info["tile_size"]
+        tileset = Tileset(level_info["tileset"], tile_size, tile_scale)
+
         self.__player_appear = level_info["player_appear"]
         spawn_x, spawn_y = level_info["player_spawn"]
-        spawn_x *= level_info["tile_size"][0] * level_info["tile_scale"]
-        spawn_y *= level_info["tile_size"][1] * level_info["tile_scale"]
+        spawn_x *= tile_size[0] * tile_scale
+        spawn_y *= tile_size[1] * tile_scale
         self.__player_spawn = (spawn_x, spawn_y)
-
-        tileset = Tileset(level_info["tileset"], level_info["tile_size"], level_info["tile_scale"])
 
         layers_path = path + "/layers"
         layer_files = [f.name for f in os.scandir(layers_path) if f.name.endswith(".csv")]
@@ -84,9 +85,11 @@ class Level:
         self.__quest_tracker.set_surface_size((world_size_x, world_size_y))
         
         for quest in level_info["quests"]:
-            if quest["object"]:
-                quest["world_scale"] = level_info["tile_scale"]
-                quest["tile_size"] = level_info["tile_size"]
+            if quest["collectables"]:
+                for collectable in quest["collectables"]:
+                    position = collectable["position"]
+                    position = (position[0] * tile_scale * tile_size[0], position[1] * tile_scale * tile_size[1])
+                    collectable["position"] = position
             self.__quest_tracker.add_quest(quest)
 
         end_condition = level_info["end_condition"]
@@ -152,8 +155,8 @@ class Level:
     def get_end_condition(self) -> EndCondition:
         return self.__quest_tracker.get_end_condition()
 
-    def get_collectables(self) -> list[Collectable]:
-        return self.__quest_tracker.get_active_objects()
+    def get_active_collectables(self) -> list[Collectable]:
+        return self.__quest_tracker.get_active_collectables()
 
     def set_player_position(self, position) -> None:
         self.__quest_tracker.set_player_position(position)
@@ -168,14 +171,12 @@ class Level:
         x, y = player_rect.x, player_rect.y
         self.__camera_offset = (configs.SCREEN_W//2 - x, configs.SCREEN_H//2 - y)
 
-    def update(self) -> None:
+    def update(self) -> GameState:
         if self.__type == LevelType.MAP:
             self.__quest_tracker.update()
-            if self.__quest_tracker.get_status() == GameState.GAME_LEVEL_END:
-                self.__level_complete = True
-    
-    def is_level_complete(self) -> bool:
-        return self.__level_complete
+            return self.__quest_tracker.get_status()
+        else:
+            return GameState.GAME_OK
 
     ### Dialogue Level
     def __get_current_line(self) -> DialogueLine:
