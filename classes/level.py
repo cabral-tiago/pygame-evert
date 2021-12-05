@@ -5,11 +5,11 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
-from classes.object import Object
+from classes.collectable import Collectable
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
 from classes.levellayer import LevelLayer
-from classes.enums import EndCondition, GameState, LevelType, QuestType
+from classes.enums import EndCondition, GameState, LevelType
 import configs
 import pygame
 
@@ -152,7 +152,7 @@ class Level:
     def get_end_condition(self) -> EndCondition:
         return self.__quest_tracker.get_end_condition()
 
-    def get_collectables(self) -> list[Object]:
+    def get_collectables(self) -> list[Collectable]:
         return self.__quest_tracker.get_active_objects()
 
     def set_player_position(self, position) -> None:

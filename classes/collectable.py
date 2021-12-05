@@ -4,7 +4,7 @@ from pygame.surface import Surface
 import pygame
 
 
-class Object:
+class Collectable:
     def __init__(self, image: Surface, scale: int, position: Tuple[int, int],
                  world_scale: int, tile_scale: Tuple[int, int]) -> None:
         self.__image: Surface = image
@@ -26,7 +26,7 @@ class Object:
     def get_rect(self) -> Rect:
         return self.get_image().get_rect(topleft=self.__position)
 
-    def collect(self) -> None:
+    def set_collected(self) -> None:
         self.__collected = True
 
     def is_collected(self) -> bool:

@@ -1,6 +1,5 @@
 from typing import Tuple
-from pygame.constants import SRCALPHA
-from classes.object import Object
+from classes.collectable import Collectable
 from classes.quest import Quest
 from classes.enums import EndCondition, GameState, QuestType
 from pygame.surface import Surface
@@ -35,7 +34,7 @@ class QuestTracker:
             world_scale = quest_info["world_scale"]
             tile_size = quest_info["tile_size"]
 
-            object = Object(object_image, object_scale, object_position, world_scale, tile_size)
+            object = Collectable(object_image, object_scale, object_position, world_scale, tile_size)
             quest = Quest(type, quest_info["quest_title"], quest_info["quest_description"], object)
         else:
             quest = Quest(type, quest_info["quest_title"], quest_info["quest_description"])
@@ -65,7 +64,7 @@ class QuestTracker:
             print(self.__end_condition_home)
 
     def set_surface_size(self, size: Tuple[int, int]) -> None:
-        self.__surface = Surface(size, SRCALPHA)
+        self.__surface = Surface(size, pygame.SRCALPHA)
 
     def update(self) -> None:
         quests_left = len(self.__quests)
@@ -85,7 +84,7 @@ class QuestTracker:
     def set_player_position(self, position: Tuple[int, int]) -> None:
         self.__player_position = position
 
-    def get_active_objects(self) -> list[Object]:
+    def get_active_objects(self) -> list[Collectable]:
         list = []
         for quest in self.__quests:
             if not quest.is_completed() and quest.get_type() == QuestType.COLLECT:

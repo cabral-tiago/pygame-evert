@@ -1,5 +1,5 @@
-from classes.enums import GameState, QuestType
-from classes.object import Object
+from classes.enums import QuestType
+from classes.collectable import Collectable
 
 
 class Quest:
@@ -8,7 +8,7 @@ class Quest:
         self.__title: str = title
         self.__desc: str = desc
         
-        self.__objects: list[Object] = []
+        self.__objects: list[Collectable] = []
         if type == QuestType.COLLECT:
             self.__objects.append(object)
 
@@ -23,7 +23,7 @@ class Quest:
     def get_description(self) -> str:
         return self.__desc
 
-    def get_object(self) -> Object:
+    def get_object(self) -> Collectable:
         return self.__objects[0]
 
     def update_quest(self) -> None:

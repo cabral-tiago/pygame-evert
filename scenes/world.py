@@ -59,7 +59,7 @@ class World(Scene):
         # With collectables
         for collectable in self.get_current_level().get_collectables():
             if collectable.get_rect().colliderect(self.__player.get_rect()):
-                collectable.collect()
+                collectable.set_collected()
         
         # Update player position for End Condition
         if self.get_current_level().get_end_condition() == EndCondition.RETURN_WHEN_DONE:
