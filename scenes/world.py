@@ -14,16 +14,18 @@ class World(Scene):
     def __init__(self) -> None:
         super().__init__()
 
+        # Player
         self.__player: Player = Player()
 
         # Dialogue button
-        dialogue_hud_size = (configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3)
-        dialogue_hud_position = (0, configs.SCREEN_H - dialogue_hud_size[1])
-        button = Button("", dialogue_hud_size, dialogue_hud_position, GameState.GAME_NEXT_DIALOGUE, transparent = True)
-        self.__dialogue_button: ButtonGroup = ButtonGroup()
-        self.__dialogue_button.add_button(button)
-        super().add_button_group(self.__dialogue_button)
-        
+        dialogue_box_size = (configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3)
+        dialogue_box_position = (0, configs.SCREEN_H - dialogue_box_size[1])
+        dialogue_button = Button("", dialogue_box_size, dialogue_box_position, GameState.GAME_NEXT_DIALOGUE, True)
+        self.__dialogue_box: ButtonGroup = ButtonGroup()
+        self.__dialogue_box.add_button(dialogue_button)
+        super().add_button_group(self.__dialogue_box)
+
+        # Loading all levels        
         levels_folder = "assets/levels/"
         levels = [f.name for f in os.scandir(levels_folder) if int(f.name) > 0]
         for level_nr in levels:
@@ -31,11 +33,8 @@ class World(Scene):
             super().load_level(int(level_nr), level)
 
     def update(self, dt: float) -> GameState:
-        match self.get_current_level().get_type():
-            case LevelType.MAP:
-                self.__update_map(dt)
-            case LevelType.DIALOGUE:
-                self.__update_dialogue(dt)
+        if self.get_current_level().get_type() == LevelType.MAP:
+            self.__update_map(dt)
         
         return super().update(dt)
 
@@ -82,22 +81,18 @@ class World(Scene):
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())
 
-    def __update_dialogue(self, dt: float) -> None:
-        pass
-
     def change_level(self, level_nr: int) -> None:
         super().change_level(level_nr)
 
         if self.get_current_level().get_type() == LevelType.MAP:
             self.__player.teleport(self.get_current_level().get_player_spawn())
-            self.__dialogue_button.hide()
+            self.__dialogue_box.hide()
         elif self.get_current_level().get_type() == LevelType.DIALOGUE:
-            self.__dialogue_button.show()
+            self.__dialogue_box.show()
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
         if self.get_current_level().is_player_visible():
             screen.blit(self.__player.get_surface(), (configs.SCREEN_W//2, configs.SCREEN_H//2))
         
-        if self.get_current_level().get_type() == LevelType.DIALOGUE:
-            super().draw(screen)  # To draw the "button"
+        super().draw(screen)
