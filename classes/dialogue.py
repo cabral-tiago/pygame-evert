@@ -9,6 +9,9 @@ class Dialogue:
         self.__lines: list[DialogueLine] = []
         self.__current_line_index: int = -1
         self.__completed: bool = False
+
+        # Narrator
+        self.add_character("", DialogueCharacter("", ""))
     
     def add_character(self, character_id:str, character: DialogueCharacter) -> None:
         self.__characters[character_id] = character

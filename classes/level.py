@@ -123,7 +123,6 @@ class Level:
 
             self.__background.blit(image,(0, 0))
 
-        self.__dialogue.add_character("", DialogueCharacter("", ""))  # Narrator
         with open(path+"/dialogue.json", "r", encoding="utf-8") as file:
             dialogue_data = json.load(file)
 
