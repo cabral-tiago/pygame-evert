@@ -8,7 +8,7 @@ from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
-from classes.levellayer import LevelLayer
+from classes.maplayer import MapLayer
 from classes.enums import EndCondition, GameState, LevelType
 import configs
 import pygame
@@ -21,7 +21,7 @@ class Level:
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
         
         ### Map
-        self.__layers: list[LevelLayer] = []
+        self.__layers: list[MapLayer] = []
         self.__obstacles: list[Rect] = []
         self.__quest_tracker: QuestTracker = QuestTracker()
         
@@ -78,9 +78,8 @@ class Level:
 
         for _, file in ordered_layers:
             layer_collide = True if file[:-4].split("_")[1] == "ob" else False
-            layer = LevelLayer(layers_path + "/" + file, layer_collide, tileset)
-            if layer_collide:
-                self.__obstacles.extend(layer.get_obstacle_rects())
+            layer = MapLayer(layers_path + "/" + file, layer_collide, tileset)
+            self.__obstacles.extend(layer.get_obstacle_rects())
             self.__layers.append(layer)
 
         # Passing map size to Quest Tracker
