@@ -25,7 +25,7 @@ class Scene:
     
     def get_next_dialogue(self) -> None:
         if self.get_current_level().get_type() == LevelType.DIALOGUE:
-            return self.get_current_level().goto_next_line()
+            self.get_current_level().goto_next_line()
 
     def goto_next_level(self) -> GameState:
         if self.__current_level + 1 in self.__levels.keys():

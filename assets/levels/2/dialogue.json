@@ -1,6 +1,6 @@
 {
     "characters": [
-        ["j", "assets/characters/jesse/jesse.json", "smile"]
+        ["j", "assets/characters/jesse/jesse-center.json", "smile"]
     ],
     "dialogue": [
         ["( Mais tarde nesse dia )"],

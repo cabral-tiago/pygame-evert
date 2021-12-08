@@ -1,0 +1,12 @@
+{
+    "characters": [
+        ["j", "assets/characters/jesse/jesse-center.json", "surprised"]
+    ],
+    "dialogue": [
+        ["j", "Uff, que raio é que acabou de acontecer!?"],
+        ["j", "Enfim... Pelo menos cheguei a salvo a casa.", "smile"],
+        ["( O Evert vai comer a sua pizza )"],
+        ["( Mais tarde nesse dia )"],
+        ["j", "Não posso adiar mais. Tenho de confrontar a Emily.", "sad"]
+    ]
+}

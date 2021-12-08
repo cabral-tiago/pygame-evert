@@ -1,0 +1,27 @@
+{
+    "characters": [
+        ["j", "assets/characters/jesse/jesse.json", "sad"],
+        ["e", "assets/characters/emily/emily.json", "neutral"]
+    ],
+    "dialogue": [
+        ["j", "Hey Emily! Tudo bem?"],
+        ["e", "Olá Evert. Sim e contigo?"],
+        ["j", "Nem por isso... Queria perguntar-te uma coisa."],
+        ["e", "O que se passa?", "sad"],
+        ["j", "Eu encontrei as tuas fotos online..."],
+        ["e", "C-Como assim?", "surprised"],
+        ["j", "Descobri que são de uma influencer..."],
+        ["e", "N-não pode ser... Deve ser só parecida.", "nervous"],
+        ["j", "Estás a enganar-me Emily. Porquê...?"],
+        ["e", "É-é que... Sabes... Tenho vergonha de me mostrar online. É isso..."],
+        ["j", "Se isso fosse verdade não tinhas a iniciativa de mandar fotos."],
+        ["e", "M-mas...", "sad"],
+        ["j", "Conta a verdade. És mesmo uma rapariga?"],
+        ["e", "C-claro que sou!", "surprised"],
+        ["j", "Então... Porque mandaste fotos que não são tuas?"],
+        ["e", "É que... Sabes... Tipo...", "sad"],
+        ["j", "Chega! Pára de me tentar enganar com mais mentiras!", "angry"],
+        ["e", "..."],
+        ["e", "Okay... A verdade é que..."]
+    ]
+}

@@ -1,4 +1,5 @@
 import json
+import os
 from typing import Tuple
 from pygame.surface import Surface
 import configs
@@ -18,6 +19,7 @@ class DialogueCharacter:
         if path != "":
             with open(path, "r", encoding="utf-8") as file:
                 character_data = json.load(file)
+                folder = os.path.dirname(path)
 
                 if character_data["screen_name"]:
                     self.__screen_name = character_data["screen_name"]
@@ -26,7 +28,7 @@ class DialogueCharacter:
                     self.__colour = character_data["name_colour"]
                 
                 for emotion in character_data["emotions"]:
-                    emotion_path = f"{path[:-5]}_{emotion}.png"
+                    emotion_path = f"{folder}/{emotion}.png"
                     emotion_surface = pygame.image.load(emotion_path)
                     if configs.CHARACTER_SIZE[0] != emotion_surface.get_width() or \
                         configs.CHARACTER_SIZE[1] != emotion_surface.get_height():

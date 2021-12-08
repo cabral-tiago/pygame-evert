@@ -1,0 +1,6 @@
+{
+    "type": 1,
+    "bg_style": "image",
+    "bg_image": "assets/images/kitchen_bg.png",
+    "bg_smooth_scale": true
+}
