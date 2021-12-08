@@ -1,20 +1,21 @@
 import pygame
 from pygame.surface import Surface
 from classes.button import Button
+from classes.buttongroup import ButtonGroup
 from classes.level import Level
 from classes.enums import GameState, LevelType
 
 
 class Scene:
     def __init__(self) -> None:
-        self.__buttons: list[Button] = []
+        self.__button_groups: list[ButtonGroup] = []
         
         self.__levels: dict[int, Level] = {}
         self.__levels[0] = Level("assets/levels/0")
         self.__current_level = 0
 
-    def add_button(self, button: Button) -> None:
-        self.__buttons.append(button)
+    def add_button_group(self, button_group: ButtonGroup) -> None:
+        self.__button_groups.append(button_group)
 
     def load_level(self, level_nr: int, level: Level) -> None:
         self.__levels[level_nr] = level
@@ -40,9 +41,11 @@ class Scene:
     def handle_mouse_click(self) -> GameState:
         mouse_pos = pygame.mouse.get_pos()
 
-        for button in self.__buttons:
-            if button.get_rect().collidepoint(mouse_pos):
-                return button.get_target_state()
+        for button_group in self.__button_groups:
+            if button_group.is_visible():
+                result = button_group.click(mouse_pos)
+                if result != GameState.NULL:
+                    return result
         
         return GameState.NULL
 
@@ -53,26 +56,20 @@ class Scene:
         pass
 
     def update(self, dt: float) -> GameState:
-        self.update_mouse()
-
-        return self.get_current_level().update()
-    
-    def update_mouse(self) -> None:
-        mouse_pos = pygame.mouse.get_pos()
-        flag_hovered = False
-
-        for button in self.__buttons:
-            if button.get_rect().collidepoint(mouse_pos):
-                button.hover()
-                flag_hovered = True
-            else:
-                button.normal()
+        flag_hovering = False
+        for button_group in self.__button_groups:
+            if button_group.is_visible() and button_group.is_hovering():
+                flag_hovering = True
+                break
         
-        if flag_hovered:
+        if flag_hovering:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
         else:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
 
+        return self.get_current_level().update()
+
     def draw(self, screen: Surface) -> None:
-        for button in self.__buttons:
-            screen.blit(button.get_surface(), button.get_position())
+        for button_group in self.__button_groups:
+            if button_group.is_visible():
+                screen.blit(button_group.get_surface(), (0, 0))

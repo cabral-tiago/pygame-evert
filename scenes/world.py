@@ -1,4 +1,5 @@
 from classes.button import Button
+from classes.buttongroup import ButtonGroup
 from classes.level import Level
 from classes.player import Player
 from classes.scene import Scene
@@ -19,7 +20,9 @@ class World(Scene):
         dialogue_hud_size = (configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3)
         dialogue_hud_position = (0, configs.SCREEN_H - dialogue_hud_size[1])
         button = Button("", dialogue_hud_size, dialogue_hud_position, GameState.GAME_NEXT_DIALOGUE, transparent = True)
-        super().add_button(button)
+        self.__dialogue_button: ButtonGroup = ButtonGroup()
+        self.__dialogue_button.add_button(button)
+        super().add_button_group(self.__dialogue_button)
         
         levels_folder = "assets/levels/"
         levels = [f.name for f in os.scandir(levels_folder) if int(f.name) > 0]
@@ -87,6 +90,9 @@ class World(Scene):
 
         if self.get_current_level().get_type() == LevelType.MAP:
             self.__player.teleport(self.get_current_level().get_player_spawn())
+            self.__dialogue_button.hide()
+        elif self.get_current_level().get_type() == LevelType.DIALOGUE:
+            self.__dialogue_button.show()
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
