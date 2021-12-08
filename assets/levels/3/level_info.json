@@ -8,8 +8,7 @@
     "quests": [
         {
             "type": "collect",
-            "quest_title": "Apanha a comida!",
-            "quest_description": "Apanha a pizza\nao fim da rua.",
+            "objective": "Apanha a pizza ao fim da rua.",
             "collectables": [
                 {
                     "image_path": "assets\\images\\pizza.png",
@@ -21,8 +20,7 @@
     ],
     "end_condition": {
         "condition": "return_when_done",
-        "quest_title": "Home sweet home",
-        "quest_description": "Volta para casa.",
+        "objective": "Volta para casa.",
         "position": [10, 12]
     }
 }

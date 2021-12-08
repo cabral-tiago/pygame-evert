@@ -3,21 +3,17 @@ from classes.collectable import Collectable
 
 
 class Quest:
-    def __init__(self, type: QuestType, title: str, desc: str, collectables: list[Collectable]) -> None:
+    def __init__(self, type: QuestType, objective: str, collectables: list[Collectable]) -> None:
         self.__type: QuestType = type
-        self.__title: str = title
-        self.__desc: str = desc
+        self.__objective: str = objective
         self.__collectables: list[Collectable] = collectables
         self.__completed = False
 
     def get_type(self) -> QuestType:
         return self.__type
 
-    def get_title(self) -> str:
-        return self.__title
-
-    def get_description(self) -> str:
-        return self.__desc
+    def get_objective(self) -> str:
+        return self.__objective
 
     def get_active_collectables(self) -> list[Collectable]:
         active_collectables: list[Collectable] = []

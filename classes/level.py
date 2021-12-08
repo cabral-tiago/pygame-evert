@@ -104,8 +104,7 @@ class Level:
             end_width = tile_size[0] * tile_scale
             end_height = tile_size[1] * tile_scale
             end_rect = Rect(end_left, end_top, end_width, end_height)
-            self.__quest_tracker.set_end_condition(EndCondition.RETURN_WHEN_DONE, end_condition["quest_title"],\
-                end_condition["quest_description"], end_rect)
+            self.__quest_tracker.set_end_condition(EndCondition.RETURN_WHEN_DONE, end_condition["objective"], end_rect)
 
 
     def __load_dialogue(self, level_info, path) -> None:
@@ -200,7 +199,8 @@ class Level:
         if self.__type == LevelType.MAP:
             for layer in self.__layers:
                 screen.blit(layer.get_surface(), self.__camera_offset)
-            screen.blit(self.__quest_tracker.get_surface(), self.__camera_offset)
+            screen.blit(self.__quest_tracker.get_map_surface(), self.__camera_offset)
+            screen.blit(self.__quest_tracker.get_objective_surface(), (0, 0))
         elif self.__type == LevelType.DIALOGUE:
             self.__dialogue.draw(screen)
 
