@@ -21,7 +21,7 @@ class Level:
         self.__type: LevelType = LevelType.BLANK
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
         
-        ### Map
+        # Map
         self.__layers: list[MapLayer] = []
         self.__obstacles: list[Rect] = []
         self.__quest_tracker: QuestTracker = QuestTracker()
@@ -33,17 +33,10 @@ class Level:
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
 
-        ### Dialogue
+        # Dialogue
         self.__dialogue = Dialogue()
-        
-        # Dialogue HUD
-        self.__d_background = Surface((configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3), pygame.SRCALPHA)
-        self.__d_background.fill((0,0,0,210))
-        self.__d_bg_position = (0, configs.SCREEN_H - self.__d_background.get_height())
-        self.__d_text_font = pygame.font.Font("assets\\fonts\\Roboto-Medium.ttf", 38)
-        self.__d_name_font = pygame.font.Font("assets\\fonts\\CarterOne-Regular.ttf", 42)
 
-
+        # Loading
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
 
@@ -209,14 +202,5 @@ class Level:
             screen.blit(self.__quest_tracker.get_objective_surface(), (0, 0))
         elif self.__type == LevelType.DIALOGUE:
             self.__dialogue.draw(screen)
-
-            dialogue_surface = self.__d_background.copy()
-            character_name = self.__dialogue.get_current_character().get_name()
-            character_colour = self.__dialogue.get_current_character().get_colour()
-            character_name_text = self.__d_name_font.render(character_name, True, character_colour)
-            dialogue_surface.blit(character_name_text, (40, 10))
-            text = self.__d_text_font.render(self.__dialogue.get_current_line().get_line(), True, "white")
-            dialogue_surface.blit(text, (40, 80))
-            screen.blit(dialogue_surface, self.__d_bg_position)
         else:
             pass  # Blank level
