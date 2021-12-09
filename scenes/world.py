@@ -1,3 +1,4 @@
+from pygame.rect import Rect
 from classes.button import Button
 from classes.buttongroup import ButtonGroup
 from classes.level import Level
@@ -18,9 +19,9 @@ class World(Scene):
         self.__player: Player = Player()
 
         # Dialogue button
-        dialogue_box_size = (configs.SCREEN_W,configs.CHARACTER_SIZE[1]/3)
-        dialogue_box_position = (0, configs.SCREEN_H - dialogue_box_size[1])
-        dialogue_button = Button("", dialogue_box_size, dialogue_box_position, GameState.GAME_NEXT_DIALOGUE, True)
+        dialogue_box_rect = Rect((0, configs.SCREEN_H - configs.CHARACTER_SIZE[1]/3),
+                                 (configs.SCREEN_W, configs.CHARACTER_SIZE[1]/3))
+        dialogue_button = Button("", dialogue_box_rect, GameState.GAME_NEXT_DIALOGUE, True)
         self.__dialogue_box: ButtonGroup = ButtonGroup()
         self.__dialogue_box.add_button(dialogue_button)
         super().add_button_group(self.__dialogue_box)
