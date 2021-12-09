@@ -20,3 +20,6 @@ class Collectable:
 
     def is_collected(self) -> bool:
         return self.__collected
+
+    def reset(self) -> None:
+        self.__collected = False

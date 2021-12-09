@@ -31,3 +31,9 @@ class Quest:
     
     def is_completed(self) -> bool:
         return self.__completed
+
+    def reset(self) -> None:
+        for collectable in self.__collectables:
+            collectable.reset()
+        
+        self.__completed = False

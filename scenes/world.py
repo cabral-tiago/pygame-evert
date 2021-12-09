@@ -89,6 +89,10 @@ class World(Scene):
             self.__dialogue_box.hide()
         elif self.get_current_level().get_type() == LevelType.DIALOGUE:
             self.__dialogue_box.show()
+    
+    def reset(self) -> None:
+        super().reset()
+        self.change_level(1)
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)

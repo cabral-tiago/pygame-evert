@@ -42,6 +42,12 @@ class Dialogue:
                     character.set_inactive()
         else:
             self.__completed = True
+    
+    def reset(self) -> None:
+        self.__current_line_index = -1
+        self.__completed = False
+
+        self.goto_next_line()
 
     def update(self) -> GameState:
         if self.__completed or len(self.__lines) == 0:
@@ -58,4 +64,3 @@ class Dialogue:
                 screen.blit(character.get_image(self.get_current_line().get_emotion()), character.get_position())
             else:
                 screen.blit(character.get_image(), character.get_position())
-

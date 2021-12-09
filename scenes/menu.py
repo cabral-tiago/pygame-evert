@@ -23,7 +23,7 @@ class Menu(Scene):
         self.__bg_surface.blit(background,(0, 0))
         self.__bg_surface.fill((50, 50, 50), special_flags=pygame.BLEND_RGB_SUB)
 
-        # Title and Background
+        # Title
         font_big = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 200)
         font_small = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 120)
         text_big = font_big.render("Evert", True, "peru")

@@ -29,8 +29,8 @@ class Game:
             case GameState.MAIN_MENU:
                 self.__current_scene = SceneID.MENU
             case GameState.GAME_FRESH:
+                self.__scenes[SceneID.WORLD].reset()
                 self.__current_scene = SceneID.WORLD
-                self.__scenes[SceneID.WORLD].change_level(1)
             case GameState.GAME_PLAYING:
                 self.__current_scene = SceneID.WORLD
                 self.__scenes[SceneID.WORLD].change_level(4)

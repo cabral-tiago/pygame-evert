@@ -156,6 +156,12 @@ class Level:
         else:
             return self.__background.get_height()
     
+    def reset(self) -> None:
+        if self.__type == LevelType.MAP:
+            self.__quest_tracker.reset()
+        elif self.__type == LevelType.DIALOGUE:
+            self.__dialogue.reset()
+
     def update(self) -> GameState:
         if self.__type == LevelType.MAP:
             return self.__quest_tracker.update()

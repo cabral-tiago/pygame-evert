@@ -55,6 +55,12 @@ class Scene:
     def handle_key_up(self, key: int) -> None:
         pass
 
+    def reset(self) -> None:
+        for level in self.__levels.values():
+            level.reset()
+        
+        self.change_level(0)
+
     def update(self, dt: float) -> GameState:
         flag_hovering = False
         for button_group in self.__button_groups:

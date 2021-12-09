@@ -115,3 +115,9 @@ class QuestTracker:
         surface.blit(objective_text, (20, 46))
 
         return surface
+
+    def reset(self) -> None:
+        for quest in self.__quests:
+            quest.reset()
+        
+        self.__level_completed = False
