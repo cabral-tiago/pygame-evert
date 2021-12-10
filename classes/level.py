@@ -186,8 +186,8 @@ class Level:
         return self.__player_spawn
     
     def center_on_player(self, player_rect: Rect) -> None:
-        x, y = player_rect.x, player_rect.y
-        self.__camera_offset = (configs.SCREEN_W//2 - x, configs.SCREEN_H//2 - y)
+        self.__camera_offset = (configs.SCREEN_W // 2 - player_rect.x - player_rect.width // 2,
+                                configs.SCREEN_H // 2 - player_rect.y - player_rect.height // 2)
     
     def set_bullets(self, bullets: list[Bullet]) -> None:
         self.__bullet_list = bullets

@@ -99,8 +99,9 @@ class Player:
         return surface
     
     def teleport(self, pos: Tuple[int, int]) -> None:
-        self.__position = pos
-        self.__prev_position = pos
+        position = self.get_surface().get_rect(topleft=pos).center
+        self.__position = position
+        self.__prev_position = position
 
     def set_collided(self) -> None:
         self.__colliding = True
@@ -142,5 +143,5 @@ class Player:
 
     def get_rect(self):
         position = int(self.__position[0]), int(self.__position[1])
-        return self.get_surface().get_rect(topleft=position)
+        return self.get_surface().get_rect(center=position)
     
