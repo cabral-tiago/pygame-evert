@@ -4,9 +4,11 @@ from pygame.surface import Surface
 from classes.projectiles.bullet import Bullet
 from classes.spritesheet import Spritesheet
 from classes.enums import PlayerDirection
+import pygame
 
 
 class Player:
+    MAX_HP = 300
     ANIMATION_INTERVAL = 0.1
     SPEED = 150
     SHOOTING_COOLDOWN = 1
@@ -36,6 +38,14 @@ class Player:
 
         # Shooting cooldown
         self.__shooting_cooldown = 0
+
+        # HP
+        self.__hp = Player.MAX_HP
+        self.__hp_font = pygame.font.Font("assets/fonts/Roboto-Medium.ttf", 22)
+        self.__hpbar_border = 4
+        self.__hpbar_bg = Surface((Player.MAX_HP + self.__hpbar_border * 2, 50), pygame.SRCALPHA)
+        pygame.draw.rect(self.__hpbar_bg, "gray20", Rect((0, 0), self.__hpbar_bg.get_size()), border_radius=4)
+        pygame.draw.rect(self.__hpbar_bg, "black", Rect((0, 0), self.__hpbar_bg.get_size()), self.__hpbar_border, 4)
     
     def move(self, dt: float, direction: PlayerDirection) -> None:
         if direction == PlayerDirection.STAY:
@@ -72,10 +82,21 @@ class Player:
 
     def shoot(self) -> Bullet:
         self.__shooting_cooldown = Player.SHOOTING_COOLDOWN
-        
+
         if self.__direction == PlayerDirection.STAY:
             return Bullet(self.get_rect().center, self.__prev_direction)
         return Bullet(self.get_rect().center, self.__direction)
+    
+    def get_hp(self) -> int:
+        return self.__hp
+
+    def get_hpbar_surface(self) -> Surface:
+        surface = self.__hpbar_bg.copy()
+        pygame.draw.rect(self.__hpbar_bg, "red", Rect((self.__hpbar_border, self.__hpbar_border),
+                            (self.get_hp(), 42)), border_radius=4)
+        hp_text = self.__hp_font.render(f"HP: {self.__hp}/{Player.MAX_HP}", True, "white")
+        surface.blit(hp_text, (self.__hpbar_border * 2, surface.get_height()//2 - hp_text.get_height() // 2))
+        return surface
     
     def teleport(self, pos: Tuple[int, int]) -> None:
         self.__position = pos
@@ -122,3 +143,4 @@ class Player:
     def get_rect(self):
         position = int(self.__position[0]), int(self.__position[1])
         return self.get_surface().get_rect(topleft=position)
+    

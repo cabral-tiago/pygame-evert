@@ -110,5 +110,8 @@ class World(Scene):
         self.get_current_level().draw(screen)
         if self.get_current_level().is_player_visible():
             screen.blit(self.__player.get_surface(), (configs.SCREEN_W//2, configs.SCREEN_H//2))
+            screen.blit(self.__player.get_hpbar_surface(),
+                        (configs.SCREEN_W//2 - self.__player.get_hpbar_surface().get_width()//2,
+                         configs.SCREEN_H - self.__player.get_hpbar_surface().get_height()))
         
         super().draw(screen)
