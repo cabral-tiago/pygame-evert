@@ -84,7 +84,7 @@ class Level:
         self.__quest_tracker.set_surface_size((world_size_x, world_size_y))
         
         # Monster for debugging
-        self.__monsters.append(Monster((1200, 1000)))
+        self.__monsters.append(Monster((1200, 800)))
 
         # Quests
         for quest in level_info["quests"]:

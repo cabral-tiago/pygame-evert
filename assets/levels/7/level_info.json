@@ -1,27 +1,25 @@
 {
     "type": 2,
-    "tileset": "assets/images/city_tileset.png",
+    "tileset": "assets/images/autumn_lands.png",
     "tile_size": [16, 16],
     "tile_scale": 4,
     "player_appear": true,
-    "player_spawn": [12, 10],
-    "player_spawn_direction": "bottom",
+    "player_spawn": [11, 12],
+    "player_spawn_direction": "right",
     "quests": [
         {
             "type": "collect",
             "objective": "Apanha a pizza ao fim da rua.",
             "collectables": [
                 {
-                    "image_path": "assets\\images\\pizza.png",
+                    "image_path": "assets/images/pizza.png",
                     "image_scale": 4,
-                    "position": [47, 10]
+                    "position": [25, 5]
                 }
             ]
         }
     ],
     "end_condition": {
-        "condition": "return_when_done",
-        "objective": "Volta para casa.",
-        "position": [12, 10]
+        "condition": "immediate_end"
     }
 }
