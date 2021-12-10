@@ -21,17 +21,23 @@ class Menu(Scene):
             scaled_height = int(background.get_height() * scale)
             background = pygame.transform.smoothscale(background, (configs.SCREEN_W, scaled_height))
         self.__bg_surface.blit(background,(0, 0))
-        self.__bg_surface.fill((50, 50, 50), special_flags=pygame.BLEND_RGB_SUB)
+        self.__bg_surface.fill((20, 20, 20), special_flags=pygame.BLEND_RGB_SUB)
 
         # Title
         font_big = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 200)
-        font_small = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 120)
         text_big = font_big.render("Evert", True, "peru")
-        text_small = font_small.render("Olá", True, "hotpink2")
-        text_big_position = (configs.SCREEN_W / 2 - text_big.get_width() / 2,
-                             configs.SCREEN_H / 2 - 200)
-        text_small_position = text_big_position[0] - 100, text_big_position[1] - 80
+        shadow_big = font_big.render("Evert", True, "gray10")
+        text_big_position = (configs.SCREEN_W / 2 - text_big.get_width() / 2, configs.SCREEN_H / 2 - 200)
+        shadow_big_position = (text_big_position[0] + 4, text_big_position[1] + 4)
 
+        font_small = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 120)
+        text_small = font_small.render("Olá", True, "hotpink2")
+        shadow_small = font_small.render("Olá", True, "gray10")
+        text_small_position = (text_big_position[0] - 100, text_big_position[1] - 80)
+        shadow_small_position = (text_small_position[0] + 4, text_small_position[1] + 4)       
+
+        self.__bg_surface.blit(shadow_big, shadow_big_position)
+        self.__bg_surface.blit(shadow_small, shadow_small_position)
         self.__bg_surface.blit(text_big, text_big_position)
         self.__bg_surface.blit(text_small, text_small_position)
 
