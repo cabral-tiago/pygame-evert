@@ -2,6 +2,7 @@ from pygame.rect import Rect
 from classes.button import Button
 from classes.level import Level
 from classes.player import Player
+from classes.projectiles.bullet import Bullet
 from classes.scene import Scene
 from pygame.surface import Surface
 from classes.enums import EndCondition, GameState, LevelType, PlayerDirection
@@ -16,6 +17,7 @@ class World(Scene):
 
         # Player
         self.__player: Player = Player()
+        self.__player_bullets: list[Bullet] = []
 
         # Dialogue button
         dialogue_box_rect = Rect((0, configs.SCREEN_H - configs.CHARACTER_SIZE[1]/3),
@@ -50,6 +52,15 @@ class World(Scene):
         
         self.__player.move(dt, player_direction)
 
+        ### Player shooting
+        if self.__player.can_shoot() and keys[pygame.K_SPACE]:
+            self.__player_bullets.append(self.__player.shoot())
+
+        for bullet in self.__player_bullets:
+            bullet.update(dt)
+
+        self.__player_bullets[:] = [bullet for bullet in self.__player_bullets if bullet.is_alive()]
+
         ### Player collisions
         # With obstacles
         for obstacle in self.get_current_level().get_obstacles():
@@ -75,6 +86,9 @@ class World(Scene):
 
         # Updating player
         self.__player.update(dt)
+
+        # Updating bullets on Level
+        self.get_current_level().set_bullets(self.__player_bullets)
 
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())

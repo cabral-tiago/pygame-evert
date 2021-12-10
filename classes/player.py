@@ -1,16 +1,18 @@
 from typing import Tuple
 from pygame.rect import Rect
 from pygame.surface import Surface
+from classes.projectiles.bullet import Bullet
 from classes.spritesheet import Spritesheet
 from classes.enums import PlayerDirection
 
 
-class Player():
+class Player:
     ANIMATION_INTERVAL = 0.1
     SPEED = 150
+    SHOOTING_COOLDOWN = 1
 
     def __init__(self) -> None:
-        spritesheet: Spritesheet = Spritesheet("assets/images/elf_spritesheet.png", (18, 18), 4)
+        spritesheet: Spritesheet = Spritesheet("assets/images/elf_spritesheet.png", (18, 18), 3)
 
         self.__sprite_directions = [PlayerDirection.DOWN,
                                     PlayerDirection.UP,
@@ -31,6 +33,9 @@ class Player():
         self.__current_frame = 0
         self.__max_frames = len(self.__sprites[next(iter(self.__sprites))])
         self.__animation_timer: float = 0
+
+        # Shooting cooldown
+        self.__shooting_cooldown = 0
     
     def move(self, dt: float, direction: PlayerDirection) -> None:
         if direction == PlayerDirection.STAY:
@@ -59,6 +64,18 @@ class Player():
             
             self.__prev_position = self.__position
             self.__position = (new_x, new_y)
+
+    def can_shoot(self) -> bool:
+        if self.__shooting_cooldown <= 0:
+            return True
+        return False
+
+    def shoot(self) -> Bullet:
+        self.__shooting_cooldown = Player.SHOOTING_COOLDOWN
+        
+        if self.__direction == PlayerDirection.STAY:
+            return Bullet(self.get_rect().center, self.__prev_direction)
+        return Bullet(self.get_rect().center, self.__direction)
     
     def teleport(self, pos: Tuple[int, int]) -> None:
         self.__position = pos
@@ -68,6 +85,8 @@ class Player():
         self.__colliding = True
 
     def update(self, dt: float) -> None:
+        self.__shooting_cooldown -= dt
+
         if self.__colliding:
             self.__colliding = False
             self.__position = self.__prev_position

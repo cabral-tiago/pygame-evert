@@ -7,6 +7,7 @@ from classes.dialogue import Dialogue
 from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
+from classes.projectiles.bullet import Bullet
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
 from classes.maplayer import MapLayer
@@ -29,6 +30,7 @@ class Level:
         # Player
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
+        self.__bullet_list: list[Bullet] = []
         
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
@@ -186,6 +188,9 @@ class Level:
     def center_on_player(self, player_rect: Rect) -> None:
         x, y = player_rect.x, player_rect.y
         self.__camera_offset = (configs.SCREEN_W//2 - x, configs.SCREEN_H//2 - y)
+    
+    def set_bullets(self, bullets: list[Bullet]) -> None:
+        self.__bullet_list = bullets
 
     ### Dialogue
     def goto_next_line(self) -> None:
@@ -198,7 +203,17 @@ class Level:
         if self.__type == LevelType.MAP:
             for layer in self.__layers:
                 screen.blit(layer.get_surface(), self.__camera_offset)
+
+            # Draw collectibles
             screen.blit(self.__quest_tracker.get_map_surface(), self.__camera_offset)
+
+            # Draw bullets
+            bullet_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
+            for bullet in self.__bullet_list:
+                bullet_surface.blit(bullet.get_surface(), bullet.get_rect())
+            screen.blit(bullet_surface, self.__camera_offset)
+
+            # Draw objective UI
             screen.blit(self.__quest_tracker.get_objective_surface(), (0, 0))
         elif self.__type == LevelType.DIALOGUE:
             self.__dialogue.draw(screen)
