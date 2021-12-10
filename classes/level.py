@@ -7,6 +7,7 @@ from classes.dialogue import Dialogue
 from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
+from classes.monster import Monster
 from classes.projectiles.bullet import Bullet
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
@@ -31,6 +32,9 @@ class Level:
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
         self.__bullet_list: list[Bullet] = []
+
+        # Monsters
+        self.__monsters: list[Monster] = []
         
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
@@ -79,6 +83,9 @@ class Level:
         world_size_y = self.__layers[0].get_surface().get_height()
         self.__quest_tracker.set_surface_size((world_size_x, world_size_y))
         
+        # Monster for debugging
+        self.__monsters.append(Monster((1200, 1000)))
+
         # Quests
         for quest in level_info["quests"]:
             if quest["collectables"]:
@@ -192,6 +199,9 @@ class Level:
     def set_bullets(self, bullets: list[Bullet]) -> None:
         self.__bullet_list = bullets
 
+    def get_monsters(self) -> list[Monster]:
+        return self.__monsters
+
     ### Dialogue
     def goto_next_line(self) -> None:
         self.__dialogue.goto_next_line()
@@ -206,6 +216,12 @@ class Level:
 
             # Draw collectibles
             screen.blit(self.__quest_tracker.get_map_surface(), self.__camera_offset)
+
+            # Draw monsters
+            monster_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
+            for monster in self.__monsters:
+                monster_surface.blit(monster.get_surface(), monster.get_rect())
+            screen.blit(monster_surface, self.__camera_offset)
 
             # Draw bullets
             bullet_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)

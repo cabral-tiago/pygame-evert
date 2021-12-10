@@ -1,6 +1,7 @@
 from pygame.rect import Rect
 from classes.button import Button
 from classes.level import Level
+from classes.monster import Monster
 from classes.player import Player
 from classes.projectiles.bullet import Bullet
 from classes.scene import Scene
@@ -39,6 +40,23 @@ class World(Scene):
         return super().update(dt)
 
     def __update_map(self, dt: float) -> None:
+        ### Monsters
+        for monster in self.get_current_level().get_monsters():
+            monster.move(dt)
+            
+            # World collisions
+            for obstacle in self.get_current_level().get_obstacles():
+                if obstacle.colliderect(monster.get_rect()):
+                    monster.set_world_collision()
+
+            # World edges
+            if (monster.get_rect().x < 0
+                or monster.get_rect().x > self.get_current_level().get_width() - monster.get_rect().width
+                or monster.get_rect().y < 0
+                or monster.get_rect().y > self.get_current_level().get_height() - monster.get_rect().height):
+                monster.set_world_collision()
+
+        ### Player
         player_direction = Direction.STAY
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
