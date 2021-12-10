@@ -3,7 +3,7 @@ from pygame.rect import Rect
 from pygame.surface import Surface
 from classes.projectiles.bullet import Bullet
 from classes.spritesheet import Spritesheet
-from classes.enums import PlayerDirection
+from classes.enums import Direction
 import pygame
 
 
@@ -16,15 +16,15 @@ class Player:
     def __init__(self) -> None:
         spritesheet: Spritesheet = Spritesheet("assets/images/elf_spritesheet.png", (18, 18), 3)
 
-        self.__sprite_directions = [PlayerDirection.DOWN,
-                                    PlayerDirection.UP,
-                                    PlayerDirection.RIGHT,
-                                    PlayerDirection.LEFT]
-        self.__sprites: dict[PlayerDirection, list[Surface]] = spritesheet.get_dictionary(self.__sprite_directions)
+        self.__sprite_directions = [Direction.DOWN,
+                                    Direction.UP,
+                                    Direction.RIGHT,
+                                    Direction.LEFT]
+        self.__sprites: dict[Direction, list[Surface]] = spritesheet.get_dictionary(self.__sprite_directions)
 
         # Movement
-        self.__prev_direction = PlayerDirection.DOWN
-        self.__direction = PlayerDirection.DOWN
+        self.__prev_direction = Direction.DOWN
+        self.__direction = Direction.DOWN
 
         # Position
         self.__prev_position: Tuple[float, float] = (0, 0)
@@ -47,9 +47,9 @@ class Player:
         pygame.draw.rect(self.__hpbar_bg, "gray20", Rect((0, 0), self.__hpbar_bg.get_size()), border_radius=4)
         pygame.draw.rect(self.__hpbar_bg, "black", Rect((0, 0), self.__hpbar_bg.get_size()), self.__hpbar_border, 4)
     
-    def move(self, dt: float, direction: PlayerDirection) -> None:
-        if direction == PlayerDirection.STAY:
-            if self.__direction != PlayerDirection.STAY:
+    def move(self, dt: float, direction: Direction) -> None:
+        if direction == Direction.STAY:
+            if self.__direction != Direction.STAY:
                 self.__prev_direction = self.__direction
             
             self.__direction = direction
@@ -60,13 +60,13 @@ class Player:
             direction_x = 0
             direction_y = 0
             match direction:
-                case PlayerDirection.RIGHT:
+                case Direction.RIGHT:
                     direction_x = 1
-                case PlayerDirection.LEFT:
+                case Direction.LEFT:
                     direction_x = -1
-                case PlayerDirection.DOWN:
+                case Direction.DOWN:
                     direction_y = 1
-                case PlayerDirection.UP:
+                case Direction.UP:
                     direction_y = -1
             
             new_x = self.__position[0] + (dt * direction_x * Player.SPEED)
@@ -83,7 +83,7 @@ class Player:
     def shoot(self) -> Bullet:
         self.__shooting_cooldown = Player.SHOOTING_COOLDOWN
 
-        if self.__direction == PlayerDirection.STAY:
+        if self.__direction == Direction.STAY:
             return Bullet(self.get_rect().center, self.__prev_direction)
         return Bullet(self.get_rect().center, self.__direction)
     
@@ -117,11 +117,11 @@ class Player:
 
     def __update_animation(self, dt: float) -> None:
         self.__animation_timer += dt
-        if self.__direction == PlayerDirection.STAY:
+        if self.__direction == Direction.STAY:
             self.__current_frame = 0
             self.__animation_timer = 0
         else:
-            if self.__prev_direction == PlayerDirection.STAY:
+            if self.__prev_direction == Direction.STAY:
                 self.__current_frame = 1
                 self.__animation_timer = 0
 
@@ -137,7 +137,7 @@ class Player:
 
     def get_surface(self) -> Surface:
         direction = self.__direction
-        if direction == PlayerDirection.STAY:
+        if direction == Direction.STAY:
             direction = self.__prev_direction
         return self.__sprites[direction][self.__current_frame]
 

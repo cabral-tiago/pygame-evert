@@ -1,7 +1,7 @@
 from typing import Tuple
 from pygame.rect import Rect
 from pygame.surface import Surface
-from classes.enums import PlayerDirection
+from classes.enums import Direction
 import pygame
 
 
@@ -9,7 +9,7 @@ class Bullet:
     SPEED = 400
     MAX_DISTANCE = 600
 
-    def __init__(self, start: Tuple[int, int], direction: PlayerDirection) -> None:
+    def __init__(self, start: Tuple[int, int], direction: Direction) -> None:
         self.__surface = Surface((15,5))
         self.__surface.fill("yellow")
 
@@ -26,7 +26,7 @@ class Bullet:
         return self.get_surface().get_rect(topleft=self.__get_position())
     
     def get_surface(self) -> Surface:
-        if self.__direction == PlayerDirection.DOWN or self.__direction == PlayerDirection.UP:
+        if self.__direction == Direction.DOWN or self.__direction == Direction.UP:
             return pygame.transform.rotate(self.__surface, 90)
         return self.__surface
     
@@ -37,13 +37,13 @@ class Bullet:
         direction_x = 0
         direction_y = 0
         match self.__direction:
-            case PlayerDirection.RIGHT:
+            case Direction.RIGHT:
                 direction_x = 1
-            case PlayerDirection.LEFT:
+            case Direction.LEFT:
                 direction_x = -1
-            case PlayerDirection.DOWN:
+            case Direction.DOWN:
                 direction_y = 1
-            case PlayerDirection.UP:
+            case Direction.UP:
                 direction_y = -1
         
         new_x = self.__position[0] + (dt * direction_x * Bullet.SPEED)

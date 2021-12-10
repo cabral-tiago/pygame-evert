@@ -1,7 +1,7 @@
 from typing import Tuple
 import pygame
 from pygame.surface import Surface
-from classes.enums import PlayerDirection
+from classes.enums import Direction
 
 
 class Spritesheet:
@@ -24,7 +24,7 @@ class Spritesheet:
             
             self.__sprite_rows.append(row)
     
-    def get_dictionary(self, ordered_positions: list[PlayerDirection]) -> dict[PlayerDirection, list[Surface]]:
+    def get_dictionary(self, ordered_positions: list[Direction]) -> dict[Direction, list[Surface]]:
         dictionary = {}
         for n, row in enumerate(self.__sprite_rows):
             dictionary[ordered_positions[n]] = row

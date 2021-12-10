@@ -5,7 +5,7 @@ from classes.player import Player
 from classes.projectiles.bullet import Bullet
 from classes.scene import Scene
 from pygame.surface import Surface
-from classes.enums import EndCondition, GameState, LevelType, PlayerDirection
+from classes.enums import EndCondition, GameState, LevelType, Direction
 import pygame
 import configs
 import os
@@ -39,16 +39,16 @@ class World(Scene):
         return super().update(dt)
 
     def __update_map(self, dt: float) -> None:
-        player_direction = PlayerDirection.STAY
+        player_direction = Direction.STAY
         keys = pygame.key.get_pressed()
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            player_direction = PlayerDirection.RIGHT
+            player_direction = Direction.RIGHT
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            player_direction = PlayerDirection.LEFT
+            player_direction = Direction.LEFT
         if keys[pygame.K_w] or keys[pygame.K_UP]:
-            player_direction = PlayerDirection.UP
+            player_direction = Direction.UP
         if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            player_direction = PlayerDirection.DOWN
+            player_direction = Direction.DOWN
         
         self.__player.move(dt, player_direction)
 

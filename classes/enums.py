@@ -24,7 +24,7 @@ class LevelType(Enum):
     MAP = 2
 
 
-class PlayerDirection(Enum):
+class Direction(Enum):
     DOWN = 0
     UP = 1
     RIGHT = 2
