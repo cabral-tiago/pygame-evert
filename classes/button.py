@@ -35,11 +35,15 @@ class Button:
             self.__hover_surface.blit(button_text_hover, (rect.width / 2 - button_text.get_width() / 2,
                                                           rect.height / 2 - button_text.get_height() / 2))
 
-    def hover(self) -> None:
-        self.__hovered = True
+    def is_hovering(self) -> bool:
+        mouse_pos = pygame.mouse.get_pos()
 
-    def normal(self) -> None:
-        self.__hovered = False
+        if self.get_rect().collidepoint(mouse_pos):
+            self.__hovered = True
+        else:
+            self.__hovered = False
+
+        return self.__hovered
     
     def show(self) -> None:
         self.__visible = True

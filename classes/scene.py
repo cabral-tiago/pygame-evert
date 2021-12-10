@@ -1,21 +1,20 @@
 import pygame
 from pygame.surface import Surface
 from classes.button import Button
-from classes.buttongroup import ButtonGroup
 from classes.level import Level
 from classes.enums import GameState, LevelType
 
 
 class Scene:
     def __init__(self) -> None:
-        self.__button_groups: list[ButtonGroup] = []
+        self.__buttons: list[Button] = []
         
         self.__levels: dict[int, Level] = {}
         self.__levels[0] = Level("assets/levels/0")
         self.__current_level = 0
 
-    def add_button_group(self, button_group: ButtonGroup) -> None:
-        self.__button_groups.append(button_group)
+    def add_button(self, button) -> None:
+        self.__buttons.append(button)
 
     def load_level(self, level_nr: int, level: Level) -> None:
         self.__levels[level_nr] = level
@@ -37,16 +36,14 @@ class Scene:
 
     def get_current_level(self) -> Level:
         return self.__levels[self.__current_level]
-
+    
     def handle_mouse_click(self) -> GameState:
         mouse_pos = pygame.mouse.get_pos()
 
-        for button_group in self.__button_groups:
-            if button_group.is_visible():
-                result = button_group.click(mouse_pos)
-                if result != GameState.NULL:
-                    return result
-        
+        for button in self.__buttons:
+            if button.is_visible() and button.get_rect().collidepoint(mouse_pos):
+                return button.get_target_state()
+
         return GameState.NULL
 
     def handle_key_down(self, key: int) -> None:
@@ -63,8 +60,8 @@ class Scene:
 
     def update(self, dt: float) -> GameState:
         flag_hovering = False
-        for button_group in self.__button_groups:
-            if button_group.is_visible() and button_group.is_hovering():
+        for button in self.__buttons:
+            if button.is_visible() and button.is_hovering():
                 flag_hovering = True
                 break
         
@@ -76,6 +73,6 @@ class Scene:
         return self.get_current_level().update()
 
     def draw(self, screen: Surface) -> None:
-        for button_group in self.__button_groups:
-            if button_group.is_visible():
-                screen.blit(button_group.get_surface(), (0, 0))
+        for button in self.__buttons:
+            if button.is_visible():
+                screen.blit(button.get_surface(), button.get_rect())

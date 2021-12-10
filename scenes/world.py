@@ -1,6 +1,5 @@
 from pygame.rect import Rect
 from classes.button import Button
-from classes.buttongroup import ButtonGroup
 from classes.level import Level
 from classes.player import Player
 from classes.scene import Scene
@@ -21,12 +20,10 @@ class World(Scene):
         # Dialogue button
         dialogue_box_rect = Rect((0, configs.SCREEN_H - configs.CHARACTER_SIZE[1]/3),
                                  (configs.SCREEN_W, configs.CHARACTER_SIZE[1]/3))
-        dialogue_button = Button("", dialogue_box_rect, GameState.GAME_NEXT_DIALOGUE, True)
-        self.__dialogue_box: ButtonGroup = ButtonGroup()
-        self.__dialogue_box.add_button(dialogue_button)
-        super().add_button_group(self.__dialogue_box)
+        self.__dialogue_button = Button("", dialogue_box_rect, GameState.GAME_NEXT_DIALOGUE, True)
+        super().add_button(self.__dialogue_button)
 
-        # Loading all levels        
+        # Loading all levels
         levels_folder = "assets/levels/"
         levels = [f.name for f in os.scandir(levels_folder) if int(f.name) > 0]
         for level_nr in levels:
@@ -87,9 +84,9 @@ class World(Scene):
 
         if self.get_current_level().get_type() == LevelType.MAP:
             self.__player.teleport(self.get_current_level().get_player_spawn())
-            self.__dialogue_box.hide()
+            self.__dialogue_button.hide()
         elif self.get_current_level().get_type() == LevelType.DIALOGUE:
-            self.__dialogue_box.show()
+            self.__dialogue_button.show()
     
     def reset(self) -> None:
         super().reset()
