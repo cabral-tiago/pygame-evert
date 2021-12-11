@@ -32,9 +32,6 @@ class Level:
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
         self.__bullet_list: list[Bullet] = []
-
-        # Monsters
-        self.__monsters: list[Monster] = []
         
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
@@ -58,6 +55,7 @@ class Level:
         # Tileset
         tile_scale: int = level_info["tile_scale"]
         tile_size: Tuple[int, int] = level_info["tile_size"]
+        world_scale: Tuple[int, int] = (tile_scale*tile_size[0], tile_scale*tile_size[1])
         tileset = Tileset(level_info["tileset"], tile_size, tile_scale)
 
         # Player visibility and spawn location
@@ -82,17 +80,19 @@ class Level:
         world_size_x = self.__layers[0].get_surface().get_width()
         world_size_y = self.__layers[0].get_surface().get_height()
         self.__quest_tracker.set_surface_size((world_size_x, world_size_y))
-        
-        # Monster for debugging
-        self.__monsters.append(Monster((1200, 800)))
 
         # Quests
         for quest in level_info["quests"]:
-            if quest["collectables"]:
+            if "collectables" in quest:
                 for collectable in quest["collectables"]:
                     position = collectable["position"]
-                    position = (position[0] * tile_scale * tile_size[0], position[1] * tile_scale * tile_size[1])
+                    position = (position[0] * world_scale[0], position[1] * world_scale[1])
                     collectable["position"] = position
+            if "monsters" in quest:
+                left, top, width, height = quest["monsters"]["spawn_area"]
+                spawn_area = [left * world_scale[0], top * world_scale[1],
+                              width * world_scale[0], height * world_scale[1]]
+                quest["monsters"]["spawn_area"] = spawn_area
             self.__quest_tracker.add_quest(quest)
 
         # End Condition
@@ -200,7 +200,7 @@ class Level:
         self.__bullet_list = bullets
 
     def get_monsters(self) -> list[Monster]:
-        return self.__monsters
+        return self.__quest_tracker.get_active_monsters()
 
     ### Dialogue
     def goto_next_line(self) -> None:
@@ -219,7 +219,7 @@ class Level:
 
             # Draw monsters
             monster_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
-            for monster in self.__monsters:
+            for monster in self.get_monsters():
                 monster_surface.blit(monster.get_surface(), monster.get_rect())
             screen.blit(monster_surface, self.__camera_offset)
 

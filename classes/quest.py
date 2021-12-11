@@ -1,12 +1,14 @@
 from classes.enums import QuestType
 from classes.collectable import Collectable
+from classes.monster import Monster
 
 
 class Quest:
-    def __init__(self, type: QuestType, objective: str, collectables: list[Collectable]) -> None:
+    def __init__(self, type: QuestType, objective: str, collectables: list[Collectable], monsters: list[Monster]) -> None:
         self.__type: QuestType = type
         self.__objective: str = objective
         self.__collectables: list[Collectable] = collectables
+        self.__monsters: list[Monster] = monsters
         self.__completed = False
 
     def get_type(self) -> QuestType:
@@ -16,11 +18,10 @@ class Quest:
         return self.__objective
 
     def get_active_collectables(self) -> list[Collectable]:
-        active_collectables: list[Collectable] = []
-        for collectable in self.__collectables:
-            if not collectable.is_collected():
-                active_collectables.append(collectable)
-        return active_collectables
+        return [collectable for collectable in self.__collectables if not collectable.is_collected()]
+
+    def get_active_monsters(self) -> list[Monster]:
+        return [monster for monster in self.__monsters if monster.is_alive()]
 
     def update_quest(self) -> None:
         if self.__type == QuestType.COLLECT and len(self.get_active_collectables()) == 0:

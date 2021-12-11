@@ -36,6 +36,7 @@ class QuestType(Enum):
     NULL = -1
     COLLECT = 0
     KILL_BOSS = 1
+    KILL_MONSTERS = 2
 
 
 class EndCondition(Enum):

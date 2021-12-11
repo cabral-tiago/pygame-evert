@@ -8,6 +8,14 @@
     "player_spawn_direction": "bottom",
     "quests": [
         {
+            "type": "kill_monsters",
+            "objective": "Mata todos os peixes-gato",
+            "monsters": {
+                "amount": 4,
+                "spawn_area": [24, 11, 20, 4]
+            }
+        },
+        {
             "type": "collect",
             "objective": "Apanha a pizza ao fim da rua.",
             "collectables": [

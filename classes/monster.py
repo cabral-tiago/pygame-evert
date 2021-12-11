@@ -61,6 +61,9 @@ class Monster:
 
         self.__rotate()
 
+    def is_alive(self) -> bool:
+        return self.__hp > 0
+
     def get_surface(self) -> Surface:
         return self.__surface
 

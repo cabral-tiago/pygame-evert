@@ -1,14 +1,17 @@
 from typing import Tuple
 from pygame.rect import Rect
 from classes.collectable import Collectable
+from classes.monster import Monster
 from classes.quest import Quest
 from classes.enums import EndCondition, GameState, QuestType
 from pygame.surface import Surface
 import pygame
 import configs
+import random
 
 
 class QuestTracker:
+
     def __init__(self) -> None:
         # Quests
         self.__quests: list[Quest] = []
@@ -18,10 +21,15 @@ class QuestTracker:
 
         # Objective UI
         self.__objective_surface: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
-        objetive_title_font = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 28)
-        objective_title = objetive_title_font.render("Objetivo atual", True, "white")
-        self.__objective_font = pygame.font.Font("assets/fonts/Roboto-Medium.ttf", 22)
-        self.__objective_surface.blit(objective_title, (20, 10))
+        black_bar = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
+        self.__objective_surface.blit(black_bar, (0, 0))
+
+        objective_title_font = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 24)
+        self.__objective_title = objective_title_font.render("Objetivos atuais:", True, "white")
+        self.__objective_surface.blit(self.__objective_title,
+                                    (20, configs.BAR_HEIGHT // 2 - self.__objective_title.get_height() // 2))
+
+        self.__objective_font = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 20)
 
         # Level End Condition
         self.__end_condition: EndCondition = EndCondition.NULL
@@ -31,24 +39,43 @@ class QuestTracker:
         self.__level_completed: bool = False
 
     def add_quest(self, quest_info: dict) -> None:
-        type = QuestType.NULL
-        if quest_info["type"] == "collect":
-            type = QuestType.COLLECT
-        elif quest_info["type"] == "kill_boss":
-            type = QuestType.KILL_BOSS
+        match quest_info["type"]:
+            case "collect":
+                type = QuestType.COLLECT
+            case "kill_boss":
+                type = QuestType.KILL_BOSS
+            case "kill_monsters":
+                type = QuestType.KILL_MONSTERS
+            case _:
+                type = QuestType.NULL
 
         collectables: list[Collectable] = []
-        for collectable in quest_info["collectables"]:
-            image = pygame.image.load(collectable["image_path"])
-            scale = collectable["image_scale"]
-            if scale != 1:
-                size = image.get_width() * scale, image.get_height() * scale
-                image = pygame.transform.scale(image, size)
-            position = collectable["position"]
-            
-            collectables.append(Collectable(image, position))
+        if "collectables" in quest_info:
+            for collectable in quest_info["collectables"]:
+                image = pygame.image.load(collectable["image_path"])
+                scale = collectable["image_scale"]
+                if scale != 1:
+                    size = image.get_width() * scale, image.get_height() * scale
+                    image = pygame.transform.scale(image, size)
+                position = collectable["position"]
+                
+                collectables.append(Collectable(image, position))
         
-        self.__quests.append(Quest(type, quest_info["objective"], collectables))
+        monsters: list[Monster] = []
+        if "monsters" in quest_info:
+            left, top, width, height = quest_info["monsters"]["spawn_area"]
+            for _ in range(quest_info["monsters"]["amount"]):
+                rects = [m.get_rect() for m in monsters]
+                while True:
+                    pos_x = random.randint(left, left+width)
+                    pos_y = random.randint(top, top+height)
+                    new_monster = Monster((pos_x, pos_y))
+
+                    if new_monster.get_rect().collidelist(rects) == -1:
+                        break
+                monsters.append(new_monster)
+
+        self.__quests.append(Quest(type, quest_info["objective"], collectables, monsters))
 
     def set_end_condition(self, condition: EndCondition, objective: str = "", position: Rect = Rect(-1, -1, 0, 0)):
         self.__end_condition = condition
@@ -91,16 +118,20 @@ class QuestTracker:
             if not quest.is_completed() and quest.get_type() == QuestType.COLLECT:
                 active_collectables.extend(quest.get_active_collectables())
         return active_collectables
+    
+    def get_active_monsters(self) -> list[Monster]:
+        return [m for q in self.__quests for m in q.get_active_monsters()]
 
     def get_end_condition(self) -> EndCondition:
         return self.__end_condition
 
-    def get_current_objective(self) -> str:
-        for quest in self.__quests:
-            if not quest.is_completed():
-                return quest.get_objective()
+    def get_current_objectives(self) -> list[str]:
+        objectives = [q.get_objective() for q in self.__quests if not q.is_completed()]
 
-        return self.__end_objective
+        if len(objectives) == 0:
+            objectives.append(self.__end_objective)
+
+        return objectives
 
     def get_map_surface(self) -> Surface:
         surface = self.__map_surface.copy()
@@ -111,9 +142,13 @@ class QuestTracker:
     def get_objective_surface(self) -> Surface:
         surface = self.__objective_surface.copy()
 
-        objective_text = self.__objective_font.render(self.get_current_objective(), True, "white")
-        surface.blit(objective_text, (20, 46))
-
+        start_x = self.__objective_title.get_width() + 40
+        current_x = start_x
+        for n, objective in enumerate(self.get_current_objectives()):
+            text = self.__objective_font.render("• " + objective, True, "white")
+            surface.blit(text, (current_x + 10, configs.BAR_HEIGHT // 2 - text.get_height() // 2))
+            current_x += text.get_width() + 20
+        
         return surface
 
     def reset(self) -> None:
