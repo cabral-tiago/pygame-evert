@@ -20,6 +20,10 @@ class World(Scene):
         self.__player: Player = Player()
         self.__player_bullets: list[Bullet] = []
 
+        # Bottom bar
+        self.__black_bar = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
+        self.__black_bar.fill("black")
+
         # Dialogue button
         dialogue_box_rect = Rect((0, configs.SCREEN_H - configs.CHARACTER_SIZE[1]/3),
                                  (configs.SCREEN_W, configs.CHARACTER_SIZE[1]/3))
@@ -127,12 +131,17 @@ class World(Scene):
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
         if self.get_current_level().is_player_visible():
+            # Draw player
             screen.blit(self.__player.get_surface(),
                         (configs.SCREEN_W / 2 - self.__player.get_surface().get_width() / 2,
                          configs.SCREEN_H / 2 - self.__player.get_surface().get_height() / 2))
 
+            # Draw bottom bar
+            screen.blit(self.__black_bar, (0, configs.SCREEN_H - configs.BAR_HEIGHT))
+
+            # Draw HP Bar
             screen.blit(self.__player.get_hpbar_surface(),
                         (configs.SCREEN_W//2 - self.__player.get_hpbar_surface().get_width()//2,
-                         configs.SCREEN_H - self.__player.get_hpbar_surface().get_height()))
+                         configs.SCREEN_H - self.__player.get_hpbar_surface().get_height() - 4))
         
         super().draw(screen)

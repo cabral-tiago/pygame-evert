@@ -8,7 +8,7 @@ import pygame
 
 
 class Player:
-    MAX_HP = 300
+    MAX_HP = 420
     ANIMATION_INTERVAL = 0.1
     SPEED = 150
     SHOOTING_COOLDOWN = 1
@@ -43,9 +43,9 @@ class Player:
         self.__hp = Player.MAX_HP
         self.__hp_font = pygame.font.Font("assets/fonts/Roboto-Medium.ttf", 22)
         self.__hpbar_border = 4
-        self.__hpbar_bg = Surface((Player.MAX_HP + self.__hpbar_border * 2, 50), pygame.SRCALPHA)
-        pygame.draw.rect(self.__hpbar_bg, "gray20", Rect((0, 0), self.__hpbar_bg.get_size()), border_radius=4)
-        pygame.draw.rect(self.__hpbar_bg, "black", Rect((0, 0), self.__hpbar_bg.get_size()), self.__hpbar_border, 4)
+        self.__hpbar_bg = Surface((Player.MAX_HP + self.__hpbar_border * 2, 46), pygame.SRCALPHA)
+        pygame.draw.rect(self.__hpbar_bg, "gray10", Rect((0, 0), self.__hpbar_bg.get_size()), border_radius=4)
+        pygame.draw.rect(self.__hpbar_bg, "red4", Rect((0, 0), self.__hpbar_bg.get_size()), self.__hpbar_border, 4)
     
     def move(self, dt: float, direction: Direction) -> None:
         if direction == Direction.STAY:
@@ -92,8 +92,11 @@ class Player:
 
     def get_hpbar_surface(self) -> Surface:
         surface = self.__hpbar_bg.copy()
-        pygame.draw.rect(self.__hpbar_bg, "red", Rect((self.__hpbar_border, self.__hpbar_border),
-                            (self.get_hp(), 42)), border_radius=4)
+        bar_size = Rect(self.__hpbar_border,
+                        self.__hpbar_border,
+                        self.get_hp(),
+                        self.__hpbar_bg.get_height() - self.__hpbar_border * 2)
+        pygame.draw.rect(surface, "red", bar_size)
         hp_text = self.__hp_font.render(f"HP: {self.__hp}/{Player.MAX_HP}", True, "white")
         surface.blit(hp_text, (self.__hpbar_border * 2, surface.get_height()//2 - hp_text.get_height() // 2))
         return surface
