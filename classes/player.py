@@ -14,7 +14,7 @@ class Player:
     SHOOTING_COOLDOWN = 1
 
     def __init__(self) -> None:
-        spritesheet: Spritesheet = Spritesheet("assets/images/elf_spritesheet.png", (18, 18), 3)
+        spritesheet: Spritesheet = Spritesheet("assets/images/jesse_sprite.png", (15, 18), 4)
 
         self.__sprite_directions = [Direction.DOWN,
                                     Direction.UP,
