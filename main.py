@@ -3,8 +3,9 @@ import configs
 from game import Game
 
 pygame.init()
-screen = pygame.display.set_mode(configs.SCREEN_SIZE)
 pygame.display.set_caption(configs.WINDOW_TITLE)
+pygame.display.set_icon(pygame.image.load("assets/images/icon.png"))
+screen = pygame.display.set_mode(configs.SCREEN_SIZE)
 
 # Loading screen
 screen.fill("black")
@@ -17,6 +18,9 @@ pygame.display.update()
 
 # Game
 game = Game()
+
+# Fps Display
+fps_font = pygame.font.Font("assets/fonts/Roboto-Medium.ttf", 16)
 
 # Clock
 clock = pygame.time.Clock()
@@ -39,6 +43,9 @@ while run:
 
     game.update(dt)
     game.draw(screen)
+
+    fps_text = fps_font.render(f"{clock.get_fps():.0f}/{configs.MAX_FPS} FPS", True, "white")
+    screen.blit(fps_text, (configs.SCREEN_W - fps_text.get_width(), 0))
 
     pygame.display.update()
 
