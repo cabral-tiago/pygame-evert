@@ -49,7 +49,7 @@ class Dialogue:
 
             for id, character in self.__characters.items():
                 if self.get_current_character_id() == id:
-                    character.set_active()
+                    character.set_active(self.get_current_line().get_emotion())
                 else:
                     character.set_inactive()
         else:
@@ -72,10 +72,7 @@ class Dialogue:
             if id == "":
                 continue
 
-            if id == self.get_current_character_id():
-                screen.blit(character.get_image(self.get_current_line().get_emotion()), character.get_position())
-            else:
-                screen.blit(character.get_image(), character.get_position())
+            screen.blit(character.get_image(), character.get_position())
 
         # UI
         ui_surface = self.__ui_surface.copy()

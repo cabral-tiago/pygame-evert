@@ -14,7 +14,7 @@ class DialogueCharacter:
         self.__position: Tuple[int, int] = (0, 0)
         self.__emotions: dict[str, Surface] = {}
         self.__faded_emotions: dict[str, Surface] = {}
-        self.__last_emotion: str = start_emotion
+        self.__current_emotion: str = start_emotion
         self.__active: bool = False
         
         if path != "":
@@ -51,8 +51,10 @@ class DialogueCharacter:
 
                     self.__position = (pos_x, configs.SCREEN_H - self.get_height())
     
-    def set_active(self) -> None:
+    def set_active(self, emotion: str) -> None:
         self.__active = True
+        if emotion != "":
+            self.__current_emotion = emotion
 
     def set_inactive(self) -> None:
         self.__active = False
@@ -63,24 +65,13 @@ class DialogueCharacter:
     def get_colour(self) -> str:
         return self.__colour
 
-    def __get_emotion_image(self, emotion: str, faded: bool = False) -> Surface:
+    def get_image(self) -> Surface:
         if len(self.__emotions) == 0:
             return Surface((0, 0))
-        if emotion == "":
-            if faded:
-                return self.__faded_emotions[self.__last_emotion]
-            return self.__emotions[self.__last_emotion]
-        
-        self.__last_emotion = emotion
-        if faded:
-            return self.__faded_emotions[emotion]
-        return self.__emotions[emotion]
-
-    def get_image(self, emotion: str = "") -> Surface:
         if self.__active:
-            return self.__get_emotion_image(emotion)
+            return self.__emotions[self.__current_emotion]
         else:
-            return self.__get_emotion_image(emotion, True)      
+            return self.__faded_emotions[self.__current_emotion]   
 
     def get_width(self) -> int:
         return configs.CHARACTER_SIZE[0]
