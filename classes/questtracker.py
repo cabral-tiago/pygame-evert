@@ -58,7 +58,7 @@ class QuestTracker:
         collectables: list[Collectable] = []
         if "collectables" in quest_info:
             for collectable in quest_info["collectables"]:
-                image = pygame.image.load(collectable["image_path"])
+                image = pygame.image.load(collectable["image_path"]).convert_alpha()
                 scale = collectable["image_scale"]
                 if scale != 1:
                     size = image.get_width() * scale, image.get_height() * scale
@@ -154,7 +154,7 @@ class QuestTracker:
 
         start_x = self.__objective_title.get_width() + 40
         current_x = start_x
-        for n, objective in enumerate(self.get_current_objectives()):
+        for objective in self.get_current_objectives():
             text = self.__objective_font.render("• " + objective, True, "white")
             surface.blit(text, (current_x + 10, configs.BAR_HEIGHT // 2 - text.get_height() // 2))
             current_x += text.get_width() + 20

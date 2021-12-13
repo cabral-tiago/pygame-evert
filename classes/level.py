@@ -120,7 +120,7 @@ class Level:
         if level_info["bg_style"] == "colour":
             self.__background.fill(level_info["bg_colour"])
         elif level_info["bg_style"] == "image":
-            image: Surface = pygame.image.load(level_info["bg_image"])
+            image: Surface = pygame.image.load(level_info["bg_image"]).convert()
             if image.get_width() != configs.SCREEN_W:
                 scale = configs.SCREEN_W / image.get_width()
                 scaled_height = int(image.get_height() * scale)

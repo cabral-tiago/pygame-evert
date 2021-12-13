@@ -15,7 +15,7 @@ class Menu(Scene):
 
         # Background
         self.__bg_surface = Surface(configs.SCREEN_SIZE)
-        background = pygame.image.load("assets/images/outside_house_evening_bg.png")
+        background = pygame.image.load("assets/images/outside_house_evening_bg.png").convert()
         if background.get_width() != configs.SCREEN_W:
             scale = configs.SCREEN_W / background.get_width()
             scaled_height = int(background.get_height() * scale)

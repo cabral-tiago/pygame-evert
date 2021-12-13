@@ -5,7 +5,7 @@ from pygame.surface import Surface
 
 class Tileset:
     def __init__(self, path: str, tile_size: Tuple[int, int], scale: int) -> None:
-        image = pygame.image.load(path)
+        image = pygame.image.load(path).convert_alpha()
         image_w, image_h = image.get_width() * scale, image.get_height() * scale
         self.__image = pygame.transform.scale(image, (image_w, image_h))
         self.__tile_size = (tile_size[0] * scale, tile_size[1] * scale)

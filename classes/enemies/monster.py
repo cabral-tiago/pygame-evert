@@ -15,7 +15,7 @@ class Monster(Enemy):
     MAX_HP = 100
 
     def __init__(self, position: Tuple[int, int]) -> None:
-        surface = pygame.image.load("assets/images/catfish.png")
+        surface = pygame.image.load("assets/images/catfish.png").convert_alpha()
         surface = pygame.transform.scale(surface, (surface.get_width() * 2, surface.get_height() * 2))
 
         possible_directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]

@@ -30,7 +30,7 @@ class DialogueCharacter:
                 
                 for emotion in character_data["emotions"]:
                     emotion_path = f"{folder}/{emotion}.png"
-                    emotion_surface = pygame.image.load(emotion_path)
+                    emotion_surface = pygame.image.load(emotion_path).convert_alpha()
                     if configs.CHARACTER_SIZE[0] != emotion_surface.get_width() or \
                         configs.CHARACTER_SIZE[1] != emotion_surface.get_height():
                         emotion_surface = pygame.transform.smoothscale(emotion_surface, configs.CHARACTER_SIZE)
