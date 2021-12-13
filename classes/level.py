@@ -7,7 +7,7 @@ from classes.dialogue import Dialogue
 from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
-from classes.monster import Monster
+from classes.enemies.monster import Monster
 from classes.projectiles.fireball import Fireball
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset

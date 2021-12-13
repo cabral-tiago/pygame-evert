@@ -5,29 +5,32 @@ from classes.enums import Direction
 import pygame
 import random
 
-
-class Monster:
+class Enemy:
     SPEED = 80
     SHOOTING_FREQ = 2
-    ROTATE_FREQ = 3
+    CHANGE_DIRECTION_FREQ = 3
     MAX_HP = 100
 
-    def __init__(self, position: Tuple[int, int]) -> None:
-        surface = pygame.image.load("assets/images/catfish.png")
-        self.__surface = pygame.transform.scale(surface, (surface.get_width() * 2, surface.get_height() * 2))
-        self.__direction: Direction = Direction(random.randint(0,3))
+    def __init__(self, surface: Surface, position: Tuple[int, int], possible_directions: list[Direction]) -> None:
+        self.__surface = surface
         self.__position: Tuple[float, float] = position
         self.__prev_position: Tuple[float, float] = position
         
-        self.__rotate_timer = 0
+        # Direction
+        self.__posible_directions: list[Direction] = possible_directions
+        self.__direction: Direction = random.choice(self.__posible_directions)
+        self.__changedir_timer = 0
         
-        self.__hp: int = Monster.MAX_HP
+        # HP
+        self.__hp: int = self.MAX_HP
+
+        # Shooting
         self.__shooting_timer = 0
 
     def move(self, dt: float) -> None:
-        self.__rotate_timer += dt
-        if self.__rotate_timer >= Monster.ROTATE_FREQ:
-            self.__rotate()
+        self.__changedir_timer += dt
+        if self.__changedir_timer >= self.CHANGE_DIRECTION_FREQ:
+            self.__change_direction()
 
         direction_x = 0
         direction_y = 0
@@ -41,25 +44,25 @@ class Monster:
             case Direction.UP:
                 direction_y = -1
         
-        new_x = self.__position[0] + (dt * direction_x * Monster.SPEED)
-        new_y = self.__position[1] + (dt * direction_y * Monster.SPEED)
+        new_x = self.__position[0] + (dt * direction_x * self.SPEED)
+        new_y = self.__position[1] + (dt * direction_y * self.SPEED)
         
         self.__prev_position = self.__position
         self.__position = (new_x, new_y)
     
-    def __rotate(self) -> None:
-        self.__rotate_timer = 0
+    def __change_direction(self) -> None:
+        self.__changedir_timer = 0
 
-        direction = Direction(random.randint(0,3))
+        direction = random.choice(self.__posible_directions)
         while self.__direction == direction:
-            direction = Direction(random.randint(0,3))
+            direction = random.choice(self.__posible_directions)
         
         self.__direction = direction
     
     def set_world_collision(self) -> None:
         self.__position = self.__prev_position
 
-        self.__rotate()
+        self.__change_direction()
 
     def is_alive(self) -> bool:
         return self.__hp > 0

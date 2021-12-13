@@ -1,7 +1,7 @@
 from typing import Tuple
 from pygame.rect import Rect
 from classes.collectable import Collectable
-from classes.monster import Monster
+from classes.enemies.monster import Monster
 from classes.quest import Quest
 from classes.enums import EndCondition, GameState, QuestType
 from pygame.surface import Surface

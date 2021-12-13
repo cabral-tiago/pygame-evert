@@ -1,6 +1,6 @@
 from classes.enums import QuestType
 from classes.collectable import Collectable
-from classes.monster import Monster
+from classes.enemies.monster import Monster
 
 
 class Quest:
