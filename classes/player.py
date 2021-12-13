@@ -1,7 +1,7 @@
 from typing import Tuple
 from pygame.rect import Rect
 from pygame.surface import Surface
-from classes.projectiles.bullet import Bullet
+from classes.projectiles.fireball import Fireball
 from classes.spritesheet import Spritesheet
 from classes.enums import Direction
 import pygame
@@ -80,12 +80,12 @@ class Player:
             return True
         return False
 
-    def shoot(self) -> Bullet:
+    def shoot(self) -> Fireball:
         self.__shooting_cooldown = Player.SHOOTING_COOLDOWN
 
         if self.__direction == Direction.STAY:
-            return Bullet(self.get_rect().center, self.__prev_direction)
-        return Bullet(self.get_rect().center, self.__direction)
+            return Fireball(self.get_rect().center, self.__prev_direction)
+        return Fireball(self.get_rect().center, self.__direction)
     
     def get_hp(self) -> int:
         return self.__hp

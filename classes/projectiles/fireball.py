@@ -5,13 +5,12 @@ from classes.enums import Direction
 import pygame
 
 
-class Bullet:
+class Fireball:
     SPEED = 400
     MAX_DISTANCE = 600
 
     def __init__(self, start: Tuple[int, int], direction: Direction) -> None:
-        self.__surface = Surface((15,5))
-        self.__surface.fill("yellow")
+        self.__surface = pygame.image.load("assets/images/fireball.png")
 
         self.__position: Tuple[float, float] = start
         self.__start_position = start
@@ -26,9 +25,15 @@ class Bullet:
         return self.get_surface().get_rect(topleft=self.__get_position())
     
     def get_surface(self) -> Surface:
-        if self.__direction == Direction.DOWN or self.__direction == Direction.UP:
-            return pygame.transform.rotate(self.__surface, 90)
-        return self.__surface
+        match self.__direction:
+            case Direction.UP:
+                return pygame.transform.rotate(self.__surface, 90)
+            case Direction.DOWN:
+                return pygame.transform.rotate(self.__surface, 270)
+            case Direction.LEFT:
+                return pygame.transform.rotate(self.__surface, 180)
+            case _:
+                return self.__surface
     
     def is_alive(self) -> bool:
         return self.__alive
@@ -46,10 +51,10 @@ class Bullet:
             case Direction.UP:
                 direction_y = -1
         
-        new_x = self.__position[0] + (dt * direction_x * Bullet.SPEED)
-        new_y = self.__position[1] + (dt * direction_y * Bullet.SPEED)
+        new_x = self.__position[0] + (dt * direction_x * Fireball.SPEED)
+        new_y = self.__position[1] + (dt * direction_y * Fireball.SPEED)
         self.__position = (new_x, new_y)
 
-        if abs(self.__start_position[0] - self.__position[0])  > Bullet.MAX_DISTANCE or\
-           abs(self.__start_position[1] - self.__position[1])  > Bullet.MAX_DISTANCE:
+        if abs(self.__start_position[0] - self.__position[0])  > Fireball.MAX_DISTANCE or\
+           abs(self.__start_position[1] - self.__position[1])  > Fireball.MAX_DISTANCE:
             self.__alive = False

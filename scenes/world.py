@@ -3,7 +3,7 @@ from classes.button import Button
 from classes.level import Level
 from classes.monster import Monster
 from classes.player import Player
-from classes.projectiles.bullet import Bullet
+from classes.projectiles.fireball import Fireball
 from classes.scene import Scene
 from pygame.surface import Surface
 from classes.enums import EndCondition, GameState, LevelType, Direction
@@ -18,7 +18,7 @@ class World(Scene):
 
         # Player
         self.__player: Player = Player()
-        self.__player_bullets: list[Bullet] = []
+        self.__player_fireballs: list[Fireball] = []
 
         # Bottom bar
         self.__black_bar = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
@@ -76,12 +76,12 @@ class World(Scene):
 
         ### Player shooting
         if self.__player.can_shoot() and keys[pygame.K_SPACE]:
-            self.__player_bullets.append(self.__player.shoot())
+            self.__player_fireballs.append(self.__player.shoot())
 
-        for bullet in self.__player_bullets:
-            bullet.update(dt)
+        for fireball in self.__player_fireballs:
+            fireball.update(dt)
 
-        self.__player_bullets[:] = [bullet for bullet in self.__player_bullets if bullet.is_alive()]
+        self.__player_fireballs[:] = [fireball for fireball in self.__player_fireballs if fireball.is_alive()]
 
         ### Player collisions
         # With obstacles
@@ -109,8 +109,8 @@ class World(Scene):
         # Updating player
         self.__player.update(dt)
 
-        # Updating bullets on Level
-        self.get_current_level().set_bullets(self.__player_bullets)
+        # Updating fireballs on Level
+        self.get_current_level().set_projectiles(self.__player_fireballs)
 
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())

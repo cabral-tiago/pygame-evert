@@ -8,7 +8,7 @@ from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
 from classes.monster import Monster
-from classes.projectiles.bullet import Bullet
+from classes.projectiles.fireball import Fireball
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
 from classes.maplayer import MapLayer
@@ -31,7 +31,9 @@ class Level:
         # Player
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
-        self.__bullet_list: list[Bullet] = []
+
+        # Projectiles
+        self.__projectile_list: list[Fireball] = []
         
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
@@ -196,8 +198,8 @@ class Level:
         self.__camera_offset = (configs.SCREEN_W // 2 - player_rect.x - player_rect.width // 2,
                                 configs.SCREEN_H // 2 - player_rect.y - player_rect.height // 2)
     
-    def set_bullets(self, bullets: list[Bullet]) -> None:
-        self.__bullet_list = bullets
+    def set_projectiles(self, projectiles: list[Fireball]) -> None:
+        self.__projectile_list = projectiles
 
     def get_monsters(self) -> list[Monster]:
         return self.__quest_tracker.get_active_monsters()
@@ -225,7 +227,7 @@ class Level:
 
             # Draw bullets
             bullet_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
-            for bullet in self.__bullet_list:
+            for bullet in self.__projectile_list:
                 bullet_surface.blit(bullet.get_surface(), bullet.get_rect())
             screen.blit(bullet_surface, self.__camera_offset)
 
