@@ -1,7 +1,10 @@
 from typing import Tuple
 from pygame.rect import Rect
 from classes.collectable import Collectable
+from classes.enemy import Enemy
 from classes.enemies.monster import Monster
+from classes.enemies.boss import Boss
+from classes.projectile import Projectile
 from classes.quest import Quest
 from classes.enums import EndCondition, GameState, QuestType
 from pygame.surface import Surface
@@ -18,6 +21,9 @@ class QuestTracker:
 
         # Map Surface
         self.__map_surface: Surface = Surface((100, 100), pygame.SRCALPHA)
+
+        # Projectiles
+        self.__projectiles: list[Projectile] = []
 
         # Objective UI
         self.__objective_surface: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
@@ -61,7 +67,7 @@ class QuestTracker:
                 
                 collectables.append(Collectable(image, position))
         
-        monsters: list[Monster] = []
+        monsters: list[Enemy] = []
         if "monsters" in quest_info:
             left, top, width, height = quest_info["monsters"]["spawn_area"]
             for _ in range(quest_info["monsters"]["amount"]):
@@ -74,6 +80,8 @@ class QuestTracker:
                     if new_monster.get_rect().collidelist(rects) == -1:
                         break
                 monsters.append(new_monster)
+        if type == QuestType.KILL_BOSS:
+            monsters.append(Boss(quest_info["boss_position"]))
 
         self.__quests.append(Quest(type, quest_info["objective"], collectables, monsters))
 
@@ -90,7 +98,6 @@ class QuestTracker:
 
         for quest in self.__quests:
             quest.update_quest()
-
             if quest.is_completed():
                 quests_left -= 1
         
@@ -119,8 +126,11 @@ class QuestTracker:
                 active_collectables.extend(quest.get_active_collectables())
         return active_collectables
     
-    def get_active_monsters(self) -> list[Monster]:
-        return [m for q in self.__quests for m in q.get_active_monsters()]
+    def get_active_enemies(self) -> list[Enemy]:
+        return [e for q in self.__quests for e in q.get_active_enemies()]
+    
+    def get_active_projectiles(self) -> list[Projectile]:
+        return self.__projectiles
 
     def get_end_condition(self) -> EndCondition:
         return self.__end_condition

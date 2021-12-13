@@ -1,12 +1,13 @@
-from typing import Tuple
+from typing import Tuple, Any
 from pygame.surface import Surface
 from pygame.rect import Rect
 from classes.enums import Direction
-import pygame
 import random
+
 
 class Enemy:
     SPEED = 80
+    SHOOTS = False
     SHOOTING_FREQ = 2
     CHANGE_DIRECTION_FREQ = 3
     MAX_HP = 100
@@ -27,11 +28,15 @@ class Enemy:
         # Shooting
         self.__shooting_timer = 0
 
-    def move(self, dt: float) -> None:
+    def update(self, dt: float) -> None:
+        # Timers
         self.__changedir_timer += dt
         if self.__changedir_timer >= self.CHANGE_DIRECTION_FREQ:
             self.__change_direction()
+        
+        self.__shooting_timer += dt
 
+        # Update position
         direction_x = 0
         direction_y = 0
         match self.__direction:
@@ -58,6 +63,17 @@ class Enemy:
             direction = random.choice(self.__posible_directions)
         
         self.__direction = direction
+    
+    def can_shoot(self) -> bool:
+        return self.SHOOTS and self.__shooting_timer >= self.SHOOTING_FREQ
+
+    def shoot(self) -> Any:
+        '''
+        Supposed to be overridden by the child class with its own projectile and logic. Should still call this through
+        super().shoot() to update the timer. Can also be left without being overridden, in the case of a passive enemy
+        that doesn't shoot (Enemy.SHOOTS == False).
+        '''
+        self.__shooting_timer = 0
     
     def set_world_collision(self) -> None:
         self.__position = self.__prev_position

@@ -1,8 +1,9 @@
 from pygame.rect import Rect
 from classes.button import Button
 from classes.level import Level
-from classes.enemies.monster import Monster
+from classes.enemy import Enemy
 from classes.player import Player
+from classes.projectile import Projectile
 from classes.projectiles.fireball import Fireball
 from classes.scene import Scene
 from pygame.surface import Surface
@@ -18,7 +19,10 @@ class World(Scene):
 
         # Player
         self.__player: Player = Player()
-        self.__player_fireballs: list[Fireball] = []
+        self.__player_fireballs: list[Projectile] = []
+
+        # Enemy
+        self.__enemy_projectiles: list[Projectile] = []
 
         # Bottom bar
         self.__black_bar = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
@@ -44,21 +48,27 @@ class World(Scene):
         return super().update(dt)
 
     def __update_map(self, dt: float) -> None:
-        ### Monsters
-        for monster in self.get_current_level().get_monsters():
-            monster.move(dt)
+        ### Enemies
+        for enemy in self.get_current_level().get_enemies():
+            enemy.update(dt)
+
+            # Shooting
+            if enemy.can_shoot():
+                projectile = enemy.shoot()
+                if projectile:
+                    self.__enemy_projectiles.append(projectile)
             
             # World collisions
             for obstacle in self.get_current_level().get_obstacles():
-                if obstacle.colliderect(monster.get_rect()):
-                    monster.set_world_collision()
+                if obstacle.colliderect(enemy.get_rect()):
+                    enemy.set_world_collision()
 
             # World edges
-            if (monster.get_rect().x < 0
-                or monster.get_rect().x > self.get_current_level().get_width() - monster.get_rect().width
-                or monster.get_rect().y < 0
-                or monster.get_rect().y > self.get_current_level().get_height() - monster.get_rect().height):
-                monster.set_world_collision()
+            if (enemy.get_rect().x < 0
+                or enemy.get_rect().x > self.get_current_level().get_width() - enemy.get_rect().width
+                or enemy.get_rect().y < 0
+                or enemy.get_rect().y > self.get_current_level().get_height() - enemy.get_rect().height):
+                enemy.set_world_collision()
 
         ### Player
         player_direction = Direction.STAY
@@ -78,10 +88,18 @@ class World(Scene):
         if self.__player.can_shoot() and keys[pygame.K_SPACE]:
             self.__player_fireballs.append(self.__player.shoot())
 
+        # Updating all projectiles
+        for projectile in self.__enemy_projectiles:
+            projectile.update(dt)
+        self.__enemy_projectiles[:] = [prj for prj in self.__enemy_projectiles if prj.is_alive()]
+
         for fireball in self.__player_fireballs:
             fireball.update(dt)
 
         self.__player_fireballs[:] = [fireball for fireball in self.__player_fireballs if fireball.is_alive()]
+
+        # Sending projectiles to Level
+        self.get_current_level().set_projectiles(self.__player_fireballs + self.__enemy_projectiles)
 
         ### Player collisions
         # With obstacles
@@ -108,9 +126,6 @@ class World(Scene):
 
         # Updating player
         self.__player.update(dt)
-
-        # Updating fireballs on Level
-        self.get_current_level().set_projectiles(self.__player_fireballs)
 
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())

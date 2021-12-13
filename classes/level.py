@@ -7,8 +7,9 @@ from classes.dialogue import Dialogue
 from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
+from classes.enemy import Enemy
 from classes.enemies.monster import Monster
-from classes.projectiles.fireball import Fireball
+from classes.projectile import Projectile
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
 from classes.maplayer import MapLayer
@@ -33,7 +34,7 @@ class Level:
         self.__player_spawn: Tuple[int, int] = (0, 0)
 
         # Projectiles
-        self.__projectile_list: list[Fireball] = []
+        self.__projectile_list: list[Projectile] = []
         
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
@@ -95,6 +96,10 @@ class Level:
                 spawn_area = [left * world_scale[0], top * world_scale[1],
                               width * world_scale[0], height * world_scale[1]]
                 quest["monsters"]["spawn_area"] = spawn_area
+            if "boss_position" in quest:
+                position = quest["boss_position"]
+                position = (position[0] * world_scale[0], position[1] * world_scale[1])
+                quest["boss_position"] = position
             self.__quest_tracker.add_quest(quest)
 
         # End Condition
@@ -198,11 +203,11 @@ class Level:
         self.__camera_offset = (configs.SCREEN_W // 2 - player_rect.x - player_rect.width // 2,
                                 configs.SCREEN_H // 2 - player_rect.y - player_rect.height // 2)
     
-    def set_projectiles(self, projectiles: list[Fireball]) -> None:
+    def set_projectiles(self, projectiles: list[Projectile]) -> None:
         self.__projectile_list = projectiles
 
-    def get_monsters(self) -> list[Monster]:
-        return self.__quest_tracker.get_active_monsters()
+    def get_enemies(self) -> list[Enemy]:
+        return self.__quest_tracker.get_active_enemies()
 
     ### Dialogue
     def goto_next_line(self) -> None:
@@ -221,15 +226,15 @@ class Level:
 
             # Draw monsters
             monster_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
-            for monster in self.get_monsters():
+            for monster in self.get_enemies():
                 monster_surface.blit(monster.get_surface(), monster.get_rect())
             screen.blit(monster_surface, self.__camera_offset)
 
-            # Draw bullets
-            bullet_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
-            for bullet in self.__projectile_list:
-                bullet_surface.blit(bullet.get_surface(), bullet.get_rect())
-            screen.blit(bullet_surface, self.__camera_offset)
+            # Draw projectiles
+            projectile_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
+            for projectile in self.__projectile_list:
+                projectile_surface.blit(projectile.get_surface(), projectile.get_rect())
+            screen.blit(projectile_surface, self.__camera_offset)
 
             # Draw objective UI
             screen.blit(self.__quest_tracker.get_objective_surface(), (0, 0))
