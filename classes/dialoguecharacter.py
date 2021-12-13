@@ -13,6 +13,7 @@ class DialogueCharacter:
         self.__colour: str = "white"
         self.__position: Tuple[int, int] = (0, 0)
         self.__emotions: dict[str, Surface] = {}
+        self.__faded_emotions: dict[str, Surface] = {}
         self.__last_emotion: str = start_emotion
         self.__active: bool = False
         
@@ -34,6 +35,9 @@ class DialogueCharacter:
                         configs.CHARACTER_SIZE[1] != emotion_surface.get_height():
                         emotion_surface = pygame.transform.smoothscale(emotion_surface, configs.CHARACTER_SIZE)
                     self.__emotions[emotion] = emotion_surface
+                    faded = emotion_surface.copy()
+                    faded.fill((140, 140, 140), special_flags=pygame.BLEND_RGB_SUB)
+                    self.__faded_emotions[emotion] = faded
                 
                 if character_data["screen_alignment"]:
                     pos_x = 0
@@ -59,24 +63,24 @@ class DialogueCharacter:
     def get_colour(self) -> str:
         return self.__colour
 
-    def __get_emotion_image(self, emotion: str) -> Surface:
+    def __get_emotion_image(self, emotion: str, faded: bool = False) -> Surface:
         if len(self.__emotions) == 0:
             return Surface((0, 0))
         if emotion == "":
+            if faded:
+                return self.__faded_emotions[self.__last_emotion]
             return self.__emotions[self.__last_emotion]
         
         self.__last_emotion = emotion
+        if faded:
+            return self.__faded_emotions[emotion]
         return self.__emotions[emotion]
 
     def get_image(self, emotion: str = "") -> Surface:
-        surface = self.__get_emotion_image(emotion)
-        
         if self.__active:
-            return surface
+            return self.__get_emotion_image(emotion)
         else:
-            faded = surface.copy()
-            faded.fill((140, 140, 140), special_flags=pygame.BLEND_RGB_SUB)
-            return faded        
+            return self.__get_emotion_image(emotion, True)      
 
     def get_width(self) -> int:
         return configs.CHARACTER_SIZE[0]
