@@ -26,9 +26,8 @@ class QuestTracker:
         self.__projectiles: list[Projectile] = []
 
         # Objective UI
-        self.__objective_surface: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
-        black_bar = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
-        self.__objective_surface.blit(black_bar, (0, 0))
+        self.__objective_surface: Surface = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
+        self.__objective_surface.fill("black")
 
         objective_title_font = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 24)
         self.__objective_title = objective_title_font.render("Objetivos atuais:", True, "white")
