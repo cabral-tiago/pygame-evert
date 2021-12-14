@@ -5,7 +5,7 @@ import pygame
 
 
 class MapLayer:
-    def __init__(self, path: str, obstacle: bool, tileset: Tileset) -> None:
+    def __init__(self, path: str, obstacle: bool, tileset: Tileset, alpha: bool) -> None:
         map: list[list[int]] = []
         self.__tileset = tileset
         self.__obstacle_rects: list[Rect] = []
@@ -22,7 +22,11 @@ class MapLayer:
 
         width = len(map[0])
         height = len(map)
-        self.__surface: Surface = Surface((width * tile_w, height * tile_h), pygame.SRCALPHA)
+        
+        if alpha:
+            self.__surface: Surface = Surface((width * tile_w, height * tile_h), pygame.SRCALPHA)
+        else:
+            self.__surface: Surface = Surface((width * tile_w, height * tile_h))
         
         # List of Rows with Lists of Groups with List of Columns.
         # Used for compressing neighbour obstacle Rects into bigger Rects, massively reducing the number of Rects needed.
@@ -31,7 +35,10 @@ class MapLayer:
             obstacle_row = []
             for w, column in enumerate(row):
                 if column != -1:
-                    self.__surface.blit(self.__tileset.get_tile(column), (w * tile_w, h * tile_h))
+                    if alpha:
+                        self.__surface.blit(self.__tileset.get_tile(column), (w * tile_w, h * tile_h))
+                    else:
+                        self.__surface.blit(self.__tileset.get_tile(column, False), (w * tile_w, h * tile_h))
                     if obstacle:
                         obstacle_row.append(w)
             if obstacle:

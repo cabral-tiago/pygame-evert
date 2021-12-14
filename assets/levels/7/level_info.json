@@ -2,7 +2,7 @@
     "type": 2,
     "tileset": "assets/images/autumn_lands.png",
     "tile_size": [16, 16],
-    "tile_scale": 4,
+    "tile_scale": 2,
     "player_appear": true,
     "player_spawn": [11, 12],
     "player_spawn_direction": "right",

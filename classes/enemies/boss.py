@@ -7,7 +7,7 @@ import pygame
 
 
 class Boss(Enemy):
-    SPEED = 120
+    SPEED = 70
     SHOOTS = True
     SHOOTING_FREQ = 1.75
     CHANGE_DIRECTION_FREQ = 4
@@ -15,7 +15,6 @@ class Boss(Enemy):
 
     def __init__(self, position: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/robert.png").convert_alpha()
-        surface = pygame.transform.scale(surface, (surface.get_width() * 2, surface.get_height() * 2))
 
         possible_directions = [Direction.UP, Direction.DOWN]
 

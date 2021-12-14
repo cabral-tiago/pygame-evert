@@ -5,8 +5,8 @@ from pygame.rect import Rect
 
 
 class Projectile:
-    SPEED = 250
-    MAX_DISTANCE = 500
+    SPEED = 120
+    MAX_DISTANCE = 250
 
     def __init__(self, surface: Surface, start: Tuple[int, int], direction: Direction) -> None:
         self.__surface = surface

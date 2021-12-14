@@ -6,12 +6,11 @@ import pygame
 
 
 class Fireball(Projectile):
-    SPEED = 400
-    MAX_DISTANCE = 600
+    SPEED = 200
+    MAX_DISTANCE = 300
 
     def __init__(self, start: Tuple[int, int], direction: Direction) -> None:
         surface = pygame.image.load("assets/images/fireball.png").convert_alpha()
-        surface = pygame.transform.scale(surface, (surface.get_width() * 2, surface.get_height() * 2))
 
         super().__init__(surface, start, direction)
 

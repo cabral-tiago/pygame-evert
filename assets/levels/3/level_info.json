@@ -2,9 +2,9 @@
     "type": 2,
     "tileset": "assets/images/city_tileset.png",
     "tile_size": [16, 16],
-    "tile_scale": 4,
+    "tile_scale": 2,
     "player_appear": true,
-    "player_spawn": [12, 10],
+    "player_spawn": [6, 5],
     "player_spawn_direction": "bottom",
     "quests": [
         {
@@ -12,7 +12,7 @@
             "objective": "Mata todos os peixes-gato",
             "monsters": {
                 "amount": 4,
-                "spawn_area": [24, 11, 20, 4]
+                "spawn_area": [13, 7, 24, 5]
             }
         },
         {
@@ -21,8 +21,8 @@
             "collectables": [
                 {
                     "image_path": "assets\\images\\pizza.png",
-                    "image_scale": 4,
-                    "position": [47, 10]
+                    "image_scale": 1,
+                    "position": [38, 6]
                 }
             ]
         }
@@ -30,6 +30,6 @@
     "end_condition": {
         "condition": "return_when_done",
         "objective": "Volta para casa.",
-        "position": [12, 10]
+        "position": [6, 5]
     }
 }

@@ -10,11 +10,11 @@ import pygame
 class Player:
     MAX_HP = 420
     ANIMATION_INTERVAL = 0.1
-    SPEED = 150
+    SPEED = 80
     SHOOTING_COOLDOWN = 0.75
 
     def __init__(self) -> None:
-        spritesheet: Spritesheet = Spritesheet("assets/images/jesse_sprite.png", (15, 18), 4)
+        spritesheet: Spritesheet = Spritesheet("assets/images/jesse_sprite.png", (15, 18), 2)
 
         self.__sprite_directions = [Direction.DOWN,
                                     Direction.UP,

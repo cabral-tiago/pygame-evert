@@ -73,9 +73,12 @@ class Level:
         layer_files = [f.name for f in os.scandir(layers_path) if f.name.endswith(".csv")]
         ordered_layers = sorted([(int(i[:-7]), i) for i in layer_files])
 
-        for _, file in ordered_layers:
+        for n, file in ordered_layers:
             layer_collide = True if file[:-4].split("_")[1] == "ob" else False
-            layer = MapLayer(layers_path + "/" + file, layer_collide, tileset)
+            alpha = True
+            if n == 0:
+                alpha = False
+            layer = MapLayer(layers_path + "/" + file, layer_collide, tileset, alpha)    
             self.__obstacles.extend(layer.get_obstacle_rects())
             self.__layers.append(layer)
 

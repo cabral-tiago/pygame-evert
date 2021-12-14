@@ -8,7 +8,7 @@ import random
 
 
 class Monster(Enemy):
-    SPEED = 80
+    SPEED = 40
     SHOOTS = True
     SHOOTING_FREQ = 2.5
     CHANGE_DIRECTION_FREQ = 2
@@ -16,7 +16,6 @@ class Monster(Enemy):
 
     def __init__(self, position: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/catfish.png").convert_alpha()
-        surface = pygame.transform.scale(surface, (surface.get_width() * 2, surface.get_height() * 2))
 
         possible_directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
 
