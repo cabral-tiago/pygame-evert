@@ -59,15 +59,7 @@ class World(Scene):
                     self.__enemy_projectiles.append(projectile)
             
             # World collisions
-            for obstacle in self.get_current_level().get_obstacles():
-                if obstacle.colliderect(enemy.get_rect()):
-                    enemy.set_world_collision()
-
-            # World edges
-            if (enemy.get_rect().x < 0
-                or enemy.get_rect().x > self.get_current_level().get_width() - enemy.get_rect().width
-                or enemy.get_rect().y < 0
-                or enemy.get_rect().y > self.get_current_level().get_height() - enemy.get_rect().height):
+            if enemy.get_rect().collidelist(self.get_current_level().get_obstacles()) != -1:
                 enemy.set_world_collision()
 
         ### Player
@@ -103,9 +95,8 @@ class World(Scene):
 
         ### Player collisions
         # With obstacles
-        for obstacle in self.get_current_level().get_obstacles():
-            if obstacle.colliderect(self.__player.get_rect()):
-                self.__player.set_collided()
+        if self.__player.get_rect().collidelist(self.get_current_level().get_obstacles()) != -1:
+            self.__player.set_collided()
 
         # With collectables
         for collectable in self.get_current_level().get_active_collectables():
@@ -116,13 +107,6 @@ class World(Scene):
         if self.get_current_level().get_end_condition() == EndCondition.RETURN_WHEN_DONE and \
                 self.get_current_level().get_end_position().colliderect(self.__player.get_rect()):
             self.get_current_level().set_player_at_end()
-
-        # With the world edges
-        if (self.__player.get_rect().x < 0
-                or self.__player.get_rect().x > self.get_current_level().get_width() - self.__player.get_rect().width
-                or self.__player.get_rect().y < 0
-                or self.__player.get_rect().y > self.get_current_level().get_height() - self.__player.get_rect().height):
-            self.__player.set_collided()
 
         # Updating player
         self.__player.update(dt)
