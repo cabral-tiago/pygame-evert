@@ -1,6 +1,6 @@
 {
     "screen_name": "Robert",
     "name_colour": "firebrick3",
-    "emotions": ["nervous", "neutral", "sad", "surprised", "mad"],
+    "emotions": ["cryingsad", "cryingsmile"],
     "screen_alignment": "center"
 }
