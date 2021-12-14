@@ -82,6 +82,14 @@ class Enemy:
 
     def is_alive(self) -> bool:
         return self.__hp > 0
+    
+    def take_damage(self, damage: int) -> None:
+        self.__hp -= damage
+        if self.__hp <= 0:
+            self.__hp = 0
+    
+    def reset(self) -> None:
+        self.__hp = Enemy.MAX_HP
 
     def get_surface(self) -> Surface:
         return self.__surface

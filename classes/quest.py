@@ -5,11 +5,11 @@ from classes.enemies.monster import Monster
 
 
 class Quest:
-    def __init__(self, type: QuestType, objective: str, collectables: list[Collectable], monsters: list[Enemy]) -> None:
+    def __init__(self, type: QuestType, objective: str, collectables: list[Collectable], enemies: list[Enemy]) -> None:
         self.__type: QuestType = type
         self.__objective: str = objective
         self.__collectables: list[Collectable] = collectables
-        self.__enemies: list[Enemy] = monsters
+        self.__enemies: list[Enemy] = enemies
         self.__completed = False
 
     def get_type(self) -> QuestType:
@@ -27,6 +27,8 @@ class Quest:
     def update_quest(self) -> None:
         if self.__type == QuestType.COLLECT and len(self.get_active_collectables()) == 0:
             self.__completed = True
+        elif self.__type in (QuestType.KILL_MONSTERS, QuestType.KILL_BOSS) and len(self.get_active_enemies()) == 0:
+            self.__completed = True
 
     def set_completed(self) -> None:
         self.__completed = True
@@ -37,5 +39,7 @@ class Quest:
     def reset(self) -> None:
         for collectable in self.__collectables:
             collectable.reset()
-        
+        for enemy in self.__enemies:
+            enemy.reset()
+
         self.__completed = False

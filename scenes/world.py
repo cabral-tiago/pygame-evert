@@ -83,10 +83,31 @@ class World(Scene):
         # Updating all projectiles
         for projectile in self.__enemy_projectiles:
             projectile.update(dt)
+
+            # Kill projectile if it collides with obstacles in the World.
+            if projectile.get_rect().collidelist(self.get_current_level().get_obstacles()) != -1:
+                projectile.die()
+            
+            # Registering the hit on the player
+            if projectile.get_rect().colliderect(self.__player.get_rect()):
+                self.__player.take_damage(projectile.DAMAGE)
+                projectile.die()
+
         self.__enemy_projectiles[:] = [prj for prj in self.__enemy_projectiles if prj.is_alive()]
 
         for fireball in self.__player_fireballs:
             fireball.update(dt)
+
+            # Kill projectile if it collides with obstacles in the World.
+            if fireball.get_rect().collidelist(self.get_current_level().get_obstacles()) != -1:
+                fireball.die()
+            
+            # Registering the hit on the enemy
+            for enemy in self.get_current_level().get_enemies():
+                if fireball.get_rect().colliderect(enemy.get_rect()):
+                    enemy.take_damage(fireball.DAMAGE)
+                    fireball.die()
+                    break
 
         self.__player_fireballs[:] = [fireball for fireball in self.__player_fireballs if fireball.is_alive()]
 
@@ -125,6 +146,9 @@ class World(Scene):
     
     def reset(self) -> None:
         super().reset()
+        self.__player_fireballs = []
+        self.__enemy_projectiles = []
+        self.__player.reset()
         self.change_level(1)
 
     def draw(self, screen: Surface) -> None:

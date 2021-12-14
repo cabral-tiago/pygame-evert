@@ -7,6 +7,7 @@ from pygame.rect import Rect
 class Projectile:
     SPEED = 120
     MAX_DISTANCE = 250
+    DAMAGE = 50
 
     def __init__(self, surface: Surface, start: Tuple[int, int], direction: Direction) -> None:
         self.__surface = surface
@@ -26,6 +27,9 @@ class Projectile:
 
     def get_rect(self) -> Rect:
         return self.get_surface().get_rect(center=self.__get_position())
+    
+    def die(self) -> None:
+        self.__alive = False
 
     def is_alive(self) -> bool:
         return self.__alive

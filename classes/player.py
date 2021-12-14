@@ -87,14 +87,22 @@ class Player:
             return Fireball(self.get_rect().center, self.__prev_direction)
         return Fireball(self.get_rect().center, self.__direction)
     
-    def get_hp(self) -> int:
-        return self.__hp
+    def is_alive(self) -> bool:
+        return self.__hp > 0
+
+    def take_damage(self, damage: int) -> None:
+        self.__hp -= damage
+        if self.__hp <= 0:
+            self.__hp = 0
+    
+    def reset(self) -> None:
+        self.__hp = Player.MAX_HP
 
     def get_hpbar_surface(self) -> Surface:
         surface = self.__hpbar_bg.copy()
         bar_size = Rect(self.__hpbar_border,
                         self.__hpbar_border,
-                        self.get_hp(),
+                        self.__hp,
                         self.__hpbar_bg.get_height() - self.__hpbar_border * 2)
         pygame.draw.rect(surface, "red", bar_size)
         hp_text = self.__hp_font.render(f"HP: {self.__hp}/{Player.MAX_HP}", True, "white")
