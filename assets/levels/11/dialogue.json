@@ -1,0 +1,9 @@
+{
+    "characters": [
+        ["a", "assets/characters/alberto/alberto.json", "neutral"]
+    ],
+    "dialogue": [
+        ["a", "Insanidade é fazer a mesma coisa repetidamente e esperar resultados diferentes."],
+        ["a", "\"Addio\""]
+    ]
+}

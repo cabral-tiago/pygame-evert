@@ -1,0 +1,18 @@
+{
+    "characters": [
+        ["j", "assets/characters/jesse/jesse.json", "smile"],
+        ["t", "assets/characters/tiago/tiago.json", "neutral"]
+    ],
+    "dialogue": [
+        ["t", "Hey Evert! Como correram as cenas com a Emily?"],
+        ["j", "Tinhas razão. Era mesmo um rapaz.", "sad"],
+        ["t", "Avisei-te... Enfim, bora jogar Valorant? Eu saquei o jog-"],
+        ["j", "Não, Valorant é uma porcaria, já desinstalei.", "angry"],
+        ["j", "Vou jogar Apex Legends com a Nicole.", "smile"],
+        ["t", "O que?! Agora que saquei o jogo...", "angry"],
+        ["t", "Espera... Nicole? Outra E-girl?!", "surprised"],
+        ["j", "Então, 'tás a ver...", "smile"],
+        ["( O Evert fala sobre mais uma rapariga que conheceu online... )"],
+        ["t", "Oh não... aqui vamos nós outra vez...", "surprised"]
+    ]
+}

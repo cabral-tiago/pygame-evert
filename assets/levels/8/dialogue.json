@@ -1,0 +1,17 @@
+{
+    "characters": [
+        ["r", "assets/characters/robert/robert-center.json", "cryingsad"]
+    ],
+    "dialogue": [
+        ["r", "És muito forte Evert..."],
+        ["r", "Depois de te enganar, de ferir os teus sentimentos..."],
+        ["r", "Ainda tiveste a força e o espírito para me derrotar."],
+        ["r", "Mereces esta vitória. Parabéns.", "cryingsmile"],
+        ["r", "A minha história acaba aqui. Uma morte triste mas...", "cryingsad"],
+        ["r", "Menos uma pessoa má no mundo, a enganar pessoas ingénuas."],
+        ["r", "Uma última coisa..."],
+        ["r", "Se eu fosse uma rapariga a sério deixava-te na friendzone.", "cryingsmile"],
+        ["r", "Adeus Evert.", "cryingsmile"],
+        ["( Com as suas últimas forças, o Robert teleporta o Evert de volta )"]
+    ]
+}

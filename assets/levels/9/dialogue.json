@@ -1,0 +1,15 @@
+{
+    "characters": [
+        ["j", "assets/characters/jesse/jesse-center.json", "angry"]
+    ],
+    "dialogue": [
+        ["j", "O quê?!"],
+        ["( O Evert repara que já está de volta ao seu quarto )"],
+        ["j", "Estou de volta! Robert...", "surprised"],
+        ["( O Evert corre para o PC e verifica o Discord )"],
+        ["( O Robert está offline )"],
+        ["j", "O Tiago tinha razão... Era mesmo um catfish...", "sad"],
+        ["( O Evert vai dormir )"],
+        ["( No dia seguinte )"]
+    ]
+}
