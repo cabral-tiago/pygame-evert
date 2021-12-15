@@ -1,5 +1,6 @@
 from classes.enums import GameState, SceneID
 from classes.scene import Scene
+from scenes.deathscreen import DeathScreen
 from scenes.menu import Menu
 from scenes.world import World
 
@@ -12,6 +13,7 @@ class Game:
         
         self.__scenes[SceneID.MENU] = Menu()
         self.__scenes[SceneID.WORLD] = World()
+        self.__scenes[SceneID.DEATHSCREEN] = DeathScreen()
         self.__current_scene = SceneID.MENU
 
     def update(self, dt) -> None:
@@ -31,9 +33,8 @@ class Game:
             case GameState.GAME_FRESH:
                 self.__scenes[SceneID.WORLD].reset()
                 self.__current_scene = SceneID.WORLD
-            case GameState.GAME_PLAYING:
-                self.__current_scene = SceneID.WORLD
-                self.__scenes[SceneID.WORLD].change_level(4)
+            case GameState.GAME_DEAD:
+                self.__current_scene = SceneID.DEATHSCREEN
             case GameState.GAME_NEXT_DIALOGUE:
                 self.get_current_scene().get_next_dialogue()
             case GameState.GAME_LEVEL_END:

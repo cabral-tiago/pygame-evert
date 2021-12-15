@@ -5,17 +5,19 @@ class GameState(Enum):
     NULL = -1
     MAIN_MENU = 0
     GAME_FRESH = 1
-    GAME_PLAYING = 2
+    GAME_DEAD = 2
     GAME_PAUSED = 3
     GAME_NEXT_DIALOGUE = 4
     GAME_OK = 5
     GAME_LEVEL_END = 6
     GAME_END = 7
+    GAME_RETRY_LEVEL = 8
 
 
 class SceneID(Enum):
     MENU = 0
     WORLD = 1
+    DEATHSCREEN = 2
 
 
 class LevelType(Enum):
