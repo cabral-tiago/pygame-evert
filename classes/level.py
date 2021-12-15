@@ -227,11 +227,11 @@ class Level:
             # Draw collectibles
             screen.blit(self.__quest_tracker.get_map_surface(), self.__camera_offset)
 
-            # Draw monsters
-            monster_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
-            for monster in self.get_enemies():
-                monster_surface.blit(monster.get_surface(), monster.get_rect())
-            screen.blit(monster_surface, self.__camera_offset)
+            # Draw enemies
+            enemy_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
+            for enemy in self.get_enemies():
+                enemy_surface.blit(enemy.get_surface_with_hp(), enemy.get_rect())
+            screen.blit(enemy_surface, self.__camera_offset)
 
             # Draw projectiles
             projectile_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)

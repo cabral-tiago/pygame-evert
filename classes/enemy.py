@@ -3,6 +3,7 @@ from pygame.surface import Surface
 from pygame.rect import Rect
 from classes.enums import Direction
 import random
+import pygame
 
 
 class Enemy:
@@ -24,6 +25,22 @@ class Enemy:
         
         # HP
         self.__hp: int = self.MAX_HP
+
+        # HP Bar
+        self.__hpbar_max_width = round(surface.get_width(), -1)
+        self.__hpbar_height = (self.__hpbar_max_width / 10) * 2
+        
+        full_width = max(self.__hpbar_max_width, surface.get_width())
+        full_height = int(self.__hpbar_height * 1.5) + surface.get_height()
+        
+        self.__hpbar_offset = (full_width - self.__hpbar_max_width) // 2
+
+        self.__scaled_surface: Surface = Surface((full_width, full_height), pygame.SRCALPHA)
+        offset_x = (full_width - surface.get_width()) // 2
+        if offset_x > 0:
+            self.__scaled_surface.blit(surface, (offset_x, int(self.__hpbar_height * 1.5)))
+        else:
+            self.__scaled_surface.blit(surface, (0, int(self.__hpbar_height * 1.5)))
 
         # Shooting
         self.__shooting_timer = 0
@@ -93,6 +110,12 @@ class Enemy:
 
     def get_surface(self) -> Surface:
         return self.__surface
+    
+    def get_surface_with_hp(self) -> Surface:
+        surface = self.__scaled_surface.copy()
+        width = int((self.__hp * self.__hpbar_max_width) / self.MAX_HP)
+        pygame.draw.rect(surface, "red", Rect((self.__hpbar_offset, 0),(width, self.__hpbar_height)))
+        return surface
 
     def get_rect(self) -> Rect:
         position = (int(self.__position[0]), int(self.__position[1]))
