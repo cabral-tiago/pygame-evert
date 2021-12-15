@@ -176,7 +176,7 @@ class World(Scene):
                 return GameState.GAME_NEXT_DIALOGUE
             if self.get_current_level().get_type() == LevelType.MAP and self.__player.can_shoot():
                 self.__player_fireballs.append(self.__player.shoot())
-        if key in self.WASD_KEYS:
+        if key in self.WASD_KEYS and key not in self.__wasd_down:
             self.__wasd_down.append(key)
 
         return super().handle_key_down(key)
