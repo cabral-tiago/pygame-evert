@@ -7,7 +7,6 @@ import pygame
 class MapLayer:
     def __init__(self, path: str, obstacle: bool, tileset: Tileset, alpha: bool) -> None:
         map: list[list[int]] = []
-        self.__tileset = tileset
         self.__obstacle_rects: list[Rect] = []
 
         with open(path, "r", encoding="utf-8") as file:
@@ -36,9 +35,9 @@ class MapLayer:
             for w, column in enumerate(row):
                 if column != -1:
                     if alpha:
-                        self.__surface.blit(self.__tileset.get_tile(column), (w * tile_w, h * tile_h))
+                        self.__surface.blit(tileset.get_tile(column), (w * tile_w, h * tile_h))
                     else:
-                        self.__surface.blit(self.__tileset.get_tile(column, False), (w * tile_w, h * tile_h))
+                        self.__surface.blit(tileset.get_tile(column, False), (w * tile_w, h * tile_h))
                     if obstacle:
                         obstacle_row.append(w)
             if obstacle:
