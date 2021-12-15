@@ -120,10 +120,12 @@ class Player:
         surface.blit(hp_text, (self.__hpbar_border * 2, surface.get_height()//2 - hp_text.get_height() // 2))
         return surface
     
-    def teleport(self, pos: Tuple[int, int]) -> None:
+    def teleport(self, pos: Tuple[int, int], direction: Direction) -> None:
         position = self.get_surface().get_rect(topleft=pos).center
         self.__position = position
         self.__prev_position = position
+        self.__prev_direction = direction
+        self.__direction = Direction.STAY
 
     def set_collided(self) -> None:
         self.__colliding = True

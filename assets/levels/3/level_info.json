@@ -5,7 +5,7 @@
     "tile_scale": 2,
     "player_appear": true,
     "player_spawn": [6, 5],
-    "player_spawn_direction": "bottom",
+    "player_spawn_direction": "down",
     "quests": [
         {
             "type": "kill_monsters",

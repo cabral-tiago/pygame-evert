@@ -8,12 +8,11 @@ from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
 from classes.enemy import Enemy
-from classes.enemies.monster import Monster
 from classes.projectile import Projectile
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
 from classes.maplayer import MapLayer
-from classes.enums import EndCondition, GameState, LevelType
+from classes.enums import Direction, EndCondition, GameState, LevelType
 import configs
 import pygame
 
@@ -32,6 +31,7 @@ class Level:
         # Player
         self.__player_appear: bool = False
         self.__player_spawn: Tuple[int, int] = (0, 0)
+        self.__player_spawn_direction: Direction = Direction.DOWN
 
         # Projectiles
         self.__projectile_list: list[Projectile] = []
@@ -61,12 +61,13 @@ class Level:
         world_scale: Tuple[int, int] = (tile_scale*tile_size[0], tile_scale*tile_size[1])
         tileset = Tileset(level_info["tileset"], tile_size, tile_scale)
 
-        # Player visibility and spawn location
+        # Player visibility, spawn location and spawn direction
         self.__player_appear = level_info["player_appear"]
         spawn_x, spawn_y = level_info["player_spawn"]
         spawn_x *= tile_size[0] * tile_scale
         spawn_y *= tile_size[1] * tile_scale
         self.__player_spawn = (spawn_x, spawn_y)
+        self.__player_spawn_direction = Direction[level_info["player_spawn_direction"].upper()]
 
         # Map Layers
         layers_path = path + "/layers"
@@ -203,6 +204,9 @@ class Level:
     
     def get_player_spawn(self) -> Tuple[int, int]:
         return self.__player_spawn
+    
+    def get_player_spawn_direction(self) -> Direction:
+        return self.__player_spawn_direction
     
     def center_on_player(self, player_rect: Rect) -> None:
         self.__camera_offset = (configs.SCREEN_W // 2 - player_rect.x - player_rect.width // 2,

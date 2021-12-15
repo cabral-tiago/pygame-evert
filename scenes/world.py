@@ -147,13 +147,15 @@ class World(Scene):
         super().change_level(level_nr)
 
         if self.get_current_level().get_type() == LevelType.MAP:
-            self.__player.teleport(self.get_current_level().get_player_spawn())
+            self.__player.teleport(self.get_current_level().get_player_spawn(),
+                                   self.get_current_level().get_player_spawn_direction())
             self.__dialogue_button.hide()
         elif self.get_current_level().get_type() == LevelType.DIALOGUE:
             self.__dialogue_button.show()
     
     def reset(self) -> None:
         super().reset()
+        self.__wasd_down = []
         self.__player_fireballs = []
         self.__enemy_projectiles = []
         self.__player.reset()
@@ -161,10 +163,12 @@ class World(Scene):
 
     def reset_level(self) -> None:
         super().reset_level()
+        self.__wasd_down = []
         self.__player_fireballs = []
         self.__enemy_projectiles = []
         self.__player.reset()
-        self.__player.teleport(self.get_current_level().get_player_spawn())
+        self.__player.teleport(self.get_current_level().get_player_spawn(),
+                               self.get_current_level().get_player_spawn_direction())
 
     def handle_key_down(self, key: int) -> GameState:
         if key == pygame.K_SPACE:
