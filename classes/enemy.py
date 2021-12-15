@@ -89,7 +89,7 @@ class Enemy:
             self.__hp = 0
     
     def reset(self) -> None:
-        self.__hp = Enemy.MAX_HP
+        self.__hp = self.MAX_HP
 
     def get_surface(self) -> Surface:
         return self.__surface
