@@ -61,6 +61,17 @@ class World(Scene):
             # World collisions
             if enemy.get_rect().collidelist(self.get_current_level().get_obstacles()) != -1:
                 enemy.set_world_collision()
+            
+            # Other enemies collisions
+            for other_enemy in self.get_current_level().get_enemies():
+                if other_enemy is enemy:
+                    continue
+                if other_enemy.get_rect().colliderect(enemy.get_rect()):
+                    enemy.set_world_collision()
+            
+            # Player collision
+            if enemy.get_rect().colliderect(self.__player.get_rect()):
+                enemy.set_world_collision()
 
         ### Player
         player_direction = Direction.STAY
@@ -118,6 +129,11 @@ class World(Scene):
         # With obstacles
         if self.__player.get_rect().collidelist(self.get_current_level().get_obstacles()) != -1:
             self.__player.set_collided()
+        
+        # With enemies
+        for enemy in self.get_current_level().get_enemies():
+            if self.__player.get_rect().colliderect(enemy.get_rect()):
+                self.__player.set_collided()
 
         # With collectables
         for collectable in self.get_current_level().get_active_collectables():
