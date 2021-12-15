@@ -11,4 +11,6 @@ class ToxicLove(Projectile):
 
     def __init__(self, start: Tuple[int, int], direction: Direction) -> None:
         surface = pygame.image.load("assets/images/toxic_love.png").convert_alpha()
-        super().__init__(surface, start, direction)
+        hitfx = pygame.image.load("assets/images/void_hitfx.png").convert_alpha()
+
+        super().__init__(surface, start, direction, hitfx)

@@ -1,5 +1,7 @@
+from typing import Tuple
 from pygame.rect import Rect
 from classes.button import Button
+from classes.hitfx import HitFX
 from classes.level import Level
 from classes.enemy import Enemy
 from classes.player import Player
@@ -28,6 +30,9 @@ class World(Scene):
         # Enemy
         self.__enemy_projectiles: list[Projectile] = []
 
+        # HitFX
+        self.__hitfx: list[HitFX] = []
+
         # Bottom bar
         self.__black_bar = Surface((configs.SCREEN_W, configs.BAR_HEIGHT))
         self.__black_bar.fill("black")
@@ -55,6 +60,14 @@ class World(Scene):
         return super().update(dt)
 
     def __update_map(self, dt: float) -> None:
+        ### HitFX
+        for hitfx in self.__hitfx:
+            hitfx.update(dt)
+
+        self.__hitfx[:] = [hitfx for hitfx in self.__hitfx if hitfx.is_alive()]
+
+        self.get_current_level().set_hitfx(self.__hitfx)
+
         ### Enemies
         for enemy in self.get_current_level().get_enemies():
             enemy.update(dt)
@@ -94,6 +107,7 @@ class World(Scene):
             # Registering the hit on the player
             if projectile.get_rect().colliderect(self.__player.get_rect()):
                 self.__player.take_damage(projectile.DAMAGE)
+                self.__hitfx.append(HitFX(projectile.get_hitfx(), self.__player.get_rect().center))
                 projectile.die()
 
         self.__enemy_projectiles[:] = [prj for prj in self.__enemy_projectiles if prj.is_alive()]
@@ -109,6 +123,7 @@ class World(Scene):
             for enemy in self.get_current_level().get_enemies():
                 if fireball.get_rect().colliderect(enemy.get_rect()):
                     enemy.take_damage(fireball.DAMAGE)
+                    self.__hitfx.append(HitFX(fireball.get_hitfx(), enemy.get_rect().center))
                     fireball.die()
                     break
 
@@ -140,8 +155,11 @@ class World(Scene):
         # Updating player
         self.__player.update(dt)
 
+        # Setting player surface on Level to be drawn at the right Z_Height
+
         if self.get_current_level().is_player_visible():
             self.get_current_level().center_on_player(self.__player.get_rect())
+            self.get_current_level().set_player_surface(self.__player.get_surface())
 
     def change_level(self, level_nr: int) -> None:
         super().change_level(level_nr)
@@ -158,6 +176,7 @@ class World(Scene):
         self.__wasd_down = []
         self.__player_fireballs = []
         self.__enemy_projectiles = []
+        self.__hitfx = []
         self.__player.reset()
         self.change_level(1)
 
@@ -166,6 +185,7 @@ class World(Scene):
         self.__wasd_down = []
         self.__player_fireballs = []
         self.__enemy_projectiles = []
+        self.__hitfx = []
         self.__player.reset()
         self.__player.teleport(self.get_current_level().get_player_spawn(),
                                self.get_current_level().get_player_spawn_direction())
@@ -200,11 +220,6 @@ class World(Scene):
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
         if self.get_current_level().is_player_visible():
-            # Draw player
-            screen.blit(self.__player.get_surface(),
-                        (configs.SCREEN_W / 2 - self.__player.get_surface().get_width() / 2,
-                         configs.SCREEN_H / 2 - self.__player.get_surface().get_height() / 2))
-
             # Draw bottom bar
             screen.blit(self.__black_bar, (0, configs.SCREEN_H - configs.BAR_HEIGHT))
 

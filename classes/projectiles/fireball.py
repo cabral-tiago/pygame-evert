@@ -12,8 +12,9 @@ class Fireball(Projectile):
 
     def __init__(self, start: Tuple[int, int], direction: Direction) -> None:
         surface = pygame.image.load("assets/images/fireball.png").convert_alpha()
+        hitfx = pygame.image.load("assets/images/fireball_hitfx.png").convert_alpha()
 
-        super().__init__(surface, start, direction)
+        super().__init__(surface, start, direction, hitfx)
 
     def get_surface(self) -> Surface:
         match super().get_direction():

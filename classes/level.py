@@ -8,6 +8,7 @@ from classes.dialoguecharacter import DialogueCharacter
 from classes.dialogueline import DialogueLine
 from classes.collectable import Collectable
 from classes.enemy import Enemy
+from classes.hitfx import HitFX
 from classes.projectile import Projectile
 from classes.questtracker import QuestTracker
 from classes.tileset import Tileset
@@ -30,11 +31,13 @@ class Level:
         
         # Player
         self.__player_appear: bool = False
+        self.__player_surface: Surface = Surface((0,0))
         self.__player_spawn: Tuple[int, int] = (0, 0)
         self.__player_spawn_direction: Direction = Direction.DOWN
 
-        # Projectiles
+        # Projectiles and HitFX
         self.__projectile_list: list[Projectile] = []
+        self.__hitfx_list: list[HitFX] = []
         
         # Camera
         self.__camera_offset: Tuple[int, int] = (0, 0)
@@ -212,8 +215,14 @@ class Level:
         self.__camera_offset = (configs.SCREEN_W // 2 - player_rect.x - player_rect.width // 2,
                                 configs.SCREEN_H // 2 - player_rect.y - player_rect.height // 2)
     
+    def set_player_surface(self, surface: Surface) -> None:
+        self.__player_surface = surface
+    
     def set_projectiles(self, projectiles: list[Projectile]) -> None:
         self.__projectile_list = projectiles
+    
+    def set_hitfx(self, hitfx: list[HitFX]) -> None:
+        self.__hitfx_list = hitfx
 
     def get_enemies(self) -> list[Enemy]:
         return self.__quest_tracker.get_active_enemies()
@@ -239,10 +248,18 @@ class Level:
                 enemy_surface.blit(enemy.get_surface_with_hp(), enemy.get_rect())
             screen.blit(enemy_surface, self.__camera_offset)
 
-            # Draw projectiles
+            # Draw player
+            if self.__player_appear:
+                screen.blit(self.__player_surface,
+                            (configs.SCREEN_W / 2 - self.__player_surface.get_width() / 2,
+                            configs.SCREEN_H / 2 - self.__player_surface.get_height() / 2))
+
+            # Draw projectiles and HitFX
             projectile_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
             for projectile in self.__projectile_list:
                 projectile_surface.blit(projectile.get_surface(), projectile.get_rect())
+            for hitfx in self.__hitfx_list:
+                projectile_surface.blit(hitfx.get_surface(), hitfx.get_rect())
             screen.blit(projectile_surface, self.__camera_offset)
 
             # Draw objective UI

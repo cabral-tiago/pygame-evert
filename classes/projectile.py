@@ -9,11 +9,12 @@ class Projectile:
     MAX_DISTANCE = 250
     DAMAGE = 50
 
-    def __init__(self, surface: Surface, start: Tuple[int, int], direction: Direction) -> None:
+    def __init__(self, surface: Surface, start: Tuple[int, int], direction: Direction, hitfx: Surface) -> None:
         self.__surface = surface
         self.__position: Tuple[float, float] = start  # Float due to deltatime calculations
         self.__start_position: Tuple[int, int] = start
         self.__direction: Direction = direction
+        self.__hitfx: Surface = hitfx
         self.__alive = True
 
     def __get_position(self) -> Tuple[int, int]:
@@ -21,6 +22,9 @@ class Projectile:
 
     def get_direction(self) -> Direction:
         return self.__direction
+    
+    def get_hitfx(self) -> Surface:
+        return self.__hitfx
 
     def get_surface(self) -> Surface:
         return self.__surface

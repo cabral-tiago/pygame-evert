@@ -11,4 +11,6 @@ class VoidBarrage(Projectile):
 
     def __init__(self, start: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/void_barrage.png").convert_alpha()
-        super().__init__(surface, start, Direction.LEFT)
+        hitfx = pygame.image.load("assets/images/void_hitfx.png").convert_alpha()
+
+        super().__init__(surface, start, Direction.LEFT, hitfx)
