@@ -46,11 +46,11 @@ class Scene:
 
         return GameState.NULL
 
-    def handle_key_down(self, key: int) -> None:
-        pass
+    def handle_key_down(self, key: int) -> GameState:
+        return GameState.GAME_OK
 
-    def handle_key_up(self, key: int) -> None:
-        pass
+    def handle_key_up(self, key: int) -> GameState:
+        return GameState.GAME_OK
 
     def reset(self) -> None:
         for level in self.__levels.values():

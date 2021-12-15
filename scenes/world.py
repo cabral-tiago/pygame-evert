@@ -14,12 +14,16 @@ import os
 
 
 class World(Scene):
+    WASD_KEYS = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d,
+                pygame.K_UP, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_DOWN]
+
     def __init__(self) -> None:
         super().__init__()
 
         # Player
         self.__player: Player = Player()
         self.__player_fireballs: list[Projectile] = []
+        self.__wasd_down: list[int] = []
 
         # Enemy
         self.__enemy_projectiles: list[Projectile] = []
@@ -77,22 +81,7 @@ class World(Scene):
                 enemy.set_world_collision()
 
         ### Player
-        player_direction = Direction.STAY
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            player_direction = Direction.RIGHT
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            player_direction = Direction.LEFT
-        if keys[pygame.K_w] or keys[pygame.K_UP]:
-            player_direction = Direction.UP
-        if keys[pygame.K_s] or keys[pygame.K_DOWN]:
-            player_direction = Direction.DOWN
-        
-        self.__player.move(dt, player_direction)
-
-        ### Player shooting
-        if self.__player.can_shoot() and keys[pygame.K_SPACE]:
-            self.__player_fireballs.append(self.__player.shoot())
+        self.__player.move(dt, self.get_last_wasd())
 
         # Updating all projectiles
         for projectile in self.__enemy_projectiles:
@@ -176,6 +165,30 @@ class World(Scene):
         self.__enemy_projectiles = []
         self.__player.reset()
         self.__player.teleport(self.get_current_level().get_player_spawn())
+
+    def handle_key_down(self, key: int) -> GameState:
+        if key == pygame.K_SPACE:
+            if self.get_current_level().get_type() == LevelType.DIALOGUE:
+                return GameState.GAME_NEXT_DIALOGUE
+            if self.get_current_level().get_type() == LevelType.MAP and self.__player.can_shoot():
+                self.__player_fireballs.append(self.__player.shoot())
+        if key in self.WASD_KEYS:
+            self.__wasd_down.append(key)
+
+        return super().handle_key_down(key)
+    
+    def handle_key_up(self, key: int) -> GameState:
+        if key in self.WASD_KEYS:
+            if key in self.__wasd_down:
+                self.__wasd_down.remove(key)
+    
+        return super().handle_key_up(key)
+    
+    def get_last_wasd(self) -> int:
+        if len(self.__wasd_down) > 0:
+            return self.__wasd_down[-1]
+        else:
+            return -1
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)

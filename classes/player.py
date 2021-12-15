@@ -47,7 +47,18 @@ class Player:
         pygame.draw.rect(self.__hpbar_bg, "gray10", Rect((0, 0), self.__hpbar_bg.get_size()), border_radius=4)
         pygame.draw.rect(self.__hpbar_bg, "red4", Rect((0, 0), self.__hpbar_bg.get_size()), self.__hpbar_border, 4)
     
-    def move(self, dt: float, direction: Direction) -> None:
+    def move(self, dt: float, key: int) -> None:
+        direction = Direction.STAY
+        match key:
+            case pygame.K_w | pygame.K_UP:
+                direction = Direction.UP
+            case pygame.K_a | pygame.K_LEFT:
+                direction = Direction.LEFT
+            case pygame.K_s | pygame.K_DOWN:
+                direction = Direction.DOWN
+            case pygame.K_d | pygame.K_RIGHT:
+                direction = Direction.RIGHT
+            
         if direction == Direction.STAY:
             if self.__direction != Direction.STAY:
                 self.__prev_direction = self.__direction

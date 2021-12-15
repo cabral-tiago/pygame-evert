@@ -38,6 +38,11 @@ while run:
             case pygame.MOUSEBUTTONDOWN:
                 if pygame.mouse.get_pressed()[0]:
                     game.handle_mouse_click()
+            case pygame.KEYDOWN:
+                game.handle_key_down(event.key)
+            case pygame.KEYUP:
+                game.handle_key_up(event.key)
+            
     
     screen.fill("black")
 

@@ -55,7 +55,9 @@ class Game:
             self.change_state(new_state)
 
     def handle_key_down(self, key: int) -> None:
-        self.__scenes[self.__current_scene].handle_key_down(key)
+        new_state = self.__scenes[self.__current_scene].handle_key_down(key)
+        self.change_state(new_state)
     
     def handle_key_up(self, key: int) -> None:
-        self.__scenes[self.__current_scene].handle_key_up(key)
+        new_state = self.__scenes[self.__current_scene].handle_key_up(key)
+        self.change_state(new_state)
