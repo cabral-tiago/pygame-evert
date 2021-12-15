@@ -177,8 +177,10 @@ class Level:
     def update(self) -> GameState:
         if self.__type == LevelType.MAP:
             return self.__quest_tracker.update()
-        else:
+        elif self.__type == LevelType.DIALOGUE:
             return self.__dialogue.update()
+        else:
+            return GameState.GAME_OK
     
     ### Map Level
     def get_obstacles(self) -> list[Rect]:
