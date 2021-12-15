@@ -178,6 +178,9 @@ class World(Scene):
                 self.__player_fireballs.append(self.__player.shoot())
         if key in self.WASD_KEYS and key not in self.__wasd_down:
             self.__wasd_down.append(key)
+        if key == pygame.K_ESCAPE:
+            self.__wasd_down = []
+            return GameState.GAME_PAUSE
 
         return super().handle_key_down(key)
     

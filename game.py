@@ -1,8 +1,11 @@
+import pygame
+from pygame.event import Event
 from classes.enums import GameState, SceneID
 from classes.scene import Scene
-from scenes.deathscreen import DeathScreen
 from scenes.menu import Menu
 from scenes.world import World
+from scenes.deathscreen import DeathScreen
+from scenes.pausescreen import PauseScreen
 
 
 class Game:
@@ -14,6 +17,7 @@ class Game:
         self.__scenes[SceneID.MENU] = Menu()
         self.__scenes[SceneID.WORLD] = World()
         self.__scenes[SceneID.DEATHSCREEN] = DeathScreen()
+        self.__scenes[SceneID.PAUSESCREEN] = PauseScreen()
         self.__current_scene = SceneID.MENU
 
     def update(self, dt) -> None:
@@ -44,6 +48,12 @@ class Game:
                 self.change_state(self.get_current_scene().goto_next_level())
             case GameState.GAME_END:
                 self.__current_scene = SceneID.MENU
+            case GameState.GAME_PAUSE:
+                self.__current_scene = SceneID.PAUSESCREEN
+            case GameState.GAME_UNPAUSE:
+                self.__current_scene = SceneID.WORLD
+            case GameState.EXIT:
+                pygame.event.post(Event(pygame.QUIT))
     
     def get_current_scene(self) -> Scene:
         return self.__scenes[self.__current_scene]
