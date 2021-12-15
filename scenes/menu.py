@@ -43,10 +43,12 @@ class Menu(Scene):
 
         # Buttons
         ref_x = int((configs.SCREEN_W / 2 ) - (Menu.MENU_BUTTON_SIZE[0] /2))
-        ref_y = int(configs.SCREEN_H / 2) + 100
+        ref_y = int(configs.SCREEN_H / 2) + 140
 
-        button_start = Button("Jogar", Rect((ref_x, ref_y + 80), Menu.MENU_BUTTON_SIZE), GameState.GAME_FRESH)
+        button_start = Button("Jogar", Rect((ref_x, ref_y), Menu.MENU_BUTTON_SIZE), GameState.GAME_FRESH)
         super().add_button(button_start)
+        button_exit = Button("Sair", Rect((ref_x, ref_y + 80), Menu.MENU_BUTTON_SIZE), GameState.EXIT)
+        super().add_button(button_exit)
 
     def draw(self, screen: Surface) -> None:
         screen.blit(self.__bg_surface, (0, 0))
