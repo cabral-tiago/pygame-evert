@@ -35,6 +35,9 @@ class Game:
                 self.__current_scene = SceneID.WORLD
             case GameState.GAME_DEAD:
                 self.__current_scene = SceneID.DEATHSCREEN
+            case GameState.GAME_RETRY_LEVEL:
+                self.__scenes[SceneID.WORLD].reset_level()
+                self.__current_scene = SceneID.WORLD
             case GameState.GAME_NEXT_DIALOGUE:
                 self.get_current_scene().get_next_dialogue()
             case GameState.GAME_LEVEL_END:

@@ -57,6 +57,9 @@ class Scene:
             level.reset()
         
         self.change_level(0)
+    
+    def reset_level(self) -> None:
+        self.get_current_level().reset()
 
     def update(self, dt: float) -> GameState:
         flag_hovering = False

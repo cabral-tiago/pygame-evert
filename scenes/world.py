@@ -44,7 +44,10 @@ class World(Scene):
     def update(self, dt: float) -> GameState:
         if self.get_current_level().get_type() == LevelType.MAP:
             self.__update_map(dt)
-        
+
+            if not self.__player.is_alive():
+                return GameState.GAME_DEAD
+
         return super().update(dt)
 
     def __update_map(self, dt: float) -> None:
@@ -166,6 +169,13 @@ class World(Scene):
         self.__enemy_projectiles = []
         self.__player.reset()
         self.change_level(1)
+
+    def reset_level(self) -> None:
+        super().reset_level()
+        self.__player_fireballs = []
+        self.__enemy_projectiles = []
+        self.__player.reset()
+        self.__player.teleport(self.get_current_level().get_player_spawn())
 
     def draw(self, screen: Surface) -> None:
         self.get_current_level().draw(screen)
