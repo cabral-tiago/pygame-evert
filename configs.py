@@ -1,5 +1,5 @@
 # Debug
-DEBUG = True
+DEBUG = False
 
 # Screen
 SCREEN_W = 1280

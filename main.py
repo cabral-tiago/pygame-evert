@@ -52,8 +52,9 @@ while run:
     game.update(dt)
     game.draw(screen)
 
-    fps_text = fps_font.render(f"{clock.get_fps():.0f}/{configs.MAX_FPS} FPS", True, "white")
-    screen.blit(fps_text, (configs.SCREEN_W - fps_text.get_width(), 0))
+    if configs.DEBUG:
+        fps_text = fps_font.render(f"{clock.get_fps():.0f}/{configs.MAX_FPS} FPS", True, "white")
+        screen.blit(fps_text, (configs.SCREEN_W - fps_text.get_width(), 0))
 
     pygame.display.update()
 
