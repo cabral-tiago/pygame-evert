@@ -1,6 +1,7 @@
 from typing import Tuple
 from pygame.rect import Rect
 from pygame.surface import Surface
+from pygame.mixer import Sound
 from classes.projectiles.fireball import Fireball
 from classes.spritesheet import Spritesheet
 from classes.enums import Direction
@@ -25,6 +26,9 @@ class Player:
         # Movement
         self.__prev_direction = Direction.DOWN
         self.__direction = Direction.DOWN
+
+        # Hurt SFX
+        self.__hurt: Sound = Sound("assets/sounds/effects/player-hurt.wav")
 
         # Position
         self.__prev_position: Tuple[float, float] = (0, 0)
@@ -103,6 +107,7 @@ class Player:
 
     def take_damage(self, damage: int) -> None:
         self.__hp -= damage
+        self.__hurt.play()
         if self.__hp <= 0:
             self.__hp = 0
     

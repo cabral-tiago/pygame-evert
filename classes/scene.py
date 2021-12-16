@@ -1,4 +1,5 @@
 import pygame
+from pygame.mixer import Sound
 from pygame.surface import Surface
 from classes.button import Button
 from classes.level import Level
@@ -13,11 +14,16 @@ class Scene:
         self.__levels[0] = Level("assets/levels/0")
         self.__current_level = 0
 
+        self.__click: Sound = Sound("assets/sounds/effects/click.wav")
+
     def add_button(self, button) -> None:
         self.__buttons.append(button)
 
     def load_level(self, level_nr: int, level: Level) -> None:
         self.__levels[level_nr] = level
+
+    def play_click(self) -> None:
+        self.__click.play()
 
     def change_level(self, level_nr: int) -> None:
         if level_nr in self.__levels.keys():
@@ -46,6 +52,7 @@ class Scene:
 
         for button in self.__buttons:
             if button.is_visible() and button.get_rect().collidepoint(mouse_pos):
+                self.play_click()
                 return button.get_target_state()
 
         return GameState.NULL

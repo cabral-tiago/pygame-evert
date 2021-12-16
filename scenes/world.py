@@ -1,4 +1,5 @@
 from typing import Tuple
+from pygame.mixer import Sound
 from pygame.rect import Rect
 from classes.button import Button
 from classes.hitfx import HitFX
@@ -6,10 +7,9 @@ from classes.level import Level
 from classes.enemy import Enemy
 from classes.player import Player
 from classes.projectile import Projectile
-from classes.projectiles.fireball import Fireball
 from classes.scene import Scene
 from pygame.surface import Surface
-from classes.enums import EndCondition, GameState, LevelType, Direction
+from classes.enums import EndCondition, GameState, LevelType
 import pygame
 import configs
 import os
@@ -26,6 +26,7 @@ class World(Scene):
         self.__player: Player = Player()
         self.__player_fireballs: list[Projectile] = []
         self.__wasd_down: list[int] = []
+        self.__player_death: Sound = Sound("assets/sounds/effects/player-death.wav")
 
         # Enemy
         self.__enemy_projectiles: list[Projectile] = []
@@ -55,6 +56,7 @@ class World(Scene):
             self.__update_map(dt)
 
             if not self.__player.is_alive():
+                self.__player_death.play()
                 return GameState.GAME_DEAD
 
         return super().update(dt)
@@ -193,6 +195,7 @@ class World(Scene):
     def handle_key_down(self, key: int) -> GameState:
         if key == pygame.K_SPACE:
             if self.get_current_level().get_type() == LevelType.DIALOGUE:
+                self.play_click()
                 return GameState.GAME_NEXT_DIALOGUE
             if self.get_current_level().get_type() == LevelType.MAP and self.__player.can_shoot():
                 self.__player_fireballs.append(self.__player.shoot())
@@ -200,6 +203,7 @@ class World(Scene):
             self.__wasd_down.append(key)
         if key == pygame.K_ESCAPE:
             self.__wasd_down = []
+            self.play_click()
             return GameState.GAME_PAUSE
 
         return super().handle_key_down(key)

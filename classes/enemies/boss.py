@@ -15,10 +15,10 @@ class Boss(Enemy):
 
     def __init__(self, position: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/robert.png").convert_alpha()
-
         possible_directions = [Direction.UP, Direction.DOWN]
+        hurt = pygame.mixer.Sound("assets/sounds/effects/robert-pain.wav")
 
-        super().__init__(surface, position, possible_directions)
+        super().__init__(surface, position, possible_directions, hurt)
 
     def shoot(self) -> Projectile:
         super().shoot()

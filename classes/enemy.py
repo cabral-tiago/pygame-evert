@@ -1,4 +1,5 @@
 from typing import Tuple, Any
+from pygame.mixer import Sound
 from pygame.surface import Surface
 from pygame.rect import Rect
 from classes.enums import Direction
@@ -13,13 +14,16 @@ class Enemy:
     CHANGE_DIRECTION_FREQ = 3
     MAX_HP = 100
 
-    def __init__(self, surface: Surface, position: Tuple[int, int], possible_directions: list[Direction]) -> None:
+    def __init__(self, surface: Surface, position: Tuple[int, int], directions: list[Direction], hurt: Sound) -> None:
         self.__surface = surface
         self.__position: Tuple[float, float] = position
         self.__prev_position: Tuple[float, float] = position
+
+        # Hurt SFX
+        self.__hurt: Sound = hurt
         
         # Direction
-        self.__posible_directions: list[Direction] = possible_directions
+        self.__posible_directions: list[Direction] = directions
         self.__direction: Direction = random.choice(self.__posible_directions)
         self.__changedir_timer = 0
         
@@ -102,6 +106,7 @@ class Enemy:
     
     def take_damage(self, damage: int) -> None:
         self.__hp -= damage
+        self.__hurt.play()
         if self.__hp <= 0:
             self.__hp = 0
     
