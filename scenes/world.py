@@ -167,6 +167,7 @@ class World(Scene):
         super().change_level(level_nr)
 
         if self.get_current_level().get_type() == LevelType.MAP:
+            self.__player.reset()
             self.__player.teleport(self.get_current_level().get_player_spawn(),
                                    self.get_current_level().get_player_spawn_direction())
             self.__dialogue_button.hide()
