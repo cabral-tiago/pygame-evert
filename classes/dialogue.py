@@ -24,8 +24,10 @@ class Dialogue:
 
         self.__font_name = pygame.font.Font("assets/fonts/CarterOne-Regular.ttf", 42)
         self.__font_text = pygame.font.Font("assets/fonts/Roboto-Medium.ttf", 38)
-        font_small = pygame.font.Font("assets/fonts/Roboto-MediumItalic.ttf", 18)
-        self.__instruction = font_small.render("Clique no diálogo para avançar", True, "gray60")
+
+        self.__next_input = pygame.image.load("assets/images/nextdialogue.png").convert_alpha()
+        self.__next_input = pygame.transform.scale(self.__next_input,
+                                                  (self.__next_input.get_width() * 2, self.__next_input.get_height() * 2))
 
         # Narrator
         self.add_character("", DialogueCharacter("", ""))
@@ -92,9 +94,9 @@ class Dialogue:
         # Text
         draw_text(ui_surface,self.get_current_line().get_line(), "white", self.__text_rect, self.__font_text)
 
-        # Instruction
-        ui_surface.blit(self.__instruction, (ui_surface.get_width() - self.__instruction.get_width() - 4,
-                                             ui_surface.get_height() - self.__instruction.get_height() - 2))
+        # Input hint
+        ui_surface.blit(self.__next_input, (ui_surface.get_width() - self.__next_input.get_width() - 4,
+                                             ui_surface.get_height() - self.__next_input.get_height() - 2))
 
         # Draw UI
         screen.blit(ui_surface, self.__ui_position)
