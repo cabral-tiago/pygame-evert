@@ -5,7 +5,7 @@
     ],
     "dialogue": [
         ["t", "Hey Evert! Como correram as cenas com a Emily?"],
-        ["j", "Tinhas razão. Era mesmo um rapaz.", "sad"],
+        ["j", "Olá Tiago. Tinhas razão. Era mesmo um rapaz.", "sad"],
         ["t", "Avisei-te... Enfim, bora jogar Valorant? Eu saquei o jog-"],
         ["j", "Não, Valorant é uma porcaria, já desinstalei.", "angry"],
         ["j", "Vou jogar Apex Legends com a Nicole.", "smile"],
