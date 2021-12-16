@@ -123,5 +123,9 @@ class Enemy:
         return surface
 
     def get_rect(self) -> Rect:
-        position = (int(self.__position[0]), int(self.__position[1]))
+        position = int(self.__position[0]), int(self.__position[1])
+        return self.get_surface().get_rect(center=position)
+    
+    def get_rect_with_hp(self) -> Rect:
+        position = int(self.__position[0]), int(self.__position[1] - self.__hpbar_height * 1.5)
         return self.get_surface().get_rect(center=position)

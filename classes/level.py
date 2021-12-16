@@ -252,17 +252,17 @@ class Level:
             # Draw collectibles
             screen.blit(self.__quest_tracker.get_map_surface(), self.__camera_offset)
 
-            # Draw enemies
-            enemy_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
-            for enemy in self.get_enemies():
-                enemy_surface.blit(enemy.get_surface_with_hp(), enemy.get_rect())
-            screen.blit(enemy_surface, self.__camera_offset)
-
             # Draw player
             if self.__player_appear:
                 screen.blit(self.__player_surface,
                             (configs.SCREEN_W / 2 - self.__player_surface.get_width() / 2,
                             configs.SCREEN_H / 2 - self.__player_surface.get_height() / 2))
+
+            # Draw enemies
+            enemy_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
+            for enemy in self.get_enemies():
+                enemy_surface.blit(enemy.get_surface_with_hp(), enemy.get_rect_with_hp())
+            screen.blit(enemy_surface, self.__camera_offset)
 
             # Draw projectiles and HitFX
             projectile_surface = Surface((self.get_width(), self.get_height()), pygame.SRCALPHA)
