@@ -20,6 +20,9 @@ class Game:
         self.__scenes[SceneID.PAUSESCREEN] = PauseScreen()
         self.__current_scene = SceneID.MENU
 
+        pygame.mixer.music.load("assets/sounds/music/fun.mp3")
+        pygame.mixer.music.play(-1)
+
     def update(self, dt) -> None:
         # Update current scene
         result = self.__scenes[self.__current_scene].update(dt)
@@ -34,6 +37,9 @@ class Game:
         match self.__state:
             case GameState.MAIN_MENU:
                 self.__current_scene = SceneID.MENU
+                pygame.mixer.music.unload()
+                pygame.mixer.music.load("assets/sounds/music/fun.mp3")
+                pygame.mixer.music.play(-1)
             case GameState.GAME_FRESH:
                 self.__scenes[SceneID.WORLD].reset()
                 self.__current_scene = SceneID.WORLD
@@ -47,11 +53,13 @@ class Game:
             case GameState.GAME_LEVEL_END:
                 self.change_state(self.get_current_scene().goto_next_level())
             case GameState.GAME_END:
-                self.__current_scene = SceneID.MENU
+                self.change_state(GameState.MAIN_MENU)
             case GameState.GAME_PAUSE:
                 self.__current_scene = SceneID.PAUSESCREEN
+                pygame.mixer.music.pause()
             case GameState.GAME_UNPAUSE:
                 self.__current_scene = SceneID.WORLD
+                pygame.mixer.music.unpause()
             case GameState.EXIT:
                 pygame.event.post(Event(pygame.QUIT))
     

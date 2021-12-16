@@ -2,5 +2,6 @@
     "type": 1,
     "bg_style": "image",
     "bg_image": "assets/images/windows_bg.png",
-    "bg_smooth_scale": true
+    "bg_smooth_scale": true,
+    "music": "assets/sounds/music/heavystring.mp3"
 }

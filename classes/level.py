@@ -24,6 +24,9 @@ class Level:
         self.__type: LevelType = LevelType.BLANK
         self.__background: Surface = Surface(configs.SCREEN_SIZE, pygame.SRCALPHA)
         
+        # Music
+        self.__music: str = ""
+
         # Map
         self.__layers: list[MapLayer] = []
         self.__obstacles: list[Rect] = []
@@ -50,6 +53,10 @@ class Level:
             level_info = json.load(file)
 
             self.__type = LevelType(level_info["type"])
+            
+            if "music" in level_info:
+                self.__music = level_info["music"]
+
             match self.__type:
                 case LevelType.MAP:
                     self.__load_map(level_info, path)
@@ -185,6 +192,9 @@ class Level:
             return self.__dialogue.update()
         else:
             return GameState.GAME_OK
+    
+    def get_music(self) -> str:
+        return self.__music
     
     ### Map Level
     def get_obstacles(self) -> list[Rect]:

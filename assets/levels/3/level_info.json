@@ -1,5 +1,6 @@
 {
     "type": 2,
+    "music": "assets/sounds/music/a-random-fish.ogg",
     "tileset": "assets/images/city_tileset.png",
     "tile_size": [16, 16],
     "tile_scale": 2,

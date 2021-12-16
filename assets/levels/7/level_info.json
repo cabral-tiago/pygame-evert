@@ -1,5 +1,6 @@
 {
     "type": 2,
+    "music": "assets/sounds/music/moonrise.mp3",
     "tileset": "assets/images/autumn_lands.png",
     "tile_size": [16, 16],
     "tile_scale": 2,

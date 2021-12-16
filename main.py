@@ -16,6 +16,9 @@ screen.blit(loading_text,
              configs.SCREEN_H/2 - loading_text.get_height()/2))
 pygame.display.update()
 
+# Music
+pygame.mixer.init()
+
 # Game
 game = Game()
 

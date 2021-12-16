@@ -22,6 +22,10 @@ class Scene:
     def change_level(self, level_nr: int) -> None:
         if level_nr in self.__levels.keys():
             self.__current_level = level_nr
+            if self.get_current_level().get_music() != "":
+                pygame.mixer.music.unload()
+                pygame.mixer.music.load(self.get_current_level().get_music())
+                pygame.mixer.music.play(-1)
     
     def get_next_dialogue(self) -> None:
         if self.get_current_level().get_type() == LevelType.DIALOGUE:
