@@ -6,9 +6,9 @@ import pygame
 
 
 class Fireball(Projectile):
-    SPEED = 200
-    MAX_DISTANCE = 300
-    DAMAGE = 40
+    SPEED = 240
+    MAX_DISTANCE = 360
+    DAMAGE = 60
 
     def __init__(self, start: Tuple[int, int], direction: Direction) -> None:
         surface = pygame.image.load("assets/images/fireball.png").convert_alpha()

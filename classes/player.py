@@ -11,8 +11,8 @@ import pygame
 class Player:
     MAX_HP = 420
     ANIMATION_INTERVAL = 0.1
-    SPEED = 80
-    SHOOTING_COOLDOWN = 0.75
+    SPEED = 95
+    SHOOTING_COOLDOWN = 0.65
 
     def __init__(self) -> None:
         spritesheet: Spritesheet = Spritesheet("assets/images/jesse_sprite.png", (15, 18), 2)

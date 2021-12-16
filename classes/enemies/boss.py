@@ -7,11 +7,11 @@ import pygame
 
 
 class Boss(Enemy):
-    SPEED = 70
+    SPEED = 80
     SHOOTS = True
     SHOOTING_FREQ = 1.75
     CHANGE_DIRECTION_FREQ = 4
-    MAX_HP = 800
+    MAX_HP = 690
 
     def __init__(self, position: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/robert.png").convert_alpha()

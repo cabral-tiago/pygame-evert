@@ -8,11 +8,11 @@ import random
 
 
 class Monster(Enemy):
-    SPEED = 40
+    SPEED = 50
     SHOOTS = True
     SHOOTING_FREQ = 2.5
     CHANGE_DIRECTION_FREQ = 2
-    MAX_HP = 100
+    MAX_HP = 200
 
     def __init__(self, position: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/catfish.png").convert_alpha()

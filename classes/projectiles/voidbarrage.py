@@ -5,9 +5,9 @@ import pygame
 
 
 class VoidBarrage(Projectile):
-    SPEED = 120
+    SPEED = 135
     MAX_DISTANCE = 300
-    DAMAGE = 80
+    DAMAGE = 95
 
     def __init__(self, start: Tuple[int, int]) -> None:
         surface = pygame.image.load("assets/images/void_barrage.png").convert_alpha()
