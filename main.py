@@ -45,7 +45,9 @@ while run:
                 game.handle_key_down(event.key)
             case pygame.KEYUP:
                 game.handle_key_up(event.key)
-            
+            case pygame.ACTIVEEVENT:
+                if event.state == pygame.APPINPUTFOCUS and event.gain == 0:
+                    game.handle_lose_focus()
     
     screen.fill("#2d353d")
 

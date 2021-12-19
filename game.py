@@ -1,6 +1,6 @@
 import pygame
 from pygame.event import Event
-from classes.enums import GameState, SceneID
+from classes.enums import GameState, LevelType, SceneID
 from classes.scene import Scene
 from scenes.menu import Menu
 from scenes.world import World
@@ -79,3 +79,7 @@ class Game:
     def handle_key_up(self, key: int) -> None:
         new_state = self.__scenes[self.__current_scene].handle_key_up(key)
         self.change_state(new_state)
+
+    def handle_lose_focus(self) -> None:
+        if self.__current_scene == SceneID.WORLD and self.__state == GameState.GAME_OK:
+            self.change_state(GameState.GAME_PAUSE)
