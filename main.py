@@ -47,7 +47,7 @@ while run:
                 game.handle_key_up(event.key)
             
     
-    screen.fill("#2d353d ")
+    screen.fill("#2d353d")
 
     game.update(dt)
     game.draw(screen)
