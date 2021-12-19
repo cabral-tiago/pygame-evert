@@ -1,5 +1,5 @@
 {
-    "type": 2,
+    "type": "map",
     "music": "assets/sounds/music/a-random-fish.ogg",
     "tileset": "assets/images/city_tileset.png",
     "tile_size": [16, 16],

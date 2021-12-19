@@ -1,5 +1,5 @@
 {
-    "type": 1,
+    "type": "dialogue",
     "bg_style": "image",
     "bg_image": "assets/images/windows_bg.png",
     "bg_smooth_scale": true,

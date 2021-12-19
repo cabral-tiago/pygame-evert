@@ -52,7 +52,7 @@ class Level:
         with open(path+"/level_info.json", "r", encoding="utf-8") as file:
             level_info = json.load(file)
 
-            self.__type = LevelType(level_info["type"])
+            self.__type = LevelType[level_info["type"].upper()]
             
             if "music" in level_info:
                 self.__music = level_info["music"]
