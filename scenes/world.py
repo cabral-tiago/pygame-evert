@@ -44,6 +44,12 @@ class World(Scene):
         self.__dialogue_button = Button("", dialogue_box_rect, GameState.GAME_NEXT_DIALOGUE, True)
         super().add_button(self.__dialogue_button)
 
+        # Movement help UI
+        self.__movement_ui = Surface((configs.SCREEN_W // 3, configs.BAR_HEIGHT))
+        movement = pygame.image.load("assets/images/movement.png")
+        movement = pygame.transform.scale(movement, (movement.get_width() * 2, movement.get_height() * 2))
+        self.__movement_ui.blit(movement, (20, 2))
+
         # Loading all levels
         levels_folder = "assets/levels/"
         levels = [f.name for f in os.scandir(levels_folder) if int(f.name) > 0]
@@ -228,9 +234,12 @@ class World(Scene):
             # Draw bottom bar
             screen.blit(self.__black_bar, (0, configs.SCREEN_H - configs.BAR_HEIGHT))
 
+            # Draw movement UI
+            screen.blit(self.__movement_ui, (0, configs.SCREEN_H - configs.BAR_HEIGHT))
+
             # Draw HP Bar
             screen.blit(self.__player.get_hpbar_surface(),
                         (configs.SCREEN_W//2 - self.__player.get_hpbar_surface().get_width()//2,
-                         configs.SCREEN_H - self.__player.get_hpbar_surface().get_height() - 4))
+                         configs.SCREEN_H - configs.BAR_HEIGHT // 2 - self.__player.get_hpbar_surface().get_height() // 2))
         
         super().draw(screen)
