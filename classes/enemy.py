@@ -10,7 +10,7 @@ import pygame
 class Enemy:
     SPEED = 80
     SHOOTS = False
-    SHOOTING_FREQ = 2
+    SHOOTING_COOLDOWN_RANGE = 1.5, 3
     CHANGE_DIRECTION_FREQ = 3
     MAX_HP = 100
 
@@ -47,7 +47,7 @@ class Enemy:
             self.__scaled_surface.blit(surface, (0, int(self.__hpbar_height * 1.5)))
 
         # Shooting
-        self.__shooting_timer = 0
+        self.__shooting_cooldown = 0
 
     def update(self, dt: float) -> None:
         # Timers
@@ -55,7 +55,7 @@ class Enemy:
         if self.__changedir_timer >= self.CHANGE_DIRECTION_FREQ:
             self.__change_direction()
         
-        self.__shooting_timer += dt
+        self.__shooting_cooldown -= dt
 
         # Update position
         direction_x = 0
@@ -86,15 +86,15 @@ class Enemy:
         self.__direction = direction
     
     def can_shoot(self) -> bool:
-        return self.SHOOTS and self.__shooting_timer >= self.SHOOTING_FREQ
+        return self.SHOOTS and self.__shooting_cooldown <= 0
 
     def shoot(self) -> Any:
         '''
         Supposed to be overridden by the child class with its own projectile and logic. Should still call this through
-        super().shoot() to update the timer. Can also be left without being overridden, in the case of a passive enemy
+        super().shoot() to update the cooldown. Can also be left without being overridden, in the case of a passive enemy
         that doesn't shoot (Enemy.SHOOTS == False).
         '''
-        self.__shooting_timer = 0
+        self.__shooting_cooldown = random.uniform(self.SHOOTING_COOLDOWN_RANGE[0], self.SHOOTING_COOLDOWN_RANGE[1])
     
     def set_world_collision(self) -> None:
         self.__position = self.__prev_position

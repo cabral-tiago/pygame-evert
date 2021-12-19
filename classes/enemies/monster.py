@@ -10,7 +10,7 @@ import random
 class Monster(Enemy):
     SPEED = 50
     SHOOTS = True
-    SHOOTING_FREQ = 2.5
+    SHOOTING_COOLDOWN_RANGE = 1.75, 2.75
     CHANGE_DIRECTION_FREQ = 2
     MAX_HP = 200
 

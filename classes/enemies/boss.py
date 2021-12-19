@@ -9,7 +9,7 @@ import pygame
 class Boss(Enemy):
     SPEED = 80
     SHOOTS = True
-    SHOOTING_FREQ = 1.75
+    SHOOTING_COOLDOWN_RANGE = 0.75, 1.75
     CHANGE_DIRECTION_FREQ = 4
     MAX_HP = 690
 
